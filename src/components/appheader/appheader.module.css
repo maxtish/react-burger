@@ -1,7 +1,7 @@
 .header {
   padding: 16px 0;
   position: relative;
-  max-width: 1280px;
+
   min-width: 920px;
   display: flex;
   background-color: #1c1c21;
