@@ -2,6 +2,7 @@ import React from 'react';
 import AppStyles from './app.module.css';
 import AppHeader from '../appheader/appheader';
 import BurgerIngredients from '../burgeringredients/burgeringredients';
+import BurgerConstructor from '../burgerconstructor/burgerconstructor';
 class App extends React.Component {
   render() {
     const dataIngredients = [
@@ -17,7 +18,7 @@ class App extends React.Component {
         image: 'https://code.s3.yandex.net/react/code/bun-02.png',
         image_mobile: 'https://code.s3.yandex.net/react/code/bun-02-mobile.png',
         image_large: 'https://code.s3.yandex.net/react/code/bun-02-large.png',
-        __v: 0,
+        __v: 1,
       },
       {
         _id: '60666c42cc7b410027a1a9b5',
@@ -45,7 +46,7 @@ class App extends React.Component {
         image: 'https://code.s3.yandex.net/react/code/meat-01.png',
         image_mobile: 'https://code.s3.yandex.net/react/code/meat-01-mobile.png',
         image_large: 'https://code.s3.yandex.net/react/code/meat-01-large.png',
-        __v: 0,
+        __v: 1,
       },
       {
         _id: '60666c42cc7b410027a1a9b7',
@@ -87,7 +88,7 @@ class App extends React.Component {
         image: 'https://code.s3.yandex.net/react/code/sauce-03.png',
         image_mobile: 'https://code.s3.yandex.net/react/code/sauce-03-mobile.png',
         image_large: 'https://code.s3.yandex.net/react/code/sauce-03-large.png',
-        __v: 0,
+        __v: 1,
       },
       {
         _id: '60666c42cc7b410027a1a9b8',
@@ -219,7 +220,10 @@ class App extends React.Component {
     return (
       <body className={AppStyles.page}>
         <AppHeader />
-        <BurgerIngredients dataIngredients={dataIngredients} />
+        <div className={AppStyles.content}>
+          <BurgerIngredients dataIngredients={dataIngredients} />
+          <BurgerConstructor dataIngredients={dataIngredients} />
+        </div>
       </body>
     );
   }

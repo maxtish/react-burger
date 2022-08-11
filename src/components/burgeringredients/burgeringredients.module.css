@@ -52,3 +52,17 @@
   color: #f2f2f3;
   text-decoration: none;
 }
+
+.ingredients {
+  overflow-y: scroll;
+  max-height: calc(100vh - 280px);
+}
+.ingredients::-webkit-scrollbar {
+  width: 8px;
+}
+.ingredients::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+.ingredients::-webkit-scrollbar-thumb {
+  background-color: #8585ad;
+}

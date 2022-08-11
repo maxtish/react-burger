@@ -2,6 +2,10 @@ import React from 'react';
 import BurgerIngredientsStyles from './burgeringredients.module.css';
 import { Tab, CurrencyIcon, Counter, Typography } from '@ya.praktikum/react-developer-burger-ui-components';
 
+const ClikIngredient = (id) => {
+  console.log(id);
+};
+
 const RenderIngredient = ({ arr }) => {
   return (
     <ul className={BurgerIngredientsStyles.list}>
@@ -28,28 +32,26 @@ const BurgerIngredients = (props) => {
   const sauces = props.dataIngredients.filter((item) => item.type === 'sauce');
 
   return (
-    <>
-      <section>
-        <h1 className={BurgerIngredientsStyles.title}>Соберите бургер</h1>
-        <div style={{ display: 'flex' }}>
-          <a className={BurgerIngredientsStyles.link} href="#buns">
-            <Tab value="one" active={current === 'one'} onClick={setCurrent}>
-              Булки
-            </Tab>
-          </a>
-          <a className={BurgerIngredientsStyles.link} href="#sauce">
-            <Tab value="two" active={current === 'two'} onClick={setCurrent} href="#sauce">
-              Соусы
-            </Tab>
-          </a>
-          <a className={BurgerIngredientsStyles.link} href="#main">
-            <Tab value="three" active={current === 'three'} onClick={setCurrent} href="#main">
-              Начинки
-            </Tab>
-          </a>
-        </div>
-      </section>
-      <section>
+    <section>
+      <h1 className={BurgerIngredientsStyles.title}>Соберите бургер</h1>
+      <div style={{ display: 'flex' }}>
+        <a className={BurgerIngredientsStyles.link} href="#buns">
+          <Tab value="one" active={current === 'one'} onClick={setCurrent}>
+            Булки
+          </Tab>
+        </a>
+        <a className={BurgerIngredientsStyles.link} href="#sauce">
+          <Tab value="two" active={current === 'two'} onClick={setCurrent} href="#sauce">
+            Соусы
+          </Tab>
+        </a>
+        <a className={BurgerIngredientsStyles.link} href="#main">
+          <Tab value="three" active={current === 'three'} onClick={setCurrent} href="#main">
+            Начинки
+          </Tab>
+        </a>
+      </div>
+      <div className={BurgerIngredientsStyles.ingredients}>
         <h2 className={BurgerIngredientsStyles.typetext} id="buns">
           Булки
         </h2>
@@ -62,8 +64,8 @@ const BurgerIngredients = (props) => {
           Начинки
         </h2>
         <RenderIngredient arr={sauces} />
-      </section>
-    </>
+      </div>
+    </section>
   );
 };
 
