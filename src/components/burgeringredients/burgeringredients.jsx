@@ -1,10 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import BurgerIngredientsStyles from './burgeringredients.module.css';
 import { Tab, CurrencyIcon, Counter, Typography } from '@ya.praktikum/react-developer-burger-ui-components';
-
-const ClikIngredient = (id) => {
-  console.log(id);
-};
 
 const RenderIngredient = ({ arr }) => {
   return (
@@ -68,5 +65,7 @@ const BurgerIngredients = (props) => {
     </section>
   );
 };
-
+BurgerIngredients.propTypes = {
+  dataIngredients: PropTypes.array,
+};
 export default BurgerIngredients;
