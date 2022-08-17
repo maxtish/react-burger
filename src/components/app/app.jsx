@@ -4,7 +4,7 @@ import { dataIngredients, dataURL } from '../../utils/data';
 import AppHeader from '../appheader/appheader';
 import BurgerIngredients from '../burgeringredients/burgeringredients';
 import BurgerConstructor from '../burgerconstructor/burgerconstructor';
-
+import OrderDetails from '../orderdetails/orderdetails';
 function App() {
   const [state, setState] = React.useState({
     isLoading: false,

@@ -9,6 +9,10 @@ import {
   ConstructorElement,
   Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+
+import Modal from '../modal/modal';
+import OrderDetails from '../orderdetails/orderdetails';
+
 // Берем все активные, убираем булки и рендерим разметку которые внутри бургера
 const RenderBurgerIngr = ({ arr }) => {
   const nobuns = arr.filter((item) => item.type !== 'bun');
@@ -54,26 +58,48 @@ const BurgerConstructor = (props) => {
   const sauces = filterDataIngredients.filter((item) => item.type === 'sauce');
   const bunsActiv = buns[0];
 
+  const [state, setState] = React.useState({
+    visible: false,
+    id: '',
+  });
+
+  function openModal() {
+    console.log('openModal');
+    setState({ ...state, visible: true, id: '777' });
+  }
+
+  function closeModal() {
+    console.log('closeModal');
+    setState({ ...state, visible: false, id: '' });
+  }
+
   return (
-    <div
-      className={BurgerConstructorStyles.constructor}
-      style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
-    >
-      <RenderBurgerBuns bunsActiv={bunsActiv} position="Верх" />
+    <>
+      <div
+        className={BurgerConstructorStyles.constructor}
+        style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
+      >
+        <RenderBurgerBuns bunsActiv={bunsActiv} position="Верх" />
 
-      <div className={BurgerConstructorStyles.scroll}>
-        <RenderBurgerIngr arr={filterDataIngredients} />
-      </div>
+        <div className={BurgerConstructorStyles.scroll}>
+          <RenderBurgerIngr arr={filterDataIngredients} />
+        </div>
 
-      <RenderBurgerBuns bunsActiv={bunsActiv} position="Низ" />
-      <div className={BurgerConstructorStyles.summing}>
-        <SummPrice arr={filterDataIngredients} />
-        <CurrencyIcon type="primary" />
-        <Button type="primary" size="large">
-          Оформить заказ
-        </Button>
+        <RenderBurgerBuns bunsActiv={bunsActiv} position="Низ" />
+        <div className={BurgerConstructorStyles.summing}>
+          <SummPrice arr={filterDataIngredients} />
+          <CurrencyIcon type="primary" />
+          <Button type="primary" size="large" onClick={openModal}>
+            Оформить заказ
+          </Button>
+        </div>
       </div>
-    </div>
+      {state.visible && (
+        <Modal header="" onClose={closeModal}>
+          <OrderDetails id={state.id} />
+        </Modal>
+      )}
+    </>
   );
 };
 
