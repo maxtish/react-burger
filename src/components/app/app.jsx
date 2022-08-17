@@ -44,5 +44,3 @@ function App() {
 }
 
 export default App;
-/*{!isLoading && !hasError && <BurgerIngredients dataIngredients={data} />}
-        {!isLoading && !hasError && <BurgerConstructor dataIngredients={data} />}*/
