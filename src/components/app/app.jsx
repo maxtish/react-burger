@@ -1,6 +1,6 @@
 import React from 'react';
 import AppStyles from './app.module.css';
-import dataIngredients from '../../utils/data';
+import { dataIngredients, dataURL } from '../../utils/data';
 import AppHeader from '../appheader/appheader';
 import BurgerIngredients from '../burgeringredients/burgeringredients';
 import BurgerConstructor from '../burgerconstructor/burgerconstructor';
@@ -12,19 +12,28 @@ function App() {
     data: [],
   });
 
-  React.useEffect(() => {
-    const getIngredients = async () => {
+  const getIngredients = async () => {
+    try {
       setState({ ...state, hasError: false, isLoading: true });
-      const res = await fetch('https://norma.nomoreparties.space/api/ingredients');
+      const res = await fetch(dataURL);
+
+      if (!res.ok) {
+        console.log('Ошибка', res.status);
+      }
+
       const data = await res.json();
       const arr = data.data;
       setState({ ...state, data: arr, hasError: false, isLoading: false });
-    };
+    } catch (error) {
+      setState({ ...state, hasError: true, isLoading: false });
+    }
+  };
+
+  React.useEffect(() => {
     getIngredients();
   }, []);
-  const { isLoading, hasError, data } = state;
 
-  console.log(data);
+  const { isLoading, hasError, data } = state;
 
   return (
     <div className={AppStyles.page}>

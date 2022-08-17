@@ -1,4 +1,6 @@
-const dataIngredients = [
+export const dataURL = 'https://norma.nomoreparties.space/api/ingredients';
+
+export const dataIngredients = [
   {
     _id: '60666c42cc7b410027a1a9b1',
     name: 'Краторная булка N-200i',
@@ -210,5 +212,3 @@ const dataIngredients = [
     __v: 3,
   },
 ];
-
-export default dataIngredients;
