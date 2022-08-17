@@ -68,12 +68,10 @@ const BurgerConstructor = ({ dataIngredients }) => {
   });
 
   function openModal() {
-    console.log('openModal');
-    setState({ ...state, visible: true, id: '777' });
+    setState({ ...state, visible: true, id: 777 });
   }
 
   function closeModal() {
-    console.log('closeModal');
     setState({ ...state, visible: false, id: '' });
   }
 

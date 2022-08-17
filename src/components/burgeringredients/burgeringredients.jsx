@@ -39,17 +39,12 @@ const BurgerIngredients = (propsArr) => {
   });
 
   function openModal(Event) {
-    console.log('openModal');
     const targetIndex = Event.currentTarget.id;
-    console.log('id клика = ', targetIndex);
     const target = propsArr.dataIngredients.find((item) => item._id === targetIndex);
-    console.log('id с массива =', target._id);
     setState({ ...state, visible: true, igredient: target });
-    console.log(state);
   }
 
   function closeModal() {
-    console.log('closeModal');
     setState({ visible: false, igredient: {} });
   }
 

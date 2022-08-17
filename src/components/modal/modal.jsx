@@ -8,8 +8,6 @@ import ModalOverlay from '../modaloverlay/modaloverlay';
 const modalRoot = document.getElementById('root');
 
 function Modal({ children, header, onClose }) {
-  console.log('Modal');
-
   React.useEffect(() => {
     const escClose = (evt) => {
       if (evt.key === 'Escape') {
