@@ -1,10 +1,11 @@
 import React from 'react';
 import AppStyles from './app.module.css';
-import { dataIngredients, dataURL } from '../../utils/data';
+import dataIngredients from '../../utils/data';
+import dataURL from '../../utils/dataURL';
 import AppHeader from '../appheader/appheader';
 import BurgerIngredients from '../burgeringredients/burgeringredients';
 import BurgerConstructor from '../burgerconstructor/burgerconstructor';
-import OrderDetails from '../orderdetails/orderdetails';
+
 function App() {
   const [state, setState] = React.useState({
     isLoading: false,
@@ -43,10 +44,10 @@ function App() {
       {hasError && 'Ошибка'}
       {!isLoading && !hasError && !data.length && 'Ошибка - нет массива'}
       {!isLoading && !hasError && data.length && (
-        <div className={AppStyles.content}>
+        <main className={AppStyles.content}>
           <BurgerIngredients dataIngredients={data} />
           <BurgerConstructor dataIngredients={dataIngredients} />
-        </div>
+        </main>
       )}
     </div>
   );

@@ -3,7 +3,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   list-style-type: none;
-  margin: 0;
+  gap: 24px;
   padding: 0;
   width: 600px;
 }
@@ -11,11 +11,7 @@
   max-width: 272px;
   position: relative;
 }
-.title {
-  font-weight: 700;
-  font-size: 36px;
-  line-height: 40px;
-}
+
 .price {
   display: flex;
   justify-content: center;
@@ -25,27 +21,9 @@
 }
 
 .text {
-  font-family: 'JetBrains Mono';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  /* or 150% */
-
   text-align: center;
-
-  /* text/primary-light (standart text) */
-
-  color: #f2f2f3;
 }
 .typetext {
-  font-family: 'JetBrains Mono';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 24px;
-  line-height: 30px;
-
-  color: #f2f2f3;
 }
 
 .link {

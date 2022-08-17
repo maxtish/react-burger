@@ -1,7 +1,3 @@
-.constructor {
-  margin-top: 100px;
-  margin-left: 40px;
-}
 .scroll {
   overflow-y: scroll;
   max-height: calc(100vh - 498px);
@@ -17,7 +13,6 @@
 }
 
 .item {
-  margin: 16px 0 0 0;
   padding: 0;
   list-style-type: none;
   display: flex;
@@ -27,10 +22,6 @@
 
 .item:first-child {
   margin-top: 0px;
-}
-
-.buns {
-  margin-left: 24px;
 }
 
 .summing {
@@ -44,4 +35,9 @@
 .summingico {
   width: 33px;
   height: 33px;
+}
+
+.icon {
+  display: flex;
+  transform: scale(1.5);
 }

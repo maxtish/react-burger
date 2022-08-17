@@ -6,20 +6,21 @@ import dataIngredient from '../../utils/dataIngredient';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredientdetails/ingredientdetails';
 import modalStyles from '../modal/modal.module.css';
+import objectWithShape from '../../utils/shape';
 
 const RenderIngredient = ({ arr, clickProp }) => {
   return (
-    <ul className={BurgerIngredientsStyles.list}>
+    <ul className={`${BurgerIngredientsStyles.list} ml-4 mt-6 mb-10`}>
       {arr.map((item) => (
         <li className={BurgerIngredientsStyles.item} key={item._id} id={item._id} onClick={clickProp}>
           {item.__v > 0 && <Counter count={item.__v} size="default" />}
 
           <img src={item.image} alt={item.name} />
-          <div className={BurgerIngredientsStyles.price}>
-            <p className={`text text_type_digits-default ${BurgerIngredientsStyles.pricenumb}`}>{item.price}</p>
+          <div className={`${BurgerIngredientsStyles.price} mt-1 mb-1`}>
+            <p className={`${BurgerIngredientsStyles.pricenumb} text text_type_digits-default`}>{item.price}</p>
             <CurrencyIcon type="primary" />
           </div>
-          <p className={BurgerIngredientsStyles.text}>{item.name}</p>
+          <p className={`${BurgerIngredientsStyles.text} text text_type_main-default pb-6`}>{item.name}</p>
         </li>
       ))}
     </ul>
@@ -55,7 +56,7 @@ const BurgerIngredients = (propsArr) => {
   return (
     <>
       <section>
-        <h1 className={BurgerIngredientsStyles.title}>Соберите бургер</h1>
+        <h1 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h1>
         <div style={{ display: 'flex' }}>
           <a className={BurgerIngredientsStyles.link} href="#buns">
             <Tab value="one" active={current === 'one'} onClick={setCurrent}>
@@ -74,15 +75,15 @@ const BurgerIngredients = (propsArr) => {
           </a>
         </div>
         <div className={BurgerIngredientsStyles.ingredients}>
-          <h2 className={BurgerIngredientsStyles.typetext} id="buns">
+          <h2 className="text text_type_main-medium mb-6 mt-10" id="buns">
             Булки
           </h2>
           <RenderIngredient arr={buns} clickProp={openModal} />
-          <h2 className={BurgerIngredientsStyles.typetext} id="sauce">
+          <h2 className="text text_type_main-medium mb-6" id="sauce">
             Соусы
           </h2>
           <RenderIngredient arr={mains} clickProp={openModal} />
-          <h2 className={BurgerIngredientsStyles.typetext} id="main">
+          <h2 className="text text_type_main-medium mb-6" id="main">
             Начинки
           </h2>
           <RenderIngredient arr={sauces} clickProp={openModal} />
@@ -98,6 +99,6 @@ const BurgerIngredients = (propsArr) => {
   );
 };
 BurgerIngredients.propTypes = {
-  dataIngredients: PropTypes.array,
+  dataIngredients: PropTypes.arrayOf(objectWithShape.isRequired),
 };
 export default BurgerIngredients;

@@ -1,4 +1,5 @@
 import modalOverlayStyles from './modaloverlay.module.css';
+import PropTypes from 'prop-types';
 
 const ModalOverlay = ({ onClick, children }) => {
   const close = (evt) => {
@@ -13,5 +14,8 @@ const ModalOverlay = ({ onClick, children }) => {
     </div>
   );
 };
-
+ModalOverlay.propTypes = {
+  onClick: PropTypes.node.isRequired,
+  children: PropTypes.func.isRequired,
+};
 export default ModalOverlay;

@@ -12,6 +12,7 @@ import {
 
 import Modal from '../modal/modal';
 import OrderDetails from '../orderdetails/orderdetails';
+import objectWithShape from '../../utils/shape';
 
 // Берем все активные, убираем булки и рендерим разметку которые внутри бургера
 const RenderBurgerIngr = ({ arr }) => {
@@ -20,8 +21,8 @@ const RenderBurgerIngr = ({ arr }) => {
   return (
     <>
       {nobuns.map((item) => (
-        <li className={BurgerConstructorStyles.item} key={item._id}>
-          <DragIcon type="primary" /> <ConstructorElement text={item.name} price={50} thumbnail={item.image} />
+        <li className={`${BurgerConstructorStyles.item} mt-4`} key={item._id}>
+          <DragIcon type="primary" /> <ConstructorElement text={item.name} price={item.price} thumbnail={item.image} />
         </li>
       ))}
     </>
@@ -31,12 +32,12 @@ const RenderBurgerIngr = ({ arr }) => {
 // Берем активную булку и позицию её, рендерим разметку булок вверх и низ
 const RenderBurgerBuns = ({ bunsActiv, position }) => {
   return (
-    <div className={BurgerConstructorStyles.buns}>
+    <div className="ml-8 mr-4">
       <ConstructorElement
         type="top"
         isLocked={true}
         text={`${bunsActiv.name} (${position})`}
-        price={200}
+        price={bunsActiv.price}
         thumbnail={bunsActiv.image}
       />
     </div>
@@ -44,15 +45,18 @@ const RenderBurgerBuns = ({ bunsActiv, position }) => {
 };
 
 const SummPrice = ({ arr }) => {
+  const buns = arr.filter((item) => item.type === 'bun');
+  const nobuns = arr.filter((item) => item.type !== 'bun');
   let summ = 0;
-  arr.map((item) => {
-    summ = +(item.price * item.__v);
+  summ = buns[0].price * 2;
+  nobuns.map((item) => {
+    summ += item.price;
   });
   return <p className="text text_type_digits-medium">{summ}</p>;
 };
 
-const BurgerConstructor = (props) => {
-  const filterDataIngredients = props.dataIngredients.filter((item) => item.__v > 0);
+const BurgerConstructor = ({ dataIngredients }) => {
+  const filterDataIngredients = dataIngredients.filter((item) => item.__v > 0);
   const buns = filterDataIngredients.filter((item) => item.type === 'bun');
   const mains = filterDataIngredients.filter((item) => item.type === 'main');
   const sauces = filterDataIngredients.filter((item) => item.type === 'sauce');
@@ -74,11 +78,8 @@ const BurgerConstructor = (props) => {
   }
 
   return (
-    <>
-      <div
-        className={BurgerConstructorStyles.constructor}
-        style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
-      >
+    <section>
+      <div className="pt-25 ml-10 pl-4 pr-4" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <RenderBurgerBuns bunsActiv={bunsActiv} position="Верх" />
 
         <div className={BurgerConstructorStyles.scroll}>
@@ -86,24 +87,27 @@ const BurgerConstructor = (props) => {
         </div>
 
         <RenderBurgerBuns bunsActiv={bunsActiv} position="Низ" />
-        <div className={BurgerConstructorStyles.summing}>
-          <SummPrice arr={filterDataIngredients} />
+      </div>
+      <div className={`${BurgerConstructorStyles.summing} mt-10 mr-4`}>
+        <SummPrice arr={filterDataIngredients} />
+
+        <div className={`${BurgerConstructorStyles.icon} ml-2 mr-10`}>
           <CurrencyIcon type="primary" />
-          <Button type="primary" size="large" onClick={openModal}>
-            Оформить заказ
-          </Button>
         </div>
+        <Button type="primary" size="large" onClick={openModal}>
+          Оформить заказ
+        </Button>
       </div>
       {state.visible && (
         <Modal header="" onClose={closeModal}>
           <OrderDetails id={state.id} />
         </Modal>
       )}
-    </>
+    </section>
   );
 };
 
 BurgerConstructor.propTypes = {
-  dataIngredients: PropTypes.array,
+  dataIngredients: PropTypes.arrayOf(objectWithShape.isRequired),
 };
 export default BurgerConstructor;

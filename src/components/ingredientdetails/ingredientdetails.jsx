@@ -1,9 +1,9 @@
 import IngredientDetailsStyles from './ingredientdetails.module.css';
+import PropTypes from 'prop-types';
 import dataIngredient from '../../utils/dataIngredient';
-function IngredientDetails({ ingredient }) {
-  console.log('IngredientDetails');
-  console.log(ingredient);
+import objectWithShape from '../../utils/shape';
 
+function IngredientDetails({ ingredient }) {
   return (
     <>
       <img src={ingredient.image_large} alt={ingredient.name} />
@@ -29,5 +29,8 @@ function IngredientDetails({ ingredient }) {
     </>
   );
 }
+IngredientDetails.propTypes = {
+  ingredient: objectWithShape.isRequired,
+};
 
 export default IngredientDetails;
