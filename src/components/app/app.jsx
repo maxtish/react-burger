@@ -19,9 +19,9 @@ function App() {
       const res = await fetch(dataURL);
 
       if (!res.ok) {
-        console.log('Ошибка', res.status);
+        setState({ ...state, hasError: true, isLoading: false });
+        return Promise.reject(`Ошибка ${res.status}`);
       }
-
       const data = await res.json();
       const arr = data.data;
       setState({ ...state, data: arr, hasError: false, isLoading: false });
