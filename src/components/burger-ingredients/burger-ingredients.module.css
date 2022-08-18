@@ -42,3 +42,7 @@
 .ingredients::-webkit-scrollbar-thumb {
   background-color: #8585ad;
 }
+
+.wrap {
+  display: flex;
+}

@@ -1,3 +1,9 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .scroll {
   overflow-y: scroll;
   max-height: calc(100vh - 498px);

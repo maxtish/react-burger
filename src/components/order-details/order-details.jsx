@@ -1,4 +1,4 @@
-import OrderDetailsStyles from './orderdetails.module.css';
+import OrderDetailsStyles from './order-details.module.css';
 import PropTypes from 'prop-types';
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 function OrderDetails({ id }) {

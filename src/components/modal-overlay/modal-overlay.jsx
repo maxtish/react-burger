@@ -1,4 +1,4 @@
-import modalOverlayStyles from './modaloverlay.module.css';
+import modalOverlayStyles from './modal-overlay.module.css';
 import PropTypes from 'prop-types';
 
 const ModalOverlay = ({ onClick, children }) => {

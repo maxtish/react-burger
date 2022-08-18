@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import BurgerConstructorStyles from './burgerconstructor.module.css';
+import BurgerConstructorStyles from './burger-constructor.module.css';
 import {
   CurrencyIcon,
   DragIcon,
@@ -11,7 +11,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import Modal from '../modal/modal';
-import OrderDetails from '../orderdetails/orderdetails';
+import OrderDetails from '../order-details/order-details';
 import objectWithShape from '../../utils/shape';
 
 // Берем все активные, убираем булки и рендерим разметку которые внутри бургера
@@ -31,12 +31,13 @@ const RenderBurgerIngr = ({ arr }) => {
 
 // Берем активную булку и позицию её, рендерим разметку булок вверх и низ
 const RenderBurgerBuns = ({ bunsActiv, position }) => {
+  const positionRus = position === 'top' ? 'Верх' : 'Низ';
   return (
     <div className="ml-8 mr-4">
       <ConstructorElement
-        type="top"
+        type={position}
         isLocked={true}
-        text={`${bunsActiv.name} (${position})`}
+        text={`${bunsActiv.name} (${positionRus})`}
         price={bunsActiv.price}
         thumbnail={bunsActiv.image}
       />
@@ -77,14 +78,14 @@ const BurgerConstructor = ({ dataIngredients }) => {
 
   return (
     <section>
-      <div className="pt-25 ml-10 pl-4 pr-4" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <RenderBurgerBuns bunsActiv={bunsActiv} position="Верх" />
+      <div className={`${BurgerConstructorStyles.wrap} pt-25 ml-10 pl-4 pr-4`}>
+        <RenderBurgerBuns bunsActiv={bunsActiv} position="top" />
 
         <div className={BurgerConstructorStyles.scroll}>
           <RenderBurgerIngr arr={filterDataIngredients} />
         </div>
 
-        <RenderBurgerBuns bunsActiv={bunsActiv} position="Низ" />
+        <RenderBurgerBuns bunsActiv={bunsActiv} position="bottom" />
       </div>
       <div className={`${BurgerConstructorStyles.summing} mt-10 mr-4`}>
         <SummPrice arr={filterDataIngredients} />
@@ -107,5 +108,10 @@ const BurgerConstructor = ({ dataIngredients }) => {
 
 BurgerConstructor.propTypes = {
   dataIngredients: PropTypes.arrayOf(objectWithShape.isRequired),
+};
+
+RenderBurgerBuns.propTypes = {
+  bunsActiv: objectWithShape.isRequired,
+  position: PropTypes.string.isRequired,
 };
 export default BurgerConstructor;

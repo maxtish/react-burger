@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import BurgerIngredientsStyles from './burgeringredients.module.css';
+import BurgerIngredientsStyles from './burger-ingredients.module.css';
 import { Tab, CurrencyIcon, Counter, Typography } from '@ya.praktikum/react-developer-burger-ui-components';
 import dataIngredient from '../../utils/dataIngredient';
 import Modal from '../modal/modal';
-import IngredientDetails from '../ingredientdetails/ingredientdetails';
+import IngredientDetails from '../ingredient-details/ingredient-details';
 import modalStyles from '../modal/modal.module.css';
 import objectWithShape from '../../utils/shape';
 
@@ -52,7 +52,7 @@ const BurgerIngredients = (propsArr) => {
     <>
       <section>
         <h1 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h1>
-        <div style={{ display: 'flex' }}>
+        <div className={BurgerIngredientsStyles.wrap}>
           <a className={BurgerIngredientsStyles.link} href="#buns">
             <Tab value="one" active={current === 'one'} onClick={setCurrent}>
               Булки
@@ -96,4 +96,10 @@ const BurgerIngredients = (propsArr) => {
 BurgerIngredients.propTypes = {
   dataIngredients: PropTypes.arrayOf(objectWithShape.isRequired),
 };
+
+RenderIngredient.propTypes = {
+  arr: PropTypes.arrayOf(objectWithShape.isRequired),
+  clickProp: PropTypes.func.isRequired,
+};
+
 export default BurgerIngredients;

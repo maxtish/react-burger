@@ -1,5 +1,5 @@
 import React from 'react';
-import HeaderStyles from './appheader.module.css';
+import HeaderStyles from './app-header.module.css';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 function AppHeader() {
