@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BurgerIngredientsStyles from './burger-ingredients.module.css';
 import { Tab, CurrencyIcon, Counter, Typography } from '@ya.praktikum/react-developer-burger-ui-components';
-import dataIngredient from '../../utils/dataIngredient';
+import dataIngredient from '../../utils/data-Ingredient';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import modalStyles from '../modal/modal.module.css';

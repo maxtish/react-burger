@@ -1,6 +1,6 @@
 import IngredientDetailsStyles from './ingredient-details.module.css';
 import PropTypes from 'prop-types';
-import dataIngredient from '../../utils/dataIngredient';
+import dataIngredient from '../../utils/data-Ingredient';
 import objectWithShape from '../../utils/shape';
 
 function IngredientDetails({ ingredient }) {
