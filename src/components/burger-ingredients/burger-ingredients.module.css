@@ -1,0 +1,48 @@
+.list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  list-style-type: none;
+  gap: 24px;
+  padding: 0;
+  width: 600px;
+}
+.item {
+  max-width: 272px;
+  position: relative;
+}
+
+.price {
+  display: flex;
+  justify-content: center;
+}
+.pricenumb {
+  margin-right: 9px;
+}
+
+.text {
+  text-align: center;
+}
+
+.link {
+  color: #f2f2f3;
+  text-decoration: none;
+}
+
+.ingredients {
+  overflow-y: scroll;
+  max-height: calc(100vh - 280px);
+}
+.ingredients::-webkit-scrollbar {
+  width: 8px;
+}
+.ingredients::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+.ingredients::-webkit-scrollbar-thumb {
+  background-color: #8585ad;
+}
+
+.wrap {
+  display: flex;
+}
