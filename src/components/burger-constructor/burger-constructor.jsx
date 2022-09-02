@@ -13,6 +13,8 @@ import {
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import objectWithShape from '../../utils/shape';
+import DataIngredientsContext from '../../utils/appContext';
+import SelectedIngredientsContext from '../../utils/selContext';
 
 // Берем все активные, убираем булки и рендерим разметку которые внутри бургера
 const RenderBurgerIngr = ({ arr }) => {
@@ -46,66 +48,74 @@ const RenderBurgerBuns = ({ bunsActiv, position }) => {
 };
 
 const SummPrice = ({ arr }) => {
-  const buns = arr.filter((item) => item.type === 'bun');
-  const nobuns = arr.filter((item) => item.type !== 'bun');
+  const buns = arr.filter((item) => item.type === 'bun')[0].price;
+
   let summ = 0;
-  summ = buns[0].price * 2;
-  nobuns.map((item) => {
+  summ = buns * 2;
+  arr.map((item) => {
     summ += item.price;
   });
   return <p className="text text_type_digits-medium">{summ}</p>;
 };
 
-const BurgerConstructor = ({ dataIngredients }) => {
-  const filterDataIngredients = dataIngredients.filter((item) => item.__v > 0);
-  const buns = filterDataIngredients.filter((item) => item.type === 'bun');
-  const mains = filterDataIngredients.filter((item) => item.type === 'main');
-  const sauces = filterDataIngredients.filter((item) => item.type === 'sauce');
-  const bunsActiv = buns[0];
+const BurgerConstructor = () => {
+  const { selectedIngredients } = React.useContext(SelectedIngredientsContext);
 
   const [state, setState] = React.useState({
     visible: false,
     id: '',
   });
+  console.log('constructor', selectedIngredients);
+  if (!selectedIngredients.length) {
+    console.log('Ошибка - нет массива');
 
-  function openModal() {
-    setState({ ...state, visible: true, id: 777 });
-  }
+    return <section>Нет выбранных элементов</section>;
+  } else {
+    const buns = selectedIngredients.filter((item) => item.type === 'bun')[0];
 
-  function closeModal() {
-    setState({ ...state, visible: false, id: '' });
-  }
+    const mains = selectedIngredients.filter((item) => item.type === 'main');
+    const sauces = selectedIngredients.filter((item) => item.type === 'sauce');
 
-  return (
-    <section>
-      <div className={`${BurgerConstructorStyles.wrap} pt-25 ml-10 pl-4 pr-4`}>
-        <RenderBurgerBuns bunsActiv={bunsActiv} position="top" />
+    function openModal() {
+      setState({ ...state, visible: true, id: 777 });
+    }
 
-        <div className={BurgerConstructorStyles.scroll}>
-          <RenderBurgerIngr arr={filterDataIngredients} />
+    function closeModal() {
+      setState({ ...state, visible: false, id: '' });
+    }
+
+    return (
+      <section>
+        <div className={`${BurgerConstructorStyles.wrap} pt-25 ml-10 pl-4 pr-4`}>
+          {!buns && 'Булки нет'}
+          {buns && <RenderBurgerBuns bunsActiv={buns} position="top" />}
+
+          <div className={BurgerConstructorStyles.scroll}>
+            <RenderBurgerIngr arr={selectedIngredients} />
+          </div>
+          {!buns && 'Булки нет'}
+          {buns && <RenderBurgerBuns bunsActiv={buns} position="bottom" />}
         </div>
+        <div className={`${BurgerConstructorStyles.summing} mt-10 mr-4`}>
+          {!buns && 'Булки нет'}
+          {buns && <SummPrice arr={selectedIngredients} />}
 
-        <RenderBurgerBuns bunsActiv={bunsActiv} position="bottom" />
-      </div>
-      <div className={`${BurgerConstructorStyles.summing} mt-10 mr-4`}>
-        <SummPrice arr={filterDataIngredients} />
-
-        <div className={`${BurgerConstructorStyles.icon} ml-2 mr-10`}>
-          <CurrencyIcon type="primary" />
+          <div className={`${BurgerConstructorStyles.icon} ml-2 mr-10`}>
+            <CurrencyIcon type="primary" />
+          </div>
+          <Button type="primary" size="large" onClick={openModal}>
+            Оформить заказ
+          </Button>
         </div>
-        <Button type="primary" size="large" onClick={openModal}>
-          Оформить заказ
-        </Button>
-      </div>
-      {state.visible && (
-        <Modal header="" onClose={closeModal}>
-          <OrderDetails id={state.id} />
-        </Modal>
-      )}
-    </section>
-  );
+        {state.visible && (
+          <Modal header="" onClose={closeModal}>
+            <OrderDetails id={state.id} />
+          </Modal>
+        )}
+      </section>
+    );
+  }
 };
-
 BurgerConstructor.propTypes = {
   dataIngredients: PropTypes.arrayOf(objectWithShape.isRequired),
 };

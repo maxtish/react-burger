@@ -1,11 +1,12 @@
 import React from 'react';
 import AppStyles from './app.module.css';
-import dataIngredients from '../../utils/data';
 import dataURL from '../../utils/data-URL';
 import AppHeader from '../app-header/app-header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
-
+import DataIngredientsContext from '../../utils/appContext';
+import SelectedIngredientsContext from '../../utils/selContext';
+import getIngredients from '../../utils/api';
 function App() {
   const [state, setState] = React.useState({
     isLoading: false,
@@ -13,24 +14,18 @@ function App() {
     data: [],
   });
 
-  const getIngredients = async () => {
-    try {
-      setState({ ...state, hasError: false, isLoading: true });
-      const res = await fetch(dataURL);
-
-      if (!res.ok) {
-        setState({ ...state, hasError: true, isLoading: false });
-        return Promise.reject(`Ошибка ${res.status}`);
-      }
-      const data = await res.json();
-      setState({ ...state, data: data.data, hasError: false, isLoading: false });
-    } catch (error) {
-      setState({ ...state, hasError: true, isLoading: false });
-    }
-  };
+  const [selectedIngredients, setSelectedIngredients] = React.useState([]);
 
   React.useEffect(() => {
-    getIngredients();
+    getIngredients()
+      .then((data) => {
+        setState({ ...state, data: data.data, hasError: false, isLoading: false });
+      })
+
+      .catch((error) => {
+        console.log('error:', error);
+        setState({ ...state, hasError: true, isLoading: false });
+      });
   }, []);
 
   const { isLoading, hasError, data } = state;
@@ -44,8 +39,13 @@ function App() {
       {!isLoading && !hasError && !data.length && 'Ошибка - нет массива'}
       {!isLoading && !hasError && data.length && (
         <main className={AppStyles.content}>
-          <BurgerIngredients dataIngredients={data} />
-          <BurgerConstructor dataIngredients={dataIngredients} />
+          <DataIngredientsContext.Provider value={data}>
+            <SelectedIngredientsContext.Provider value={{ selectedIngredients, setSelectedIngredients }}>
+              <BurgerIngredients />
+
+              <BurgerConstructor />
+            </SelectedIngredientsContext.Provider>
+          </DataIngredientsContext.Provider>
         </main>
       )}
     </div>
