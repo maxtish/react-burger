@@ -15,6 +15,7 @@ import OrderDetails from '../order-details/order-details';
 import objectWithShape from '../../utils/shape';
 import DataIngredientsContext from '../../utils/appContext';
 import SelectedIngredientsContext from '../../utils/selContext';
+import { getOrderDetails } from '../../utils/api';
 
 // Берем все активные, убираем булки и рендерим разметку которые внутри бургера
 const RenderBurgerIngr = ({ arr }) => {
@@ -22,8 +23,8 @@ const RenderBurgerIngr = ({ arr }) => {
 
   return (
     <>
-      {nobuns.map((item) => (
-        <li className={`${BurgerConstructorStyles.item} mt-4`} key={item._id}>
+      {nobuns.map((item, index) => (
+        <li className={`${BurgerConstructorStyles.item} mt-4`} key={index}>
           <DragIcon type="primary" /> <ConstructorElement text={item.name} price={item.price} thumbnail={item.image} />
         </li>
       ))}
@@ -49,9 +50,8 @@ const RenderBurgerBuns = ({ bunsActiv, position }) => {
 
 const SummPrice = ({ arr }) => {
   const buns = arr.filter((item) => item.type === 'bun')[0].price;
-
   let summ = 0;
-  summ = buns * 2;
+  summ = buns;
   arr.map((item) => {
     summ += item.price;
   });
@@ -65,11 +65,13 @@ const BurgerConstructor = () => {
     visible: false,
     id: '',
   });
-  console.log('constructor', selectedIngredients);
-  if (!selectedIngredients.length) {
-    console.log('Ошибка - нет массива');
 
-    return <section>Нет выбранных элементов</section>;
+  if (!selectedIngredients.length) {
+    return (
+      <section>
+        <p>Лучше начать с булки</p>
+      </section>
+    );
   } else {
     const buns = selectedIngredients.filter((item) => item.type === 'bun')[0];
 
@@ -77,7 +79,16 @@ const BurgerConstructor = () => {
     const sauces = selectedIngredients.filter((item) => item.type === 'sauce');
 
     function openModal() {
-      setState({ ...state, visible: true, id: 777 });
+      const idArrSelected = selectedIngredients.map((item) => item._id);
+
+      getOrderDetails(idArrSelected)
+        .then((res) => {
+          setState({ ...state, visible: true, id: res.order.number });
+        })
+        .catch((error) => {
+          console.log('error:', error);
+          setState({ ...state, visible: false });
+        });
     }
 
     function closeModal() {
@@ -87,26 +98,28 @@ const BurgerConstructor = () => {
     return (
       <section>
         <div className={`${BurgerConstructorStyles.wrap} pt-25 ml-10 pl-4 pr-4`}>
-          {!buns && 'Булки нет'}
+          {!buns && 'Выберите булку'}
           {buns && <RenderBurgerBuns bunsActiv={buns} position="top" />}
 
           <div className={BurgerConstructorStyles.scroll}>
             <RenderBurgerIngr arr={selectedIngredients} />
           </div>
-          {!buns && 'Булки нет'}
+          {!buns && 'Выберите булку'}
           {buns && <RenderBurgerBuns bunsActiv={buns} position="bottom" />}
         </div>
-        <div className={`${BurgerConstructorStyles.summing} mt-10 mr-4`}>
-          {!buns && 'Булки нет'}
-          {buns && <SummPrice arr={selectedIngredients} />}
+        {!buns && 'Это не бургер!'}
+        {buns && (
+          <div className={`${BurgerConstructorStyles.summing} mt-10 mr-4`}>
+            <SummPrice arr={selectedIngredients} />
 
-          <div className={`${BurgerConstructorStyles.icon} ml-2 mr-10`}>
-            <CurrencyIcon type="primary" />
+            <div className={`${BurgerConstructorStyles.icon} ml-2 mr-10`}>
+              <CurrencyIcon type="primary" />
+            </div>
+            <Button type="primary" size="large" onClick={openModal}>
+              Оформить заказ
+            </Button>
           </div>
-          <Button type="primary" size="large" onClick={openModal}>
-            Оформить заказ
-          </Button>
-        </div>
+        )}
         {state.visible && (
           <Modal header="" onClose={closeModal}>
             <OrderDetails id={state.id} />
@@ -117,11 +130,12 @@ const BurgerConstructor = () => {
   }
 };
 BurgerConstructor.propTypes = {
-  dataIngredients: PropTypes.arrayOf(objectWithShape.isRequired),
+  selectedIngredients: PropTypes.arrayOf(objectWithShape.isRequired),
 };
 
 RenderBurgerBuns.propTypes = {
   bunsActiv: objectWithShape.isRequired,
   position: PropTypes.string.isRequired,
 };
+
 export default BurgerConstructor;

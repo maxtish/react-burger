@@ -50,7 +50,6 @@ const BurgerIngredients = () => {
   function reducer(selectedState, event) {
     const ids = event.target.offsetParent.getAttribute('id');
     const selected = ingredients.find((item) => item._id === ids);
-    console.log(selected);
 
     let bun = selectedState.filter((item) => item.type === 'bun');
     // если клик по булке и в массиве есть уже булка
@@ -66,7 +65,10 @@ const BurgerIngredients = () => {
 
   const [selectedState, dispatch] = React.useReducer(reducer, []);
 
-  setSelectedIngredients(selectedState);
+  React.useEffect(() => {
+    setSelectedIngredients(selectedState);
+  }, [selectedState, setSelectedIngredients]);
+
   function openModal(Event) {
     const targetIndex = Event.currentTarget.id;
     const target = ingredients.find((item) => item._id === targetIndex);
@@ -129,6 +131,7 @@ BurgerIngredients.propTypes = {
 RenderIngredient.propTypes = {
   arr: PropTypes.arrayOf(objectWithShape.isRequired),
   clickProp: PropTypes.func.isRequired,
+  clickSelect: PropTypes.func.isRequired,
 };
 
 export default BurgerIngredients;

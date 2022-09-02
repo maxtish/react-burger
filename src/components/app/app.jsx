@@ -1,12 +1,11 @@
 import React from 'react';
 import AppStyles from './app.module.css';
-import dataURL from '../../utils/data-URL';
 import AppHeader from '../app-header/app-header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import DataIngredientsContext from '../../utils/appContext';
 import SelectedIngredientsContext from '../../utils/selContext';
-import getIngredients from '../../utils/api';
+import { getIngredients } from '../../utils/api';
 function App() {
   const [state, setState] = React.useState({
     isLoading: false,

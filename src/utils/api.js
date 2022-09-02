@@ -1,11 +1,21 @@
-const url = 'https://norma.nomoreparties.space/api/ingredients';
+const url = 'https://norma.nomoreparties.space/api/';
 
-export default function getIngredients() {
-  return fetch(url, {
+export function getIngredients() {
+  return fetch(`${url}ingredients`, {
     method: 'GET',
     headers: {
-      'Conternt-Type': 'application/json',
+      'Content-Type': 'application/json',
     },
+  }).then(getResponse);
+}
+
+export function getOrderDetails(idArrSelected) {
+  return fetch(`${url}orders`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ingredients: idArrSelected }),
   }).then(getResponse);
 }
 
