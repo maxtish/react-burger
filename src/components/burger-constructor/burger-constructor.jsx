@@ -17,6 +17,12 @@ import DataIngredientsContext from '../../utils/appContext';
 import SelectedIngredientsContext from '../../utils/selContext';
 import { getOrderDetails } from '../../utils/api';
 
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { ADD_ING } from '../../services/actions/constructor';
+
+console.log('sss');
+
 // Берем все активные, убираем булки и рендерим разметку которые внутри бургера
 const RenderBurgerIngr = ({ arr }) => {
   const nobuns = arr.filter((item) => item.type !== 'bun');
