@@ -6,13 +6,14 @@ import BurgerConstructor from '../burger-constructor/burger-constructor';
 import DataIngredientsContext from '../../utils/appContext';
 import SelectedIngredientsContext from '../../utils/selContext';
 import { getIngredients } from '../../utils/api';
+
 function App() {
   const [state, setState] = React.useState({
     isLoading: false,
     hasError: false,
     data: [],
   });
-  //
+
   const [selectedIngredients, setSelectedIngredients] = React.useState([]);
 
   React.useEffect(() => {
