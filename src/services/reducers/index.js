@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import { constructorReducer } from './constructor';
+import { ingredientsReducer } from './ingredients';
 
 export const rootReducer = combineReducers({
-  constructor: constructorReducer,
+  ingredients: ingredientsReducer,
+  constructors: constructorReducer,
 });

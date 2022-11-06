@@ -17,11 +17,9 @@ import DataIngredientsContext from '../../utils/appContext';
 import SelectedIngredientsContext from '../../utils/selContext';
 import { getOrderDetails } from '../../utils/api';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import { ADD_ING } from '../../services/actions/constructor';
-
-console.log('sss');
+import { ADD_ING, GET_ING } from '../../services/actions/constructor';
 
 // Берем все активные, убираем булки и рендерим разметку которые внутри бургера
 const RenderBurgerIngr = ({ arr }) => {
@@ -65,6 +63,23 @@ const SummPrice = ({ arr }) => {
 };
 
 const BurgerConstructor = () => {
+  //тест сторе
+  let st = useSelector((store) => store.ingredients.ing);
+  let stn = useSelector((store) => store.constructors.number);
+  const dispatch = useDispatch();
+  const switchTabKon = () => {
+    dispatch({ type: GET_ING });
+
+    console.log(st);
+  };
+  const switchTabIng = () => {
+    dispatch({ type: ADD_ING });
+
+    console.log(stn);
+  };
+
+  //тест сторе
+
   const { selectedIngredients } = React.useContext(SelectedIngredientsContext);
 
   const [state, setState] = React.useState({
@@ -75,6 +90,12 @@ const BurgerConstructor = () => {
   if (!selectedIngredients.length) {
     return (
       <section>
+        <Button type="primary" size="large" onClick={switchTabIng}>
+          + ингридиент
+        </Button>
+        <Button type="primary" size="large" onClick={switchTabKon}>
+          + конструктор
+        </Button>
         <p>Лучше начать с булки</p>
       </section>
     );
