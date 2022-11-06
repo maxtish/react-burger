@@ -9,7 +9,7 @@ import modalStyles from '../modal/modal.module.css';
 import objectWithShape from '../../utils/shape';
 import DataIngredientsContext from '../../utils/appContext';
 import SelectedIngredientsContext from '../../utils/selContext';
-
+import { useDispatch, useSelector } from 'react-redux';
 const RenderIngredient = ({ arr, clickProp, clickSelect }) => {
   return (
     <ul className={`${BurgerIngredientsStyles.list} ml-4 mt-6 mb-10`}>
@@ -30,7 +30,9 @@ const RenderIngredient = ({ arr, clickProp, clickSelect }) => {
 };
 
 const BurgerIngredients = () => {
-  const ingredients = React.useContext(DataIngredientsContext);
+  //const ingredients = React.useContext(DataIngredientsContext);
+  const ingredients = useSelector((store) => store.ingredients.data); // уже из стора
+
   const { setSelectedIngredients } = React.useContext(SelectedIngredientsContext);
   const [current, setCurrent] = React.useState('one');
 

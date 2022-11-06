@@ -19,7 +19,8 @@ import { getOrderDetails } from '../../utils/api';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import { ADD_ING, GET_ING } from '../../services/actions/constructor';
+import { ADD_ING } from '../../services/actions/constructor';
+import { GET_ING } from '../../services/actions/ingredients';
 
 // Берем все активные, убираем булки и рендерим разметку которые внутри бургера
 const RenderBurgerIngr = ({ arr }) => {
@@ -69,13 +70,9 @@ const BurgerConstructor = () => {
   const dispatch = useDispatch();
   const switchTabKon = () => {
     dispatch({ type: GET_ING });
-
-    console.log(st);
   };
   const switchTabIng = () => {
     dispatch({ type: ADD_ING });
-
-    console.log(stn);
   };
 
   //тест сторе
@@ -91,10 +88,10 @@ const BurgerConstructor = () => {
     return (
       <section>
         <Button type="primary" size="large" onClick={switchTabIng}>
-          + ингридиент
+          + 1 ингридиент = {stn}
         </Button>
         <Button type="primary" size="large" onClick={switchTabKon}>
-          + конструктор
+          + 1 конструктор = {st}
         </Button>
         <p>Лучше начать с булки</p>
       </section>

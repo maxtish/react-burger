@@ -6,6 +6,8 @@ import BurgerConstructor from '../burger-constructor/burger-constructor';
 import DataIngredientsContext from '../../utils/appContext';
 import SelectedIngredientsContext from '../../utils/selContext';
 import { getIngredients } from '../../utils/api';
+import { useDispatch, useSelector } from 'react-redux';
+import { GET_ING_DATA } from '../../services/actions/ingredients';
 
 function App() {
   const [state, setState] = React.useState({
@@ -29,6 +31,13 @@ function App() {
   }, []);
 
   const { isLoading, hasError, data } = state;
+
+  // передаем data  в store
+  const dispatch = useDispatch();
+  dispatch({
+    type: GET_ING_DATA,
+    data: data,
+  });
 
   return (
     <div className={AppStyles.page}>
