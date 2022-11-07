@@ -1,10 +1,11 @@
 //
-import { GET_ING, GET_ING_DATA } from '../actions/ingredients';
+import { GET_ING, GET_ITEMS_REQUEST, GET_ITEMS_SUCCESS, GET_ITEMS_FAILED } from '../actions/ingredients';
 
 let initialState = {
   ing: 9,
-  connect: false,
   data: [],
+  hasError: false,
+  isLoading: false,
 };
 
 // Редьюсер
@@ -19,11 +20,28 @@ export const ingredientsReducer = (state = initialState, action) => {
       };
     }
 
-    case GET_ING_DATA: {
+    case GET_ITEMS_SUCCESS: {
       return {
         ...state,
-        connect: true,
-        data: action.data,
+        isLoading: false,
+        hasError: false,
+        data: action.items,
+      };
+    }
+
+    case GET_ITEMS_FAILED: {
+      return {
+        ...state,
+        isLoading: false,
+        hasError: true,
+      };
+    }
+
+    case GET_ITEMS_REQUEST: {
+      return {
+        ...state,
+        isLoading: true,
+        hasError: false,
       };
     }
 
