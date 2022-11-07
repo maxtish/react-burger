@@ -10,6 +10,8 @@ import objectWithShape from '../../utils/shape';
 import DataIngredientsContext from '../../utils/appContext';
 import SelectedIngredientsContext from '../../utils/selContext';
 import { useDispatch, useSelector } from 'react-redux';
+import { ADD_INGREDIENTS } from '../../services/actions/constructor';
+
 const RenderIngredient = ({ arr, clickProp, clickSelect }) => {
   return (
     <ul className={`${BurgerIngredientsStyles.list} ml-4 mt-6 mb-10`}>
@@ -33,6 +35,15 @@ const BurgerIngredients = () => {
   //const ingredients = React.useContext(DataIngredientsContext);
   const ingredients = useSelector((store) => store.ingredients.data); // уже из стора
 
+  /*
+ let sing = useSelector((store) => store.ingredients.selectedIngredients);
+dispatch({
+    type: ADD_INGREDIENTS,
+    ing: selectedState,
+  });*/
+
+  const dispatch = useDispatch();
+
   const { setSelectedIngredients } = React.useContext(SelectedIngredientsContext);
   const [current, setCurrent] = React.useState('one');
 
@@ -47,12 +58,13 @@ const BurgerIngredients = () => {
   function SelectClick(event) {
     event.stopPropagation();
 
-    dispatch(event);
+    dispatchN(event);
   }
+
   function reducer(selectedState, event) {
     const ids = event.target.offsetParent.getAttribute('id');
     const selected = ingredients.find((item) => item._id === ids);
-
+    console.log(ids);
     let bun = selectedState.filter((item) => item.type === 'bun');
     // если клик по булке и в массиве есть уже булка
     // тогда удаляем старую булку и добавляем новую
@@ -65,10 +77,16 @@ const BurgerIngredients = () => {
     }
   }
 
-  const [selectedState, dispatch] = React.useReducer(reducer, []);
+  const [selectedState, dispatchN] = React.useReducer(reducer, []);
 
   React.useEffect(() => {
     setSelectedIngredients(selectedState);
+    /// передаем в стор список всех ингредиентов в текущем конструкторе бургера
+    dispatch({
+      type: ADD_INGREDIENTS,
+      ing: selectedState,
+    });
+    ////
   }, [selectedState, setSelectedIngredients]);
 
   function openModal(Event) {

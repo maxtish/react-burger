@@ -77,7 +77,8 @@ const BurgerConstructor = () => {
 
   //тест сторе
 
-  const { selectedIngredients } = React.useContext(SelectedIngredientsContext);
+  //const { selectedIngredients } = React.useContext(SelectedIngredientsContext);
+  const selectedIngredients = useSelector((store) => store.constructors.selectedIngredients);
 
   const [state, setState] = React.useState({
     visible: false,

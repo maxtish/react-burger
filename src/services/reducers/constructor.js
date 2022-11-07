@@ -1,8 +1,9 @@
 //
-import { ADD_ING } from '../actions/constructor';
+import { ADD_ING, ADD_INGREDIENTS } from '../actions/constructor';
 
 let initialState = {
   number: 0,
+  selectedIngredients: [],
 };
 
 // Редьюсер
@@ -14,6 +15,12 @@ export const constructorReducer = (state = initialState, action) => {
       return {
         ...state,
         number: state.number + 1,
+      };
+    }
+    case ADD_INGREDIENTS: {
+      return {
+        ...state,
+        selectedIngredients: action.ing,
       };
     }
 
