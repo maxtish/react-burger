@@ -19,7 +19,7 @@ import { getOrderDetails } from '../../utils/api';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import { ADD_ING } from '../../services/actions/constructor';
+import { getOrder, VIEWING_ORDER_ENABLED, VIEWING_ORDER_DISABLED } from '../../services/actions/constructor';
 import { GET_ING } from '../../services/actions/ingredients';
 
 // Берем все активные, убираем булки и рендерим разметку которые внутри бургера
@@ -65,8 +65,9 @@ const SummPrice = ({ arr }) => {
 
 const BurgerConstructor = () => {
   //const { selectedIngredients } = React.useContext(SelectedIngredientsContext);
-  const selectedIngredients = useSelector((store) => store.constructors.selectedIngredients);
+  const { selectedIngredients, visibleOrderModal } = useSelector((store) => store.constructors);
 
+  const dispatch = useDispatch();
   const [state, setState] = React.useState({
     visible: false,
     id: '',
@@ -85,7 +86,12 @@ const BurgerConstructor = () => {
 
     function openModal() {
       const idArrSelected = selectedIngredients.map((item) => item._id);
+      dispatch({
+        type: VIEWING_ORDER_ENABLED,
+      });
+      dispatch(getOrder(idArrSelected));
 
+      /*
       getOrderDetails(idArrSelected)
         .then((res) => {
           setState({ ...state, visible: true, id: res.order.number });
@@ -93,11 +99,14 @@ const BurgerConstructor = () => {
         .catch((error) => {
           console.log('error:', error);
           setState({ ...state, visible: false });
-        });
+        });*/
     }
 
     function closeModal() {
-      setState({ ...state, visible: false, id: '' });
+      //setState({ ...state, visible: false, id: '' });
+      dispatch({
+        type: VIEWING_ORDER_DISABLED,
+      });
     }
 
     return (
@@ -125,9 +134,9 @@ const BurgerConstructor = () => {
             </Button>
           </div>
         )}
-        {state.visible && (
+        {visibleOrderModal && (
           <Modal header="" onClose={closeModal}>
-            <OrderDetails id={state.id} />
+            <OrderDetails />
           </Modal>
         )}
       </section>

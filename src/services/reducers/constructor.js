@@ -1,9 +1,21 @@
 //
-import { ADD_ING, ADD_INGREDIENTS } from '../actions/constructor';
+import {
+  ADD_ING,
+  ADD_INGREDIENTS,
+  GET_ORDER_REQUEST,
+  GET_ORDER_SUCCESS,
+  GET_ORDER_FAILED,
+  VIEWING_ORDER_ENABLED,
+  VIEWING_ORDER_DISABLED,
+} from '../actions/constructor';
 
 let initialState = {
   number: 0,
   selectedIngredients: [],
+  order: {},
+  orderLoading: false,
+  orderError: false,
+  visibleOrderModal: false,
 };
 
 // Редьюсер
@@ -21,6 +33,42 @@ export const constructorReducer = (state = initialState, action) => {
       return {
         ...state,
         selectedIngredients: action.ing,
+      };
+    }
+    case GET_ORDER_REQUEST: {
+      return {
+        ...state,
+        orderLoading: true,
+        orderError: false,
+      };
+    }
+    case GET_ORDER_SUCCESS: {
+      return {
+        ...state,
+        orderLoading: false,
+        orderError: false,
+        order: action.order,
+      };
+    }
+
+    case GET_ORDER_FAILED: {
+      return {
+        ...state,
+        orderLoading: false,
+        orderError: true,
+      };
+    }
+
+    case VIEWING_ORDER_ENABLED: {
+      return {
+        ...state,
+        visibleOrderModal: true,
+      };
+    }
+    case VIEWING_ORDER_DISABLED: {
+      return {
+        ...state,
+        visibleOrderModal: false,
       };
     }
 
