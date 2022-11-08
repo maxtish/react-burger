@@ -64,19 +64,6 @@ const SummPrice = ({ arr }) => {
 };
 
 const BurgerConstructor = () => {
-  //тест сторе
-  let st = useSelector((store) => store.ingredients.ing);
-  let stn = useSelector((store) => store.constructors.number);
-  const dispatch = useDispatch();
-  const switchTabKon = () => {
-    dispatch({ type: GET_ING });
-  };
-  const switchTabIng = () => {
-    dispatch({ type: ADD_ING });
-  };
-
-  //тест сторе
-
   //const { selectedIngredients } = React.useContext(SelectedIngredientsContext);
   const selectedIngredients = useSelector((store) => store.constructors.selectedIngredients);
 
@@ -88,18 +75,11 @@ const BurgerConstructor = () => {
   if (!selectedIngredients.length) {
     return (
       <section>
-        <Button type="primary" size="large" onClick={switchTabIng}>
-          + 1 ингридиент = {stn}
-        </Button>
-        <Button type="primary" size="large" onClick={switchTabKon}>
-          + 1 конструктор = {st}
-        </Button>
         <p>Лучше начать с булки</p>
       </section>
     );
   } else {
     const buns = selectedIngredients.filter((item) => item.type === 'bun')[0];
-
     const mains = selectedIngredients.filter((item) => item.type === 'main');
     const sauces = selectedIngredients.filter((item) => item.type === 'sauce');
 
@@ -154,13 +134,13 @@ const BurgerConstructor = () => {
     );
   }
 };
-BurgerConstructor.propTypes = {
-  selectedIngredients: PropTypes.arrayOf(objectWithShape.isRequired),
-};
 
 RenderBurgerBuns.propTypes = {
   bunsActiv: objectWithShape.isRequired,
   position: PropTypes.string.isRequired,
+};
+Button.propTypes = {
+  onClick: PropTypes.func.isRequired,
 };
 
 export default BurgerConstructor;

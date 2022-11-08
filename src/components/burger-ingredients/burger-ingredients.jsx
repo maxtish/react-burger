@@ -11,6 +11,7 @@ import DataIngredientsContext from '../../utils/appContext';
 import SelectedIngredientsContext from '../../utils/selContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { ADD_INGREDIENTS } from '../../services/actions/constructor';
+import { VIEWING_INGREDIENT_ENABLED, VIEWING_INGREDIENT_DISABLED } from '../../services/actions/ingredients';
 
 const RenderIngredient = ({ arr, clickProp, clickSelect }) => {
   return (
@@ -34,7 +35,7 @@ const RenderIngredient = ({ arr, clickProp, clickSelect }) => {
 const BurgerIngredients = () => {
   //const ingredients = React.useContext(DataIngredientsContext);
   const ingredients = useSelector((store) => store.ingredients.data); // уже из стора
-
+  const visibleModal = useSelector((store) => store.ingredients.visibleModal); // состояние модального окна
   /*
  let sing = useSelector((store) => store.ingredients.selectedIngredients);
 dispatch({
@@ -45,6 +46,7 @@ dispatch({
   const dispatch = useDispatch();
 
   const { setSelectedIngredients } = React.useContext(SelectedIngredientsContext);
+
   const [current, setCurrent] = React.useState('one');
 
   const buns = ingredients.filter((item) => item.type === 'bun');
@@ -64,7 +66,7 @@ dispatch({
   function reducer(selectedState, event) {
     const ids = event.target.offsetParent.getAttribute('id');
     const selected = ingredients.find((item) => item._id === ids);
-    console.log(ids);
+
     let bun = selectedState.filter((item) => item.type === 'bun');
     // если клик по булке и в массиве есть уже булка
     // тогда удаляем старую булку и добавляем новую
@@ -93,10 +95,20 @@ dispatch({
     const targetIndex = Event.currentTarget.id;
     const target = ingredients.find((item) => item._id === targetIndex);
     setState({ ...state, visible: true, igredient: target });
+    /// передаем в стор объект текущего просматриваемого ингредиента,
+    dispatch({
+      type: VIEWING_INGREDIENT_ENABLED,
+      ing: target,
+    });
+    ////
   }
 
   function closeModal() {
     setState({ visible: false, igredient: {} });
+    /// удаляем из стора объект текущего просматриваемого ингредиента,
+    dispatch({
+      type: VIEWING_INGREDIENT_DISABLED,
+    });
   }
 
   return (
@@ -136,9 +148,9 @@ dispatch({
         </div>
       </section>
 
-      {state.visible && (
+      {visibleModal && (
         <Modal header="Детали ингредиента" onClose={closeModal}>
-          <IngredientDetails ingredient={state.igredient} />
+          <IngredientDetails />
         </Modal>
       )}
     </>

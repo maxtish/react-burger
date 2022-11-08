@@ -1,9 +1,18 @@
 //
-import { GET_ING, GET_ITEMS_REQUEST, GET_ITEMS_SUCCESS, GET_ITEMS_FAILED } from '../actions/ingredients';
+import {
+  GET_ING,
+  GET_ITEMS_REQUEST,
+  GET_ITEMS_SUCCESS,
+  GET_ITEMS_FAILED,
+  VIEWING_INGREDIENT_ENABLED,
+  VIEWING_INGREDIENT_DISABLED,
+} from '../actions/ingredients';
 
 let initialState = {
   ing: 9,
   data: [],
+  selectedIngredient: {},
+  visibleModal: false,
   hasError: false,
   isLoading: false,
 };
@@ -42,6 +51,21 @@ export const ingredientsReducer = (state = initialState, action) => {
         ...state,
         isLoading: true,
         hasError: false,
+      };
+    }
+    case VIEWING_INGREDIENT_ENABLED: {
+      return {
+        ...state,
+        selectedIngredient: action.ing,
+        visibleModal: true,
+      };
+    }
+
+    case VIEWING_INGREDIENT_DISABLED: {
+      return {
+        ...state,
+        selectedIngredient: {},
+        visibleModal: false,
       };
     }
 
