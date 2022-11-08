@@ -1,7 +1,6 @@
 //
 import {
-  ADD_ING,
-  ADD_INGREDIENTS,
+  GET_INGREDIENTS,
   GET_ORDER_REQUEST,
   GET_ORDER_SUCCESS,
   GET_ORDER_FAILED,
@@ -22,14 +21,7 @@ let initialState = {
 
 export const constructorReducer = (state = initialState, action) => {
   switch (action.type) {
-    // Добавить ингридиент
-    case ADD_ING: {
-      return {
-        ...state,
-        number: state.number + 1,
-      };
-    }
-    case ADD_INGREDIENTS: {
+    case GET_INGREDIENTS: {
       return {
         ...state,
         selectedIngredients: action.ing,

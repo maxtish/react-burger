@@ -1,7 +1,6 @@
 import { getOrderDetails } from '../../utils/api';
-export const ADD_ING = 'ADD_ING'; // добавление ингридиента
-export const GET_ING = 'GET_ING'; // добавление ингридиентов API
-export const ADD_INGREDIENTS = 'ADD_INGREDIENTS'; // добавление ингридиентов в конструктор
+
+export const GET_INGREDIENTS = 'ADD_INGREDIENTS'; // Получение списка ингредиентов для конструктора бургера
 export const GET_ORDER_REQUEST = 'GET_ORDER_REQUEST'; // запрос
 export const GET_ORDER_SUCCESS = 'GET_ORDER_SUCCESS'; // успех
 export const GET_ORDER_FAILED = 'GET_ORDER_FAILED'; // нет успеха

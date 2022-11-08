@@ -1,11 +1,11 @@
 //
 import {
-  GET_ING,
   GET_ITEMS_REQUEST,
   GET_ITEMS_SUCCESS,
   GET_ITEMS_FAILED,
   VIEWING_INGREDIENT_ENABLED,
   VIEWING_INGREDIENT_DISABLED,
+  POSITION_SCROLL,
 } from '../actions/ingredients';
 
 let initialState = {
@@ -15,6 +15,7 @@ let initialState = {
   visibleModal: false,
   hasError: false,
   isLoading: false,
+  positionScroll: 'one',
 };
 
 // Редьюсер
@@ -22,12 +23,6 @@ let initialState = {
 export const ingredientsReducer = (state = initialState, action) => {
   switch (action.type) {
     // Добавить ингридиент
-    case GET_ING: {
-      return {
-        ...state,
-        ing: state.ing + 1,
-      };
-    }
 
     case GET_ITEMS_SUCCESS: {
       return {
@@ -66,6 +61,12 @@ export const ingredientsReducer = (state = initialState, action) => {
         ...state,
         selectedIngredient: {},
         visibleModal: false,
+      };
+    }
+    case POSITION_SCROLL: {
+      return {
+        ...state,
+        positionScroll: action.positionScroll,
       };
     }
 

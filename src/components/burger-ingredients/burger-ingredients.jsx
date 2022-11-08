@@ -10,8 +10,12 @@ import objectWithShape from '../../utils/shape';
 import DataIngredientsContext from '../../utils/appContext';
 import SelectedIngredientsContext from '../../utils/selContext';
 import { useDispatch, useSelector } from 'react-redux';
-import { ADD_INGREDIENTS } from '../../services/actions/constructor';
-import { VIEWING_INGREDIENT_ENABLED, VIEWING_INGREDIENT_DISABLED } from '../../services/actions/ingredients';
+import { GET_INGREDIENTS } from '../../services/actions/constructor';
+import {
+  VIEWING_INGREDIENT_ENABLED,
+  VIEWING_INGREDIENT_DISABLED,
+  POSITION_SCROLL,
+} from '../../services/actions/ingredients';
 
 const RenderIngredient = ({ arr, clickProp, clickSelect }) => {
   return (
@@ -35,19 +39,13 @@ const RenderIngredient = ({ arr, clickProp, clickSelect }) => {
 const BurgerIngredients = () => {
   //const ingredients = React.useContext(DataIngredientsContext);
   const ingredients = useSelector((store) => store.ingredients.data); // уже из стора
-  const visibleModal = useSelector((store) => store.ingredients.visibleModal); // состояние модального окна
-  /*
- let sing = useSelector((store) => store.ingredients.selectedIngredients);
-dispatch({
-    type: ADD_INGREDIENTS,
-    ing: selectedState,
-  });*/
+  const { visibleModal, positionScroll } = useSelector((store) => store.ingredients); // состояние модального окна
 
   const dispatch = useDispatch();
 
   const { setSelectedIngredients } = React.useContext(SelectedIngredientsContext);
 
-  const [current, setCurrent] = React.useState('one');
+  //const [current, setCurrent] = React.useState('one');
 
   const buns = ingredients.filter((item) => item.type === 'bun');
   const mains = ingredients.filter((item) => item.type === 'main');
@@ -85,7 +83,7 @@ dispatch({
     setSelectedIngredients(selectedState);
     /// передаем в стор список всех ингредиентов в текущем конструкторе бургера
     dispatch({
-      type: ADD_INGREDIENTS,
+      type: GET_INGREDIENTS,
       ing: selectedState,
     });
     ////
@@ -100,7 +98,6 @@ dispatch({
       type: VIEWING_INGREDIENT_ENABLED,
       ing: target,
     });
-    ////
   }
 
   function closeModal() {
@@ -110,6 +107,42 @@ dispatch({
       type: VIEWING_INGREDIENT_DISABLED,
     });
   }
+  //По мере пользовательского скролла ингредиентов в компоненте BurgerIngredients
+  //выделяйте активным тот переключатель, заголовок которого в
+  //самом контейнере ближе всего к верхней левой границе контейнера компонента BurgerIngredients.
+  const activePositionScroll = () => {
+    document.getElementById('sectionScroll').addEventListener('scroll', function () {
+      let korrektor = Math.round(document.getElementById('sectionScroll').getBoundingClientRect().top);
+      let sauceTop = Math.round(document.getElementById('sauce').getBoundingClientRect().top - korrektor);
+      let mainTop = Math.round(document.getElementById('main').getBoundingClientRect().top - korrektor);
+      let windowHight = Math.round(document.getElementById('sectionScroll').getBoundingClientRect().height) / 5;
+
+      if (sauceTop < windowHight) {
+        dispatch({
+          type: POSITION_SCROLL,
+          positionScroll: 'two',
+        });
+
+        if (mainTop < windowHight) {
+          dispatch({
+            type: POSITION_SCROLL,
+            positionScroll: 'three',
+          });
+        }
+      } else {
+        dispatch({
+          type: POSITION_SCROLL,
+          positionScroll: 'one',
+        });
+      }
+    });
+  };
+
+  React.useEffect(() => {
+    activePositionScroll();
+  }, []);
+
+  //////
 
   return (
     <>
@@ -117,22 +150,22 @@ dispatch({
         <h1 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h1>
         <div className={BurgerIngredientsStyles.wrap}>
           <a className={BurgerIngredientsStyles.link} href="#buns">
-            <Tab value="one" active={current === 'one'} onClick={setCurrent}>
+            <Tab value="one" active={positionScroll === 'one'} href="#buns">
               Булки
             </Tab>
           </a>
           <a className={BurgerIngredientsStyles.link} href="#sauce">
-            <Tab value="two" active={current === 'two'} onClick={setCurrent} href="#sauce">
+            <Tab value="two" active={positionScroll === 'two'} href="#sauce">
               Соусы
             </Tab>
           </a>
           <a className={BurgerIngredientsStyles.link} href="#main">
-            <Tab value="three" active={current === 'three'} onClick={setCurrent} href="#main">
+            <Tab value="three" active={positionScroll === 'three'} href="#main">
               Начинки
             </Tab>
           </a>
         </div>
-        <div className={BurgerIngredientsStyles.ingredients}>
+        <div className={BurgerIngredientsStyles.ingredients} id="sectionScroll">
           <h2 className="text text_type_main-medium mb-6 mt-10" id="buns">
             Булки
           </h2>
