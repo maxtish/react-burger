@@ -6,6 +6,8 @@ import {
   GET_ORDER_FAILED,
   VIEWING_ORDER_ENABLED,
   VIEWING_ORDER_DISABLED,
+  ADD_SELECTED_ING,
+  DELETE_ING,
 } from '../actions/constructor';
 
 let initialState = {
@@ -27,6 +29,14 @@ export const constructorReducer = (state = initialState, action) => {
         selectedIngredients: action.ing,
       };
     }
+
+    case DELETE_ING: {
+      return {
+        ...state,
+        selectedIngredients: state.selectedIngredients.filter((item, index) => index !== action.index),
+      };
+    }
+
     case GET_ORDER_REQUEST: {
       return {
         ...state,

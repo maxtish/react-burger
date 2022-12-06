@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useRef, useCallback } from 'react';
 import BurgerConstructorStyles from './burger-constructor.module.css';
 import {
   CurrencyIcon,
@@ -18,9 +19,16 @@ import SelectedIngredientsContext from '../../utils/selContext';
 import { getOrderDetails } from '../../utils/api';
 
 import { useDrop } from 'react-dnd';
+import uniqid from 'uniqid';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import { getOrder, VIEWING_ORDER_ENABLED, VIEWING_ORDER_DISABLED } from '../../services/actions/constructor';
+import {
+  getOrder,
+  VIEWING_ORDER_ENABLED,
+  VIEWING_ORDER_DISABLED,
+  GET_INGREDIENTS,
+  DELETE_ING,
+} from '../../services/actions/constructor';
 import { GET_ING } from '../../services/actions/ingredients';
 
 // Берем все активные, убираем булки и рендерим разметку которые внутри бургера
@@ -31,7 +39,8 @@ const RenderBurgerIngr = ({ arr }) => {
     <>
       {nobuns.map((item, index) => (
         <li className={`${BurgerConstructorStyles.item} mt-4`} key={index}>
-          <DragIcon type="primary" /> <ConstructorElement text={item.name} price={item.price} thumbnail={item.image} />
+          <DragIcon type="primary" />{' '}
+          <ConstructorElement handleClose={deleteIng} text={item.name} price={item.price} thumbnail={item.image} />
         </li>
       ))}
     </>
@@ -75,6 +84,24 @@ const BurgerConstructor = () => {
   });
 
   // react-dnd
+  const [{ isHover }, dropTarget] = useDrop({
+    accept: 'items',
+    drop: ({ currentItem }) => {
+      //  если булка
+      if ((currentItem.type === 'bun') & selectedItems.some((item) => item.type === 'bun')) {
+        const bunId = selectedItems.findIndex((item) => item.type === 'bun');
+        dispatch({
+          type: DELETE_ING,
+          index: bunId,
+        });
+      }
+      // Отправим экшен с текущим перетаскиваемым элементом
+      dispatch({
+        type: GET_INGREDIENTS,
+        item: { ...currentItem, id: uniqid() },
+      });
+    },
+  });
 
   if (!selectedIngredients.length) {
     return (
@@ -114,7 +141,7 @@ const BurgerConstructor = () => {
 
     return (
       <section>
-        <div className={`${BurgerConstructorStyles.wrap} pt-25 ml-10 pl-4 pr-4`}>
+        <div className={`${BurgerConstructorStyles.wrap} pt-25 ml-10 pl-4 pr-4`} ref={dropTarget}>
           {!buns && 'Выберите булку'}
           {buns && <RenderBurgerBuns bunsActiv={buns} position="top" />}
 
