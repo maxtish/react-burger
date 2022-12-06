@@ -16,21 +16,37 @@ import {
   VIEWING_INGREDIENT_DISABLED,
   POSITION_SCROLL,
 } from '../../services/actions/ingredients';
+import { useDrag } from 'react-dnd';
 
-const RenderIngredient = ({ arr, clickProp, clickSelect }) => {
+// render игридиента
+const RenderIngredient = ({ item, clickProp, clickSelect }) => {
+  // react-dnd
+  const currentItem = item;
+  const [, dragRef] = useDrag({
+    type: 'items',
+    item: { currentItem },
+  });
+
+  return (
+    <li className={BurgerIngredientsStyles.item} key={item._id} id={item._id} onClick={clickProp} ref={dragRef}>
+      {item.__v > 0 && <Counter count={item.__v} size="default" />}
+
+      <img src={item.image} alt={item.name} onClick={clickSelect} />
+      <div className={`${BurgerIngredientsStyles.price} mt-1 mb-1`}>
+        <p className={`${BurgerIngredientsStyles.pricenumb} text text_type_digits-default`}>{item.price}</p>
+        <CurrencyIcon type="primary" />
+      </div>
+      <p className={`${BurgerIngredientsStyles.text} text text_type_main-default pb-6`}>{item.name}</p>
+    </li>
+  );
+};
+
+// render группы игридиентов
+const RenderGroup = ({ arr, clickProp, clickSelect }) => {
   return (
     <ul className={`${BurgerIngredientsStyles.list} ml-4 mt-6 mb-10`}>
       {arr.map((item) => (
-        <li className={BurgerIngredientsStyles.item} key={item._id} id={item._id} onClick={clickProp}>
-          {item.__v > 0 && <Counter count={item.__v} size="default" />}
-
-          <img src={item.image} alt={item.name} onClick={clickSelect} />
-          <div className={`${BurgerIngredientsStyles.price} mt-1 mb-1`}>
-            <p className={`${BurgerIngredientsStyles.pricenumb} text text_type_digits-default`}>{item.price}</p>
-            <CurrencyIcon type="primary" />
-          </div>
-          <p className={`${BurgerIngredientsStyles.text} text text_type_main-default pb-6`}>{item.name}</p>
-        </li>
+        <RenderIngredient clickProp={clickProp} clickSelect={clickSelect} item={item} />
       ))}
     </ul>
   );
@@ -169,15 +185,15 @@ const BurgerIngredients = () => {
           <h2 className="text text_type_main-medium mb-6 mt-10" id="buns">
             Булки
           </h2>
-          <RenderIngredient arr={buns} clickProp={openModal} clickSelect={SelectClick} />
+          <RenderGroup arr={buns} clickProp={openModal} clickSelect={SelectClick} />
           <h2 className="text text_type_main-medium mb-6" id="sauce">
             Соусы
           </h2>
-          <RenderIngredient arr={mains} clickProp={openModal} clickSelect={SelectClick} />
+          <RenderGroup arr={mains} clickProp={openModal} clickSelect={SelectClick} />
           <h2 className="text text_type_main-medium mb-6" id="main">
             Начинки
           </h2>
-          <RenderIngredient arr={sauces} clickProp={openModal} clickSelect={SelectClick} />
+          <RenderGroup arr={sauces} clickProp={openModal} clickSelect={SelectClick} />
         </div>
       </section>
 

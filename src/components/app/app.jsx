@@ -7,6 +7,8 @@ import DataIngredientsContext from '../../utils/appContext';
 import SelectedIngredientsContext from '../../utils/selContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { getItemsIng } from '../../services/actions/ingredients';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd';
 
 function App() {
   const dispatch = useDispatch();
@@ -28,8 +30,10 @@ function App() {
       {!isLoading && !hasError && !data.length && 'Ошибка - нет массива'}
       {!isLoading && !hasError && data.length && (
         <main className={AppStyles.content}>
-          <BurgerIngredients />
-          <BurgerConstructor />
+          <DndProvider backend={HTML5Backend}>
+            <BurgerIngredients />
+            <BurgerConstructor />
+          </DndProvider>
         </main>
       )}
     </div>

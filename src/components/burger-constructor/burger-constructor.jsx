@@ -17,6 +17,7 @@ import DataIngredientsContext from '../../utils/appContext';
 import SelectedIngredientsContext from '../../utils/selContext';
 import { getOrderDetails } from '../../utils/api';
 
+import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { getOrder, VIEWING_ORDER_ENABLED, VIEWING_ORDER_DISABLED } from '../../services/actions/constructor';
@@ -72,6 +73,8 @@ const BurgerConstructor = () => {
     visible: false,
     id: '',
   });
+
+  // react-dnd
 
   if (!selectedIngredients.length) {
     return (
