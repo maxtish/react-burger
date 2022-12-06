@@ -16,7 +16,7 @@ function App() {
     dispatch(getItemsIng());
   }, [dispatch]);
 
-  const [selectedIngredients, setSelectedIngredients] = useState([]);
+  //const [selectedIngredients, setSelectedIngredients] = useState([]);
   const { hasError, isLoading, data } = useSelector((store) => store.ingredients);
 
   return (
@@ -28,13 +28,8 @@ function App() {
       {!isLoading && !hasError && !data.length && 'Ошибка - нет массива'}
       {!isLoading && !hasError && data.length && (
         <main className={AppStyles.content}>
-          <DataIngredientsContext.Provider value={data}>
-            <SelectedIngredientsContext.Provider value={{ selectedIngredients, setSelectedIngredients }}>
-              <BurgerIngredients />
-
-              <BurgerConstructor />
-            </SelectedIngredientsContext.Provider>
-          </DataIngredientsContext.Provider>
+          <BurgerIngredients />
+          <BurgerConstructor />
         </main>
       )}
     </div>

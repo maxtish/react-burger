@@ -43,7 +43,7 @@ const BurgerIngredients = () => {
 
   const dispatch = useDispatch();
 
-  const { setSelectedIngredients } = React.useContext(SelectedIngredientsContext);
+  //const { setSelectedIngredients } = React.useContext(SelectedIngredientsContext);
 
   //const [current, setCurrent] = React.useState('one');
 
@@ -80,14 +80,14 @@ const BurgerIngredients = () => {
   const [selectedState, dispatchN] = React.useReducer(reducer, []);
 
   React.useEffect(() => {
-    setSelectedIngredients(selectedState);
+    //setSelectedIngredients(selectedState);
     /// передаем в стор список всех ингредиентов в текущем конструкторе бургера
     dispatch({
       type: GET_INGREDIENTS,
       ing: selectedState,
     });
     ////
-  }, [selectedState, setSelectedIngredients]);
+  }, [selectedState]);
 
   function openModal(Event) {
     const targetIndex = Event.currentTarget.id;
