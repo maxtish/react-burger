@@ -29,11 +29,17 @@ export const constructorReducer = (state = initialState, action) => {
         selectedIngredients: action.ing,
       };
     }
+    case ADD_SELECTED_ING: {
+      return {
+        ...state,
+        selectedIngredients: action.item,
+      };
+    }
 
     case DELETE_ING: {
       return {
         ...state,
-        selectedIngredients: state.selectedIngredients.filter((item, index) => index !== action.index),
+        selectedIngredients: state.selectedIngredients.filter((item) => item._id !== action.index),
       };
     }
 

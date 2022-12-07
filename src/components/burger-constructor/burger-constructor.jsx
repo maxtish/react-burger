@@ -28,28 +28,32 @@ import {
   VIEWING_ORDER_DISABLED,
   GET_INGREDIENTS,
   DELETE_ING,
+  ADD_SELECTED_ING,
 } from '../../services/actions/constructor';
 import { GET_ING } from '../../services/actions/ingredients';
 
 // Берем все активные, убираем булки и рендерим разметку которые внутри бургера
-const RenderBurgerIngr = ({ arr }) => {
-  const nobuns = arr.filter((item) => item.type !== 'bun');
+const RenderBurgerIngr = ({ item }) => {
+  const dispatch = useDispatch();
+  const deleteIng = () => {
+    dispatch({
+      type: DELETE_ING,
+      index: item._id,
+    });
+  };
 
   return (
-    <>
-      {nobuns.map((item, index) => (
-        <li className={`${BurgerConstructorStyles.item} mt-4`} key={index}>
-          <DragIcon type="primary" />{' '}
-          <ConstructorElement handleClose={deleteIng} text={item.name} price={item.price} thumbnail={item.image} />
-        </li>
-      ))}
-    </>
+    <li className={`${BurgerConstructorStyles.item} mt-4`} key={item._id}>
+      <DragIcon type="primary" />{' '}
+      <ConstructorElement handleClose={deleteIng} text={item.name} price={item.price} thumbnail={item.image} />
+    </li>
   );
 };
 
 // Берем активную булку и позицию её, рендерим разметку булок вверх и низ
 const RenderBurgerBuns = ({ bunsActiv, position }) => {
   const positionRus = position === 'top' ? 'Верх' : 'Низ';
+
   return (
     <div className="ml-8 mr-4">
       <ConstructorElement
@@ -87,18 +91,10 @@ const BurgerConstructor = () => {
   const [{ isHover }, dropTarget] = useDrop({
     accept: 'items',
     drop: ({ currentItem }) => {
-      //  если булка
-      if ((currentItem.type === 'bun') & selectedItems.some((item) => item.type === 'bun')) {
-        const bunId = selectedItems.findIndex((item) => item.type === 'bun');
-        dispatch({
-          type: DELETE_ING,
-          index: bunId,
-        });
-      }
-      // Отправим экшен с текущим перетаскиваемым элементом
+      console.log(currentItem);
       dispatch({
-        type: GET_INGREDIENTS,
-        item: { ...currentItem, id: uniqid() },
+        type: ADD_SELECTED_ING,
+        item: { currentItem },
       });
     },
   });
@@ -139,14 +135,18 @@ const BurgerConstructor = () => {
       });
     }
 
+    const nobuns = selectedIngredients.filter((item) => item.type !== 'bun');
+
     return (
-      <section>
-        <div className={`${BurgerConstructorStyles.wrap} pt-25 ml-10 pl-4 pr-4`} ref={dropTarget}>
+      <section ref={dropTarget}>
+        <div className={`${BurgerConstructorStyles.wrap}  pt-25 ml-10 pl-4 pr-4`}>
           {!buns && 'Выберите булку'}
           {buns && <RenderBurgerBuns bunsActiv={buns} position="top" />}
 
           <div className={BurgerConstructorStyles.scroll}>
-            <RenderBurgerIngr arr={selectedIngredients} />
+            {nobuns.map((item) => (
+              <RenderBurgerIngr item={item} />
+            ))}
           </div>
           {!buns && 'Выберите булку'}
           {buns && <RenderBurgerBuns bunsActiv={buns} position="bottom" />}

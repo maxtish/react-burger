@@ -24,7 +24,7 @@ const RenderIngredient = ({ item, clickProp, clickSelect }) => {
   const currentItem = item;
   const [, dragRef] = useDrag({
     type: 'items',
-    item: { currentItem },
+    item: currentItem,
   });
 
   return (
@@ -67,10 +67,11 @@ const BurgerIngredients = () => {
   const mains = ingredients.filter((item) => item.type === 'main');
   const sauces = ingredients.filter((item) => item.type === 'sauce');
 
-  const [state, setState] = React.useState({
-    visible: false,
-    igredient: {},
-  });
+  //const [state, setState] = React.useState({
+  // visible: false,
+  // igredient: {},
+  //});
+
   function SelectClick(event) {
     event.stopPropagation();
 
@@ -103,12 +104,12 @@ const BurgerIngredients = () => {
       ing: selectedState,
     });
     ////
-  }, [selectedState]);
+  }, [dispatch, selectedState]);
 
   function openModal(Event) {
     const targetIndex = Event.currentTarget.id;
     const target = ingredients.find((item) => item._id === targetIndex);
-    setState({ ...state, visible: true, igredient: target });
+    //setState({ ...state, visible: true, igredient: target });
     /// передаем в стор объект текущего просматриваемого ингредиента,
     dispatch({
       type: VIEWING_INGREDIENT_ENABLED,
@@ -117,7 +118,7 @@ const BurgerIngredients = () => {
   }
 
   function closeModal() {
-    setState({ visible: false, igredient: {} });
+    //setState({ visible: false, igredient: {} });
     /// удаляем из стора объект текущего просматриваемого ингредиента,
     dispatch({
       type: VIEWING_INGREDIENT_DISABLED,
