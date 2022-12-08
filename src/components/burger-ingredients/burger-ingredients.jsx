@@ -41,8 +41,8 @@ const RenderIngredient = ({ item, clickProp, clickSelect, counters }) => {
 const RenderGroup = ({ arr, clickProp, clickSelect, counters }) => {
   return (
     <ul className={`${BurgerIngredientsStyles.list} ml-4 mt-6 mb-10`}>
-      {arr.map((item) => (
-        <RenderIngredient counters={counters} clickProp={clickProp} clickSelect={clickSelect} item={item} />
+      {arr.map((item, index) => (
+        <RenderIngredient key={index} counters={counters} clickProp={clickProp} clickSelect={clickSelect} item={item} />
       ))}
     </ul>
   );
@@ -186,6 +186,7 @@ const BurgerIngredients = () => {
     </>
   );
 };
+
 BurgerIngredients.propTypes = {
   dataIngredients: PropTypes.arrayOf(objectWithShape.isRequired),
 };

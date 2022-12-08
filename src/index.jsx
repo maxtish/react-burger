@@ -19,9 +19,6 @@ const enhancer = composeEnhancers(applyMiddleware(thunk));
 const store = createStore(rootReducer, enhancer);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-store.subscribe(() => {
-  console.log(store.getState());
-});
 
 root.render(
   <React.StrictMode>

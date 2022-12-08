@@ -153,7 +153,7 @@ const BurgerConstructor = () => {
 
           <div className={BurgerConstructorStyles.scroll}>
             {nobuns.map((item, index) => (
-              <RenderBurgerIngr item={item} index={index} />
+              <RenderBurgerIngr item={item} index={index} key={index} />
             ))}
           </div>
           {!buns && 'Выберите булку'}
