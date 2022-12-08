@@ -12,7 +12,6 @@ import {
 } from '../actions/constructor';
 
 let initialState = {
-  number: 0,
   selectedIngredients: [],
   order: {},
   orderLoading: false,
@@ -126,12 +125,3 @@ export const constructorReducer = (state = initialState, action) => {
       return state;
   }
 };
-
-/*
-
-  itemsAllIng: [], // список всех полученных ингредиентов
-  itemsAllSelectedIng: [], // список всех ингредиентов в текущем конструкторе бургера
-  objIng: {}, //объект текущего просматриваемого ингредиента
-  objOrder: {}, //объект созданного заказа
-
-*/

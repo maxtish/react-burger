@@ -2,36 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useRef, useCallback } from 'react';
 import BurgerConstructorStyles from './burger-constructor.module.css';
-import {
-  CurrencyIcon,
-  DragIcon,
-  Counter,
-  Typography,
-  ConstructorElement,
-  Button,
-} from '@ya.praktikum/react-developer-burger-ui-components';
-
+import { CurrencyIcon, DragIcon, ConstructorElement, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import objectWithShape from '../../utils/shape';
-import DataIngredientsContext from '../../utils/appContext';
-import SelectedIngredientsContext from '../../utils/selContext';
-import { getOrderDetails } from '../../utils/api';
-
 import { useDrop, useDrag } from 'react-dnd';
-import uniqid from 'uniqid';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
+
 import {
   getOrder,
   VIEWING_ORDER_ENABLED,
   VIEWING_ORDER_DISABLED,
-  GET_INGREDIENTS,
   DELETE_ING,
   ADD_SELECTED_ING,
   TOGGLE_ING,
 } from '../../services/actions/constructor';
-import { GET_ING } from '../../services/actions/ingredients';
 
 // Берем все активные, убираем булки и рендерим разметку которые внутри бургера
 const RenderBurgerIngr = ({ item, index }) => {
@@ -121,13 +106,8 @@ const SummPrice = ({ arr }) => {
 
 const BurgerConstructor = () => {
   const { selectedIngredients, visibleOrderModal } = useSelector((store) => store.constructors);
-  const ingredients = useSelector((store) => store.ingredients.data);
 
   const dispatch = useDispatch();
-  const [state, setState] = React.useState({
-    visible: false,
-    id: '',
-  });
 
   // react-dnd
   const [{ isHover }, dropTarget] = useDrop({
@@ -135,7 +115,7 @@ const BurgerConstructor = () => {
     drop: ({ currentItem }) => {
       dispatch({
         type: ADD_SELECTED_ING,
-        item: { ...currentItem, myIndex: uniqid() },
+        item: { ...currentItem },
       });
     },
   });
@@ -148,8 +128,6 @@ const BurgerConstructor = () => {
     );
   } else {
     const buns = selectedIngredients.filter((item) => item.type === 'bun')[0];
-    const mains = selectedIngredients.filter((item) => item.type === 'main');
-    const sauces = selectedIngredients.filter((item) => item.type === 'sauce');
 
     function openModal() {
       const idArrSelected = selectedIngredients.map((item) => item._id);

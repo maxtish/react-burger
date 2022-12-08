@@ -1,11 +1,8 @@
 import IngredientDetailsStyles from './ingredient-details.module.css';
-import PropTypes from 'prop-types';
-import dataIngredient from '../../utils/data-Ingredient';
-import objectWithShape from '../../utils/shape';
 import { useSelector } from 'react-redux';
 
 function IngredientDetails() {
-  const ingredient = useSelector((store) => store.ingredients.selectedIngredient);
+  const ingredient = useSelector((store) => store.ingredients.viewingIngredient);
   return (
     <>
       <img src={ingredient.image_large} alt={ingredient.name} />

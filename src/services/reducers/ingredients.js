@@ -11,7 +11,7 @@ import {
 let initialState = {
   ing: 9,
   data: [],
-  selectedIngredient: {},
+  viewingIngredient: {},
   visibleModal: false,
   hasError: false,
   isLoading: false,
@@ -51,7 +51,7 @@ export const ingredientsReducer = (state = initialState, action) => {
     case VIEWING_INGREDIENT_ENABLED: {
       return {
         ...state,
-        selectedIngredient: action.ing,
+        viewingIngredient: action.ing,
         visibleModal: true,
       };
     }
@@ -59,7 +59,7 @@ export const ingredientsReducer = (state = initialState, action) => {
     case VIEWING_INGREDIENT_DISABLED: {
       return {
         ...state,
-        selectedIngredient: {},
+        viewingIngredient: {},
         visibleModal: false,
       };
     }

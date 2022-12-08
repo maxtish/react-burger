@@ -2,13 +2,9 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import BurgerIngredientsStyles from './burger-ingredients.module.css';
 import { Tab, CurrencyIcon, Counter, Typography } from '@ya.praktikum/react-developer-burger-ui-components';
-import dataIngredient from '../../utils/data-Ingredient';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
-import modalStyles from '../modal/modal.module.css';
 import objectWithShape from '../../utils/shape';
-import DataIngredientsContext from '../../utils/appContext';
-import SelectedIngredientsContext from '../../utils/selContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { GET_INGREDIENTS } from '../../services/actions/constructor';
 import {
@@ -17,8 +13,6 @@ import {
   POSITION_SCROLL,
 } from '../../services/actions/ingredients';
 import { useDrag } from 'react-dnd';
-import { render } from '@testing-library/react';
-import uniqid from 'uniqid';
 
 // render игридиента
 const RenderIngredient = ({ item, clickProp, clickSelect, counters }) => {
@@ -76,47 +70,10 @@ const BurgerIngredients = () => {
     });
   }
 
-  /*
-  function SelectClick(event) {
-    event.stopPropagation();
-
-    dispatchN(event);
-    console.log('event', event);
-  }
-
-  function reducer(selectedState, event) {
-    const ids = event.target.offsetParent.getAttribute('id');
-    const selected = ingredients.find((item) => item._id === ids);
-
-    let bun = selectedState.filter((item) => item.type === 'bun');
-    // если клик по булке и в массиве есть уже булка
-    // тогда удаляем старую булку и добавляем новую
-    if ((selected.type === 'bun') & (bun.length > 0)) {
-      const indexBun = selectedState.findIndex((item) => item.type === 'bun');
-      selectedState.splice(indexBun, 1);
-      return selected;
-    } else {
-      return selected;
-    }
-  }
-
-  const [selectedState, dispatchN] = React.useReducer(reducer, []);
-
-  React.useEffect(() => {
-    //setSelectedIngredients(selectedState);
-    /// передаем в стор список всех ингредиентов в текущем конструкторе бургера
-    console.log('selectedState', selectedState);
-    dispatch({
-      type: GET_INGREDIENTS,
-      ing: selectedState,
-    });
-    ////
-  }, [dispatch, selectedState]);
-*/
   function openModal(Event) {
     const targetIndex = Event.currentTarget.id;
     const target = ingredients.find((item) => item._id === targetIndex);
-    //setState({ ...state, visible: true, igredient: target });
+
     /// передаем в стор объект текущего просматриваемого ингредиента,
     dispatch({
       type: VIEWING_INGREDIENT_ENABLED,
@@ -125,12 +82,12 @@ const BurgerIngredients = () => {
   }
 
   function closeModal() {
-    //setState({ visible: false, igredient: {} });
     /// удаляем из стора объект текущего просматриваемого ингредиента,
     dispatch({
       type: VIEWING_INGREDIENT_DISABLED,
     });
   }
+
   //По мере пользовательского скролла ингредиентов в компоненте BurgerIngredients
   //выделяйте активным тот переключатель, заголовок которого в
   //самом контейнере ближе всего к верхней левой границе контейнера компонента BurgerIngredients.
@@ -161,13 +118,11 @@ const BurgerIngredients = () => {
       }
     });
   };
-
   React.useEffect(() => {
     activePositionScroll();
   }, []);
 
   //////couters
-
   const selectedIngredients = useSelector((store) => store.constructors.selectedIngredients);
   const counters = useMemo(
     () =>
@@ -211,21 +166,15 @@ const BurgerIngredients = () => {
           <h2 className="text text_type_main-medium mb-6 mt-10" id="buns">
             Булки
           </h2>
-          <RenderGroup key={uniqid()} counters={counters} arr={buns} clickProp={openModal} clickSelect={SelectClick} />
+          <RenderGroup counters={counters} arr={buns} clickProp={openModal} clickSelect={SelectClick} />
           <h2 className="text text_type_main-medium mb-6" id="sauce">
             Соусы
           </h2>
-          <RenderGroup key={uniqid()} counters={counters} arr={mains} clickProp={openModal} clickSelect={SelectClick} />
+          <RenderGroup counters={counters} arr={mains} clickProp={openModal} clickSelect={SelectClick} />
           <h2 className="text text_type_main-medium mb-6" id="main">
             Начинки
           </h2>
-          <RenderGroup
-            key={uniqid()}
-            counters={counters}
-            arr={sauces}
-            clickProp={openModal}
-            clickSelect={SelectClick}
-          />
+          <RenderGroup counters={counters} arr={sauces} clickProp={openModal} clickSelect={SelectClick} />
         </div>
       </section>
 

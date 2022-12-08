@@ -18,7 +18,6 @@ function App() {
     dispatch(getItemsIng());
   }, [dispatch]);
 
-  //const [selectedIngredients, setSelectedIngredients] = useState([]);
   const { hasError, isLoading, data } = useSelector((store) => store.ingredients);
 
   return (
