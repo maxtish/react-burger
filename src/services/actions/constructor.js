@@ -7,7 +7,8 @@ export const GET_ORDER_FAILED = 'GET_ORDER_FAILED'; // нет успеха
 export const VIEWING_ORDER_ENABLED = 'VIEWING_ORDER_ENABLED'; // Просмотр заказа открыть
 export const VIEWING_ORDER_DISABLED = 'VIEWING_ORDER_DISABLED'; // Просмотр заказа закрыть
 export const ADD_SELECTED_ING = 'ADD_SELECTED_ING'; // Добавить
-export const DELETE_ING = 'DELETE_ING'; // Удалить
+export const DELETE_ING = 'DELETE_ING'; // Удалить TOGGLE_LIST
+export const TOGGLE_ING = 'TOGGLE_LIST'; // Менять
 
 export function getOrder(idArrSelected) {
   return function (dispatch) {

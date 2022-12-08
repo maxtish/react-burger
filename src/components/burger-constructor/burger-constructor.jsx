@@ -18,7 +18,7 @@ import DataIngredientsContext from '../../utils/appContext';
 import SelectedIngredientsContext from '../../utils/selContext';
 import { getOrderDetails } from '../../utils/api';
 
-import { useDrop } from 'react-dnd';
+import { useDrop, useDrag } from 'react-dnd';
 import uniqid from 'uniqid';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
@@ -29,13 +29,13 @@ import {
   GET_INGREDIENTS,
   DELETE_ING,
   ADD_SELECTED_ING,
+  TOGGLE_ING,
 } from '../../services/actions/constructor';
 import { GET_ING } from '../../services/actions/ingredients';
 
 // Берем все активные, убираем булки и рендерим разметку которые внутри бургера
 const RenderBurgerIngr = ({ item, index }) => {
   const dispatch = useDispatch();
-  console.log('index', index);
   const deleteIng = useCallback(() => {
     dispatch({
       type: DELETE_ING,
@@ -44,8 +44,48 @@ const RenderBurgerIngr = ({ item, index }) => {
     });
   }, [dispatch, index]);
 
+  const ref = useRef();
+
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: 'main',
+    item: { index },
+    collect: (monitor) => {
+      return {
+        isDragging: monitor.isDragging(),
+      };
+    },
+  }));
+  const [{ isHover }, drop] = useDrop({
+    accept: 'main',
+    hover(item) {
+      if (!ref.current) {
+        return;
+      }
+      const dragIndex = item.index;
+      const hoverIndex = index;
+      if (dragIndex === hoverIndex) {
+        return;
+      }
+      //Меняем местами элементы в массиве
+      dispatch({
+        type: TOGGLE_ING,
+        dragIndex: dragIndex,
+        hoverIndex: hoverIndex,
+      });
+
+      item.index = hoverIndex;
+    },
+    collect: (monitor) => {
+      return {
+        isHover: monitor.isOver(),
+      };
+    },
+  });
+
+  drag(drop(ref));
+
   return (
-    <li className={`${BurgerConstructorStyles.item} mt-4`} key={index}>
+    <li className={`${BurgerConstructorStyles.item} mt-4`} key={index} ref={ref}>
       <DragIcon type="primary" />{' '}
       <ConstructorElement handleClose={deleteIng} text={item.name} price={item.price} thumbnail={item.image} />
     </li>
@@ -80,7 +120,6 @@ const SummPrice = ({ arr }) => {
 };
 
 const BurgerConstructor = () => {
-  //const { selectedIngredients } = React.useContext(SelectedIngredientsContext);
   const { selectedIngredients, visibleOrderModal } = useSelector((store) => store.constructors);
   const ingredients = useSelector((store) => store.ingredients.data);
 
@@ -94,7 +133,6 @@ const BurgerConstructor = () => {
   const [{ isHover }, dropTarget] = useDrop({
     accept: 'ingredients',
     drop: ({ currentItem }) => {
-      console.log(currentItem);
       dispatch({
         type: ADD_SELECTED_ING,
         item: { ...currentItem, myIndex: uniqid() },
@@ -119,20 +157,9 @@ const BurgerConstructor = () => {
         type: VIEWING_ORDER_ENABLED,
       });
       dispatch(getOrder(idArrSelected));
-
-      /*
-      getOrderDetails(idArrSelected)
-        .then((res) => {
-          setState({ ...state, visible: true, id: res.order.number });
-        })
-        .catch((error) => {
-          console.log('error:', error);
-          setState({ ...state, visible: false });
-        });*/
     }
 
     function closeModal() {
-      //setState({ ...state, visible: false, id: '' });
       dispatch({
         type: VIEWING_ORDER_DISABLED,
       });

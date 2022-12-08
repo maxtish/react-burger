@@ -8,6 +8,7 @@ import {
   VIEWING_ORDER_DISABLED,
   ADD_SELECTED_ING,
   DELETE_ING,
+  TOGGLE_ING,
 } from '../actions/constructor';
 
 let initialState = {
@@ -23,6 +24,21 @@ let initialState = {
 
 export const constructorReducer = (state = initialState, action) => {
   switch (action.type) {
+    case TOGGLE_ING: {
+      return {
+        ...state,
+        selectedIngredients: state.selectedIngredients.map((item, index, array) => {
+          if (index === action.hoverIndex) {
+            return array[action.dragIndex];
+          }
+          if (index === action.dragIndex) {
+            return array[action.hoverIndex];
+          }
+          return item;
+        }),
+      };
+    }
+
     case GET_INGREDIENTS: {
       state.selectedIngredients.unshift(action.ing);
       let bun = state.selectedIngredients.filter((item) => item.type === 'bun');
@@ -58,7 +74,6 @@ export const constructorReducer = (state = initialState, action) => {
     }
 
     case DELETE_ING: {
-      console.log('action.indexN', action.indexN);
       let bun = state.selectedIngredients.filter((item) => item.type === 'bun');
       state.selectedIngredients = state.selectedIngredients.filter((item) => item.type !== 'bun');
       state.selectedIngredients = state.selectedIngredients.filter((item, index) => index !== action.indexN);

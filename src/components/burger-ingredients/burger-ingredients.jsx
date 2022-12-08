@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import BurgerIngredientsStyles from './burger-ingredients.module.css';
 import { Tab, CurrencyIcon, Counter, Typography } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -17,9 +17,11 @@ import {
   POSITION_SCROLL,
 } from '../../services/actions/ingredients';
 import { useDrag } from 'react-dnd';
+import { render } from '@testing-library/react';
+import uniqid from 'uniqid';
 
 // render игридиента
-const RenderIngredient = ({ item, clickProp, clickSelect }) => {
+const RenderIngredient = ({ item, clickProp, clickSelect, counters }) => {
   // react-dnd
   const currentItem = item;
   const [, dragRef] = useDrag({
@@ -29,7 +31,7 @@ const RenderIngredient = ({ item, clickProp, clickSelect }) => {
 
   return (
     <li className={BurgerIngredientsStyles.item} key={item._id} id={item._id} onClick={clickProp} ref={dragRef}>
-      {item.__v > 0 && <Counter count={item.__v} size="default" />}
+      {counters[item._id] > 0 && <Counter count={counters[item._id]} size="default" />}
 
       <img src={item.image} alt={item.name} onClick={clickSelect} />
       <div className={`${BurgerIngredientsStyles.price} mt-1 mb-1`}>
@@ -42,37 +44,29 @@ const RenderIngredient = ({ item, clickProp, clickSelect }) => {
 };
 
 // render группы игридиентов
-const RenderGroup = ({ arr, clickProp, clickSelect }) => {
+const RenderGroup = ({ arr, clickProp, clickSelect, counters }) => {
   return (
     <ul className={`${BurgerIngredientsStyles.list} ml-4 mt-6 mb-10`}>
       {arr.map((item) => (
-        <RenderIngredient clickProp={clickProp} clickSelect={clickSelect} item={item} />
+        <RenderIngredient counters={counters} clickProp={clickProp} clickSelect={clickSelect} item={item} />
       ))}
     </ul>
   );
 };
 
 const BurgerIngredients = () => {
-  //const ingredients = React.useContext(DataIngredientsContext);
   const ingredients = useSelector((store) => store.ingredients.data); // уже из стора
   const { visibleModal, positionScroll } = useSelector((store) => store.ingredients); // состояние модального окна
 
   const dispatch = useDispatch();
 
-  //const { setSelectedIngredients } = React.useContext(SelectedIngredientsContext);
-
-  //const [current, setCurrent] = React.useState('one');
-
   const buns = ingredients.filter((item) => item.type === 'bun');
   const mains = ingredients.filter((item) => item.type === 'main');
   const sauces = ingredients.filter((item) => item.type === 'sauce');
 
-  //const [state, setState] = React.useState({
-  // visible: false,
-  // igredient: {},
-  //});
   function SelectClick(event) {
     event.stopPropagation();
+
     const ids = event.target.offsetParent.getAttribute('id');
     const selected = ingredients.find((item) => item._id === ids);
 
@@ -172,7 +166,25 @@ const BurgerIngredients = () => {
     activePositionScroll();
   }, []);
 
-  //////
+  //////couters
+
+  const selectedIngredients = useSelector((store) => store.constructors.selectedIngredients);
+  const counters = useMemo(
+    () =>
+      selectedIngredients.reduce((previousValue, item) => {
+        if (!previousValue[item._id]) {
+          if (item.type === 'bun') {
+            previousValue[item._id] = 2;
+          } else {
+            previousValue[item._id] = 1;
+          }
+        } else {
+          previousValue[item._id]++;
+        }
+        return previousValue;
+      }, {}),
+    [selectedIngredients]
+  );
 
   return (
     <>
@@ -199,15 +211,21 @@ const BurgerIngredients = () => {
           <h2 className="text text_type_main-medium mb-6 mt-10" id="buns">
             Булки
           </h2>
-          <RenderGroup arr={buns} clickProp={openModal} clickSelect={SelectClick} />
+          <RenderGroup key={uniqid()} counters={counters} arr={buns} clickProp={openModal} clickSelect={SelectClick} />
           <h2 className="text text_type_main-medium mb-6" id="sauce">
             Соусы
           </h2>
-          <RenderGroup arr={mains} clickProp={openModal} clickSelect={SelectClick} />
+          <RenderGroup key={uniqid()} counters={counters} arr={mains} clickProp={openModal} clickSelect={SelectClick} />
           <h2 className="text text_type_main-medium mb-6" id="main">
             Начинки
           </h2>
-          <RenderGroup arr={sauces} clickProp={openModal} clickSelect={SelectClick} />
+          <RenderGroup
+            key={uniqid()}
+            counters={counters}
+            arr={sauces}
+            clickProp={openModal}
+            clickSelect={SelectClick}
+          />
         </div>
       </section>
 
@@ -229,4 +247,4 @@ RenderIngredient.propTypes = {
   clickSelect: PropTypes.func.isRequired,
 };
 
-export default BurgerIngredients;
+export default React.memo(BurgerIngredients);
