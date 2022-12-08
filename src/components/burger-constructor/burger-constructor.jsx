@@ -80,6 +80,7 @@ const SummPrice = ({ arr }) => {
 const BurgerConstructor = () => {
   //const { selectedIngredients } = React.useContext(SelectedIngredientsContext);
   const { selectedIngredients, visibleOrderModal } = useSelector((store) => store.constructors);
+  const ingredients = useSelector((store) => store.ingredients.data);
 
   const dispatch = useDispatch();
   const [state, setState] = React.useState({
@@ -89,12 +90,12 @@ const BurgerConstructor = () => {
 
   // react-dnd
   const [{ isHover }, dropTarget] = useDrop({
-    accept: 'items',
+    accept: 'ingredients',
     drop: ({ currentItem }) => {
       console.log(currentItem);
       dispatch({
         type: ADD_SELECTED_ING,
-        item: { currentItem },
+        item: { ...currentItem },
       });
     },
   });

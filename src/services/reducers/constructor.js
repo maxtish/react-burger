@@ -17,6 +17,7 @@ let initialState = {
   orderLoading: false,
   orderError: false,
   visibleOrderModal: false,
+  boards: ['default', 'bun', 'ing'],
 };
 
 // Редьюсер
@@ -30,9 +31,11 @@ export const constructorReducer = (state = initialState, action) => {
       };
     }
     case ADD_SELECTED_ING: {
+      state.selectedIngredients.unshift(action.item);
+
       return {
         ...state,
-        selectedIngredients: action.item,
+        selectedIngredients: state.selectedIngredients,
       };
     }
 

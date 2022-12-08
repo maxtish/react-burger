@@ -23,8 +23,8 @@ const RenderIngredient = ({ item, clickProp, clickSelect }) => {
   // react-dnd
   const currentItem = item;
   const [, dragRef] = useDrag({
-    type: 'items',
-    item: currentItem,
+    type: 'ingredients',
+    item: { currentItem },
   });
 
   return (
