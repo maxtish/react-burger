@@ -102,7 +102,7 @@ const BurgerConstructor = () => {
 
   if (!selectedIngredients.length) {
     return (
-      <section>
+      <section ref={dropTarget}>
         <p>Лучше начать с булки</p>
       </section>
     );
@@ -139,8 +139,8 @@ const BurgerConstructor = () => {
     const nobuns = selectedIngredients.filter((item) => item.type !== 'bun');
 
     return (
-      <section ref={dropTarget}>
-        <div className={`${BurgerConstructorStyles.wrap}  pt-25 ml-10 pl-4 pr-4`}>
+      <section>
+        <div className={`${BurgerConstructorStyles.wrap}  pt-25 ml-10 pl-4 pr-4`} ref={dropTarget}>
           {!buns && 'Выберите булку'}
           {buns && <RenderBurgerBuns bunsActiv={buns} position="top" />}
 

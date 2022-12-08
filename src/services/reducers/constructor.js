@@ -17,7 +17,6 @@ let initialState = {
   orderLoading: false,
   orderError: false,
   visibleOrderModal: false,
-  boards: ['default', 'bun', 'ing'],
 };
 
 // Редьюсер
@@ -25,14 +24,38 @@ let initialState = {
 export const constructorReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_INGREDIENTS: {
+      state.selectedIngredients.unshift(action.ing);
+      let bun = state.selectedIngredients.filter((item) => item.type === 'bun');
+      // если клик по булке и в массиве есть уже булка
+      // тогда удаляем старую булку и добавляем новую
+      if ((action.ing.type === 'bun') & (bun.length > 0)) {
+        console.log('Булка уже есть');
+        bun = {};
+        bun = action.ing;
+        console.log('bun', bun);
+        state.selectedIngredients = state.selectedIngredients.filter((item) => item.type !== 'bun');
+        state.selectedIngredients.unshift(bun);
+      }
+
       return {
         ...state,
-        selectedIngredients: action.ing,
+        selectedIngredients: state.selectedIngredients,
       };
     }
     case ADD_SELECTED_ING: {
       state.selectedIngredients.unshift(action.item);
-
+      let bun = state.selectedIngredients.filter((item) => item.type === 'bun');
+      // если клик по булке и в массиве есть уже булка
+      // тогда удаляем старую булку и добавляем новую
+      if ((action.item.type === 'bun') & (bun.length > 0)) {
+        console.log('Булка уже есть');
+        bun = {};
+        bun = action.item;
+        console.log('bun', bun);
+        state.selectedIngredients = state.selectedIngredients.filter((item) => item.type !== 'bun');
+        state.selectedIngredients.unshift(bun);
+        // state.selectedIngredients.unshift(action.item);
+      }
       return {
         ...state,
         selectedIngredients: state.selectedIngredients,

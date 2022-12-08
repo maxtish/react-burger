@@ -71,11 +71,23 @@ const BurgerIngredients = () => {
   // visible: false,
   // igredient: {},
   //});
+  function SelectClick(event) {
+    event.stopPropagation();
+    const ids = event.target.offsetParent.getAttribute('id');
+    const selected = ingredients.find((item) => item._id === ids);
 
+    dispatch({
+      type: GET_INGREDIENTS,
+      ing: selected,
+    });
+  }
+
+  /*
   function SelectClick(event) {
     event.stopPropagation();
 
     dispatchN(event);
+    console.log('event', event);
   }
 
   function reducer(selectedState, event) {
@@ -88,9 +100,9 @@ const BurgerIngredients = () => {
     if ((selected.type === 'bun') & (bun.length > 0)) {
       const indexBun = selectedState.findIndex((item) => item.type === 'bun');
       selectedState.splice(indexBun, 1);
-      return [...selectedState, selected];
+      return selected;
     } else {
-      return [...selectedState, selected];
+      return selected;
     }
   }
 
@@ -99,13 +111,14 @@ const BurgerIngredients = () => {
   React.useEffect(() => {
     //setSelectedIngredients(selectedState);
     /// передаем в стор список всех ингредиентов в текущем конструкторе бургера
+    console.log('selectedState', selectedState);
     dispatch({
       type: GET_INGREDIENTS,
       ing: selectedState,
     });
     ////
   }, [dispatch, selectedState]);
-
+*/
   function openModal(Event) {
     const targetIndex = Event.currentTarget.id;
     const target = ingredients.find((item) => item._id === targetIndex);
