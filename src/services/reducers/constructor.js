@@ -29,10 +29,8 @@ export const constructorReducer = (state = initialState, action) => {
       // если клик по булке и в массиве есть уже булка
       // тогда удаляем старую булку и добавляем новую
       if ((action.ing.type === 'bun') & (bun.length > 0)) {
-        console.log('Булка уже есть');
         bun = {};
         bun = action.ing;
-        console.log('bun', bun);
         state.selectedIngredients = state.selectedIngredients.filter((item) => item.type !== 'bun');
         state.selectedIngredients.unshift(bun);
       }
@@ -48,13 +46,10 @@ export const constructorReducer = (state = initialState, action) => {
       // если клик по булке и в массиве есть уже булка
       // тогда удаляем старую булку и добавляем новую
       if ((action.item.type === 'bun') & (bun.length > 0)) {
-        console.log('Булка уже есть');
         bun = {};
         bun = action.item;
-        console.log('bun', bun);
         state.selectedIngredients = state.selectedIngredients.filter((item) => item.type !== 'bun');
         state.selectedIngredients.unshift(bun);
-        // state.selectedIngredients.unshift(action.item);
       }
       return {
         ...state,
@@ -63,9 +58,14 @@ export const constructorReducer = (state = initialState, action) => {
     }
 
     case DELETE_ING: {
+      console.log('action.indexN', action.indexN);
+      let bun = state.selectedIngredients.filter((item) => item.type === 'bun');
+      state.selectedIngredients = state.selectedIngredients.filter((item) => item.type !== 'bun');
+      state.selectedIngredients = state.selectedIngredients.filter((item, index) => index !== action.indexN);
+      state.selectedIngredients = [].concat(state.selectedIngredients, bun);
       return {
         ...state,
-        selectedIngredients: state.selectedIngredients.filter((item) => item._id !== action.index),
+        selectedIngredients: state.selectedIngredients,
       };
     }
 

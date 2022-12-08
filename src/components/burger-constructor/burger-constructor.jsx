@@ -33,17 +33,19 @@ import {
 import { GET_ING } from '../../services/actions/ingredients';
 
 // Берем все активные, убираем булки и рендерим разметку которые внутри бургера
-const RenderBurgerIngr = ({ item }) => {
+const RenderBurgerIngr = ({ item, index }) => {
   const dispatch = useDispatch();
-  const deleteIng = () => {
+  console.log('index', index);
+  const deleteIng = useCallback(() => {
     dispatch({
       type: DELETE_ING,
       index: item._id,
+      indexN: index,
     });
-  };
+  }, [dispatch, index]);
 
   return (
-    <li className={`${BurgerConstructorStyles.item} mt-4`} key={item._id}>
+    <li className={`${BurgerConstructorStyles.item} mt-4`} key={index}>
       <DragIcon type="primary" />{' '}
       <ConstructorElement handleClose={deleteIng} text={item.name} price={item.price} thumbnail={item.image} />
     </li>
@@ -95,7 +97,7 @@ const BurgerConstructor = () => {
       console.log(currentItem);
       dispatch({
         type: ADD_SELECTED_ING,
-        item: { ...currentItem },
+        item: { ...currentItem, myIndex: uniqid() },
       });
     },
   });
@@ -145,8 +147,8 @@ const BurgerConstructor = () => {
           {buns && <RenderBurgerBuns bunsActiv={buns} position="top" />}
 
           <div className={BurgerConstructorStyles.scroll}>
-            {nobuns.map((item) => (
-              <RenderBurgerIngr item={item} />
+            {nobuns.map((item, index) => (
+              <RenderBurgerIngr item={item} index={index} />
             ))}
           </div>
           {!buns && 'Выберите булку'}
