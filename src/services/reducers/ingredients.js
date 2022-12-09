@@ -38,6 +38,7 @@ export const ingredientsReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         hasError: true,
+        data: [],
       };
     }
 

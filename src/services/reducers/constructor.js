@@ -104,6 +104,7 @@ export const constructorReducer = (state = initialState, action) => {
         ...state,
         orderLoading: false,
         orderError: true,
+        order: {},
       };
     }
 
