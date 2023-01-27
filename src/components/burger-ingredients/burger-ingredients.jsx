@@ -6,13 +6,25 @@ import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import objectWithShape from '../../utils/shape';
 import { useDispatch, useSelector } from 'react-redux';
-import { GET_INGREDIENTS } from '../../services/actions/constructor';
+import { addToConstructor } from '../../services/actions/constructor';
+
 import {
   VIEWING_INGREDIENT_ENABLED,
   VIEWING_INGREDIENT_DISABLED,
   POSITION_SCROLL,
 } from '../../services/actions/ingredients';
 import { useDrag } from 'react-dnd';
+
+// render группы игридиенто в
+const RenderGroup = ({ arr, clickProp, clickSelect, counters }) => {
+  return (
+    <ul className={`${BurgerIngredientsStyles.list} ml-4 mt-6 mb-10`}>
+      {arr.map((item, index) => (
+        <RenderIngredient key={index} counters={counters} clickProp={clickProp} clickSelect={clickSelect} item={item} />
+      ))}
+    </ul>
+  );
+};
 
 // render игридиента
 const RenderIngredient = ({ item, clickProp, clickSelect, counters }) => {
@@ -37,17 +49,6 @@ const RenderIngredient = ({ item, clickProp, clickSelect, counters }) => {
   );
 };
 
-// render группы игридиенто в
-const RenderGroup = ({ arr, clickProp, clickSelect, counters }) => {
-  return (
-    <ul className={`${BurgerIngredientsStyles.list} ml-4 mt-6 mb-10`}>
-      {arr.map((item, index) => (
-        <RenderIngredient key={index} counters={counters} clickProp={clickProp} clickSelect={clickSelect} item={item} />
-      ))}
-    </ul>
-  );
-};
-
 const BurgerIngredients = () => {
   const ingredients = useSelector((store) => store.ingredients.data); // уже из стора
   const { visibleModal, positionScroll } = useSelector((store) => store.ingredients); // состояние модального окна
@@ -64,10 +65,13 @@ const BurgerIngredients = () => {
     const ids = event.target.offsetParent.getAttribute('id');
     const selected = ingredients.find((item) => item._id === ids);
 
-    dispatch({
+    /*dispatch({
       type: GET_INGREDIENTS,
       ing: selected,
     });
+  */
+
+    dispatch(addToConstructor(selected));
   }
 
   function openModal(Event) {
@@ -122,24 +126,18 @@ const BurgerIngredients = () => {
     activePositionScroll();
   }, []);
 
-  //////couters
-  const selectedIngredients = useSelector((store) => store.constructors.selectedIngredients);
-  const counters = useMemo(
-    () =>
-      selectedIngredients.reduce((previousValue, item) => {
-        if (!previousValue[item._id]) {
-          if (item.type === 'bun') {
-            previousValue[item._id] = 2;
-          } else {
-            previousValue[item._id] = 1;
-          }
-        } else {
-          previousValue[item._id]++;
-        }
-        return previousValue;
-      }, {}),
-    [selectedIngredients]
-  );
+  //////Счетчики на ингридиентах
+  const { selectedIngredients, selectedBun } = useSelector((store) => store.constructors);
+
+  const counters = useMemo(() => {
+    const count = {};
+    selectedIngredients.forEach((ingredient) => {
+      if (!count[ingredient._id]) count[ingredient._id] = 0;
+      count[ingredient._id]++;
+    });
+    if (selectedBun) count[selectedBun._id] = 2;
+    return count;
+  }, [selectedIngredients, selectedBun]);
 
   return (
     <>

@@ -1,5 +1,6 @@
 //
 import {
+  CONSTRUCTOR_ADD,
   GET_INGREDIENTS,
   GET_ORDER_REQUEST,
   GET_ORDER_SUCCESS,
@@ -12,6 +13,7 @@ import {
 } from '../actions/constructor';
 
 let initialState = {
+  selectedBun: null,
   selectedIngredients: [],
   order: {},
   orderLoading: false,
@@ -23,18 +25,43 @@ let initialState = {
 
 export const constructorReducer = (state = initialState, action) => {
   switch (action.type) {
-    case TOGGLE_ING: {
+    case CONSTRUCTOR_ADD: {
+      if (action.payload.type === 'bun') {
+        return { ...state, selectedBun: action.payload };
+      }
+
       return {
         ...state,
-        selectedIngredients: state.selectedIngredients.map((item, index, array) => {
-          if (index === action.hoverIndex) {
-            return array[action.dragIndex];
-          }
-          if (index === action.dragIndex) {
-            return array[action.hoverIndex];
-          }
-          return item;
-        }),
+        selectedIngredients: [...state.selectedIngredients, action.payload],
+      };
+    }
+
+    case TOGGLE_ING: {
+      const indexElHover = action.hoverIndex; //над дим
+      const indexElDrag = action.dragIndex; // он
+      const elementSelect = state.selectedIngredients.filter((item) => item.id === action.dragIndex.item.id);
+
+      /*function moveObjectAtIndex(array, sourceIndex, destIndex) {
+        var placeholder = elementSelect;
+        // удалите объект из его исходного положения и
+        // установите объект-заполнитель на его место, чтобы
+        // сохранить длину массива постоянной
+        var objectToMove = array.splice(sourceIndex, 1, placeholder)[0];
+        // выньте временный объект
+        array.splice(destIndex, 0, objectToMove);
+        /// поместите объект в нужное положение
+        array.splice(array.indexOf(placeholder), 1);
+        return array;
+      }*/
+      function moveItem(arr, fromIndex, toIndex) {
+        let itemRemoved = arr.splice(fromIndex, 1); // assign the removed item as an array
+        arr.splice(toIndex, 0, itemRemoved[0]); // insert itemRemoved into the target index
+        return arr;
+      }
+
+      return {
+        ...state,
+        selectedIngredients: moveItem(state.selectedIngredients, indexElDrag, indexElHover),
       };
     }
 
