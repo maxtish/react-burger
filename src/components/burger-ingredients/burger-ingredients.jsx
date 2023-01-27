@@ -37,7 +37,7 @@ const RenderIngredient = ({ item, clickProp, clickSelect, counters }) => {
   );
 };
 
-// render группы игридиентов
+// render группы игридиенто в
 const RenderGroup = ({ arr, clickProp, clickSelect, counters }) => {
   return (
     <ul className={`${BurgerIngredientsStyles.list} ml-4 mt-6 mb-10`}>
