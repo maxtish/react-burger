@@ -8,29 +8,56 @@ import OrderDetails from '../order-details/order-details';
 import objectWithShape from '../../utils/shape';
 import { useDrop, useDrag } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  getOrder,
-  addToConstructor,
-  VIEWING_ORDER_ENABLED,
-  VIEWING_ORDER_DISABLED,
-  DELETE_ING,
-  ADD_SELECTED_ING,
-  TOGGLE_ING,
-} from '../../services/actions/constructor';
+import { addToConstructor, DELETE_ING, TOGGLE_ING } from '../../services/actions/constructor';
+import { getOrder, VIEWING_ORDER_ENABLED, VIEWING_ORDER_DISABLED } from '../../services/actions/order';
 
 // Берем все активные, убираем булки и рендерим разметку которые внутри бургера
-const RenderBurgerIngr = ({ item, index }) => {
+const RenderBurgerIngr = ({ ingrdient, index }) => {
+  const ref = useRef(null);
   const dispatch = useDispatch();
   const deleteIng = useCallback(() => {
     dispatch({
       type: DELETE_ING,
-      index: item._id,
+      index: ingrdient._id,
       indexN: index,
     });
   }, [dispatch, index]);
 
-  const ref = useRef(null);
+  const [{ handlerID }, drop] = useDrop({
+    accept: 'main',
+    collect(monitor) {
+      return { handlerID: monitor.getHandlerId() };
+    },
+    hover(item, monitor) {
+      const dragIndex = item.index;
+      const hoverIndex = index;
+      if (dragIndex === hoverIndex) {
+        return;
+      }
+      dispatch({
+        type: TOGGLE_ING,
+        payload: {
+          from: dragIndex,
+          to: hoverIndex,
+        },
+      });
 
+      item.index = hoverIndex;
+    },
+  });
+
+  const [{ isDragging }, drag] = useDrag({
+    type: 'main',
+    item: () => {
+      return { ingrdient, index };
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+  const opacity = isDragging ? 0 : 1;
+
+  /*
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'main',
     item: { item, index },
@@ -40,6 +67,7 @@ const RenderBurgerIngr = ({ item, index }) => {
       };
     },
   }));
+  const { selectedIngredients, visibleOrderModal, selectedBun } = useSelector((store) => store.constructors);
 
   const [{ isHover }, drop] = useDrop({
     accept: 'main',
@@ -47,20 +75,22 @@ const RenderBurgerIngr = ({ item, index }) => {
       if (!ref.current) {
         return;
       }
-      const dragIndex = item;
-      const hoverIndex = index;
-      console.log('dragIndex-', dragIndex, 'над ним-', hoverIndex);
-
+      const dragIndex = item.index; //сам обект
+      const hoverIndex = index; //над обьектом
+      console.log('dragIndex-', dragIndex);
       if (dragIndex === hoverIndex) {
         return;
-      }
+      } else {
+        //Меняем местами элементы в массиве
+        console.log('dragIndex-', dragIndex, 'над ним-', hoverIndex);
+        dispatch({
+          type: TOGGLE_ING,
+          dragIndex: dragIndex,
+          hoverIndex: hoverIndex,
+        });
 
-      //Меняем местами элементы в массиве
-      dispatch({
-        type: TOGGLE_ING,
-        dragIndex: dragIndex,
-        hoverIndex: hoverIndex,
-      });
+        console.log(selectedIngredients);
+      }
     },
     collect: (monitor) => {
       return {
@@ -68,13 +98,25 @@ const RenderBurgerIngr = ({ item, index }) => {
       };
     },
   });
-
+*/
   drag(drop(ref));
 
   return (
-    <li className={`${BurgerConstructorStyles.item} mt-4`} key={index} ref={ref}>
+    <li
+      className={`${BurgerConstructorStyles.item} mt-4`}
+      data-handler-id={handlerID}
+      draggable={true}
+      key={index}
+      ref={ref}
+      style={{ opacity }}
+    >
       <DragIcon type="primary" />{' '}
-      <ConstructorElement handleClose={deleteIng} text={item.name} price={item.price} thumbnail={item.image} />
+      <ConstructorElement
+        handleClose={deleteIng}
+        text={ingrdient.name}
+        price={ingrdient.price}
+        thumbnail={ingrdient.image}
+      />
     </li>
   );
 };
@@ -107,7 +149,8 @@ const SummPrice = ({ selectedIngredients, selectedBun }) => {
 };
 
 const BurgerConstructor = () => {
-  const { selectedIngredients, visibleOrderModal, selectedBun } = useSelector((store) => store.constructors);
+  const { selectedIngredients, selectedBun } = useSelector((store) => store.constructors);
+  const visibleOrderModal = useSelector((store) => store.order.visibleOrderModal);
 
   const dispatch = useDispatch();
 
@@ -134,14 +177,14 @@ const BurgerConstructor = () => {
   }
 
   return (
-    <section>
-      <div className={`${BurgerConstructorStyles.wrap}  pt-25 ml-10 pl-4 pr-4`} ref={dropTarget}>
+    <section className={BurgerConstructorStyles.section} ref={dropTarget}>
+      <div className={`${BurgerConstructorStyles.wrap}  pt-25 ml-10 pl-4 pr-4`}>
         {!selectedBun && ''}
         {selectedBun && <RenderBurgerBuns bunsActiv={selectedBun} position="top" />}
 
         <div className={BurgerConstructorStyles.scroll}>
           {selectedIngredients.map((item, index) => (
-            <RenderBurgerIngr item={item} index={index} key={item.id} />
+            <RenderBurgerIngr ingrdient={item} index={index} key={item.id} />
           ))}
         </div>
         {!selectedBun && ''}

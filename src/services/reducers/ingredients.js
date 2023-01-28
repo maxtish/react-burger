@@ -1,18 +1,9 @@
 //
-import {
-  GET_ITEMS_REQUEST,
-  GET_ITEMS_SUCCESS,
-  GET_ITEMS_FAILED,
-  VIEWING_INGREDIENT_ENABLED,
-  VIEWING_INGREDIENT_DISABLED,
-  POSITION_SCROLL,
-} from '../actions/ingredients';
+import { GET_ITEMS_REQUEST, GET_ITEMS_SUCCESS, GET_ITEMS_FAILED, POSITION_SCROLL } from '../actions/ingredients';
 
 let initialState = {
   ing: 9,
   data: [],
-  viewingIngredient: {},
-  visibleModal: false,
   hasError: false,
   isLoading: false,
   positionScroll: 'one',
@@ -49,21 +40,7 @@ export const ingredientsReducer = (state = initialState, action) => {
         hasError: false,
       };
     }
-    case VIEWING_INGREDIENT_ENABLED: {
-      return {
-        ...state,
-        viewingIngredient: action.ing,
-        visibleModal: true,
-      };
-    }
 
-    case VIEWING_INGREDIENT_DISABLED: {
-      return {
-        ...state,
-        viewingIngredient: {},
-        visibleModal: false,
-      };
-    }
     case POSITION_SCROLL: {
       return {
         ...state,

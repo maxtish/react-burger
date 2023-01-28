@@ -2,7 +2,7 @@ import OrderDetailsStyles from './order-details.module.css';
 import { useSelector } from 'react-redux';
 
 function OrderDetails() {
-  const { order, orderLoading, orderError } = useSelector((store) => store.constructors);
+  const { orderDetails, orderLoading, orderError } = useSelector((store) => store.order);
 
   return (
     <>
@@ -10,7 +10,7 @@ function OrderDetails() {
       {orderError && <h3 className="text text_type_digits-large mt-9 mb-8">'Ошибка'</h3>}
       {!orderLoading && !orderError && (
         <>
-          <h3 className="text text_type_digits-large mt-9 mb-8">{order.number}</h3>
+          <h3 className="text text_type_digits-large mt-9 mb-8">{orderDetails.number}</h3>
           <p className="text text_type_main-medium mb-15">идентификатор заказа</p>
           <div className={OrderDetailsStyles.done}></div>
 

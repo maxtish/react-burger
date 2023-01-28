@@ -8,11 +8,12 @@ import objectWithShape from '../../utils/shape';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToConstructor } from '../../services/actions/constructor';
 
+import { POSITION_SCROLL } from '../../services/actions/ingredients';
 import {
   VIEWING_INGREDIENT_ENABLED,
   VIEWING_INGREDIENT_DISABLED,
-  POSITION_SCROLL,
-} from '../../services/actions/ingredients';
+} from '../../services/actions/ingredient-detail-modal';
+
 import { useDrag } from 'react-dnd';
 
 // render группы игридиенто в
@@ -51,8 +52,8 @@ const RenderIngredient = ({ item, clickProp, clickSelect, counters }) => {
 
 const BurgerIngredients = () => {
   const ingredients = useSelector((store) => store.ingredients.data); // уже из стора
-  const { visibleModal, positionScroll } = useSelector((store) => store.ingredients); // состояние модального окна
-
+  const { positionScroll } = useSelector((store) => store.ingredients); // состояние модального окна
+  const visibleModal = useSelector((store) => store.ingredientDetailModal.visibleModal);
   const dispatch = useDispatch();
 
   const buns = ingredients.filter((item) => item.type === 'bun');
@@ -64,12 +65,6 @@ const BurgerIngredients = () => {
 
     const ids = event.target.offsetParent.getAttribute('id');
     const selected = ingredients.find((item) => item._id === ids);
-
-    /*dispatch({
-      type: GET_INGREDIENTS,
-      ing: selected,
-    });
-  */
 
     dispatch(addToConstructor(selected));
   }

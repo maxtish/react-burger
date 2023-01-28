@@ -2,7 +2,7 @@ import IngredientDetailsStyles from './ingredient-details.module.css';
 import { useSelector } from 'react-redux';
 
 function IngredientDetails() {
-  const ingredient = useSelector((store) => store.ingredients.viewingIngredient);
+  const ingredient = useSelector((store) => store.ingredientDetailModal.viewingIngredient);
   return (
     <>
       <img src={ingredient.image_large} alt={ingredient.name} />
