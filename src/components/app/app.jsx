@@ -1,10 +1,11 @@
 import { React, useEffect, useState } from 'react';
 import AppStyles from './app.module.css';
 import AppHeader from '../app-header/app-header';
-import ConstructorPage from '../../pages/constructor';
 import { useDispatch, useSelector } from 'react-redux';
 import { getItemsIng } from '../../services/actions/ingredients';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import { ConstructorPage, LoginPage } from '../../pages/index';
 
 function App() {
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<ConstructorPage />} />
+            <Route path="/login" element={<LoginPage />} />
           </Routes>
         </BrowserRouter>
       </main>

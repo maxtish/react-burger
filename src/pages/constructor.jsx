@@ -6,7 +6,7 @@ import BurgerIngredients from '../components/burger-ingredients/burger-ingredien
 import BurgerConstructor from '../components/burger-constructor/burger-constructor';
 import styles from './constructor.module.css';
 
-function ConstructorPage() {
+export function ConstructorPage() {
   return (
     <section className={styles.content}>
       <DndProvider backend={HTML5Backend}>
@@ -16,5 +16,3 @@ function ConstructorPage() {
     </section>
   );
 }
-
-export default ConstructorPage;
