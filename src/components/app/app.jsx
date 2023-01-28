@@ -1,12 +1,10 @@
 import { React, useEffect, useState } from 'react';
 import AppStyles from './app.module.css';
 import AppHeader from '../app-header/app-header';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-import BurgerConstructor from '../burger-constructor/burger-constructor';
+import ConstructorPage from '../../pages/constructor';
 import { useDispatch, useSelector } from 'react-redux';
 import { getItemsIng } from '../../services/actions/ingredients';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DndProvider } from 'react-dnd';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
   const dispatch = useDispatch();
@@ -21,18 +19,13 @@ function App() {
   return (
     <div className={AppStyles.page}>
       <AppHeader />
-
-      {isLoading && 'Загрузка...'}
-      {hasError && 'Ошибка'}
-      {!isLoading && !hasError && !data.length && 'Ошибка - нет массива'}
-      {!isLoading && !hasError && data.length && (
-        <main className={AppStyles.content}>
-          <DndProvider backend={HTML5Backend}>
-            <BurgerIngredients />
-            <BurgerConstructor />
-          </DndProvider>
-        </main>
-      )}
+      <main className={AppStyles.content}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<ConstructorPage />} />
+          </Routes>
+        </BrowserRouter>
+      </main>
     </div>
   );
 }
