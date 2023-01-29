@@ -5,9 +5,11 @@ import { Link } from 'react-router-dom';
 import styles from './authorization-form.module.css';
 
 const login = () => {};
-export function LoginPage() {
+export function RegisterPage() {
   ///Input
-  const [value, setValue] = useState('value');
+  const [valueName, setValueName] = useState('ValueName');
+  const [valueEmail, setValueEmail] = useState('ValueEmail');
+
   const inputRef = useRef(null);
   const onIconClick = () => {
     setTimeout(() => inputRef.current.focus(), 0);
@@ -23,11 +25,25 @@ export function LoginPage() {
     <section className={styles.wrapper}>
       <div className={styles.container}>
         <form className={styles.form} onSubmit={login} method="post">
-          <h1 className={`text text_type_main-medium ${styles.title}`}>Вход</h1>
+          <h1 className={`text text_type_main-medium ${styles.title}`}>Регистрация</h1>
+          <Input
+            type={'text'}
+            placeholder={'Имя'}
+            onChange={(e) => setValueName(e.target.value)}
+            icon={'CurrencyIcon'}
+            value={''}
+            name={'name'}
+            error={false}
+            ref={inputRef}
+            onIconClick={onIconClick}
+            errorText={'Ошибка'}
+            size={'default'}
+            extraClass="ml-1"
+          />
           <Input
             type={'email'}
             placeholder={'E-mail'}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => setValueEmail(e.target.value)}
             icon={'CurrencyIcon'}
             value={''}
             name={'email'}
@@ -45,20 +61,14 @@ export function LoginPage() {
             name="password"
           />
           <Button type="primary" size="medium">
-            Войти
+            Регистрация
           </Button>
         </form>
         <div className={`${styles.container__footer} mt-20 text text_type_main-default text_color_inactive`}>
-          <div className={styles.question}>
-            <p className="text">Вы - новый пользователь?</p>
-            <Link to="/register" className={`${styles.link} ml-1`}>
-              Зарегистрироваться
-            </Link>
-          </div>
           <div className={`${styles.question} mt-4`}>
-            <p className="text">Забыли пароль?</p>
-            <Link to="/forgot-password" className={`${styles.link} ml-1`}>
-              Восстановить пароль
+            <p className="text">Уже зарегистрированы?</p>
+            <Link to="/login" className={`${styles.link} ml-1`}>
+              Войти
             </Link>
           </div>
         </div>

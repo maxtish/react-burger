@@ -5,9 +5,11 @@ import { Link } from 'react-router-dom';
 import styles from './authorization-form.module.css';
 
 const login = () => {};
-export function LoginPage() {
+export function ResetPasswordPage() {
   ///Input
-  const [value, setValue] = useState('value');
+  const [valueName, setValueName] = useState('ValueName');
+  const [valueEmail, setValueEmail] = useState('ValueEmail');
+
   const inputRef = useRef(null);
   const onIconClick = () => {
     setTimeout(() => inputRef.current.focus(), 0);
@@ -23,14 +25,20 @@ export function LoginPage() {
     <section className={styles.wrapper}>
       <div className={styles.container}>
         <form className={styles.form} onSubmit={login} method="post">
-          <h1 className={`text text_type_main-medium ${styles.title}`}>Вход</h1>
+          <h1 className={`text text_type_main-medium ${styles.title}`}>Восстановление пароля</h1>
+          <PasswordInput
+            onChange={(e) => setValuePassword(e.target.value)}
+            placeholder={'Введите новый пароль'}
+            value={''}
+            name="password"
+          />
           <Input
-            type={'email'}
-            placeholder={'E-mail'}
-            onChange={(e) => setValue(e.target.value)}
+            type={'text'}
+            placeholder={'Введите код из письма'}
+            onChange={(e) => setValueName(e.target.value)}
             icon={'CurrencyIcon'}
             value={''}
-            name={'email'}
+            name={'name'}
             error={false}
             ref={inputRef}
             onIconClick={onIconClick}
@@ -38,27 +46,16 @@ export function LoginPage() {
             size={'default'}
             extraClass="ml-1"
           />
-          <PasswordInput
-            onChange={(e) => setValuePassword(e.target.value)}
-            placeholder={'Пароль'}
-            value={''}
-            name="password"
-          />
+
           <Button type="primary" size="medium">
-            Войти
+            Сохранить
           </Button>
         </form>
         <div className={`${styles.container__footer} mt-20 text text_type_main-default text_color_inactive`}>
-          <div className={styles.question}>
-            <p className="text">Вы - новый пользователь?</p>
-            <Link to="/register" className={`${styles.link} ml-1`}>
-              Зарегистрироваться
-            </Link>
-          </div>
           <div className={`${styles.question} mt-4`}>
-            <p className="text">Забыли пароль?</p>
-            <Link to="/forgot-password" className={`${styles.link} ml-1`}>
-              Восстановить пароль
+            <p className="text">Уже зарегистрированы?</p>
+            <Link to="/login" className={`${styles.link} ml-1`}>
+              Войти
             </Link>
           </div>
         </div>

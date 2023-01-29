@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import styles from './authorization-form.module.css';
 
 const login = () => {};
-export function LoginPage() {
+export function ForgotPasswordPage() {
   ///Input
   const [value, setValue] = useState('value');
   const inputRef = useRef(null);
@@ -23,10 +23,10 @@ export function LoginPage() {
     <section className={styles.wrapper}>
       <div className={styles.container}>
         <form className={styles.form} onSubmit={login} method="post">
-          <h1 className={`text text_type_main-medium ${styles.title}`}>Вход</h1>
+          <h1 className={`text text_type_main-medium ${styles.title}`}>Восстановление пароля</h1>
           <Input
             type={'email'}
-            placeholder={'E-mail'}
+            placeholder={'Укажите e-mail'}
             onChange={(e) => setValue(e.target.value)}
             icon={'CurrencyIcon'}
             value={''}
@@ -38,27 +38,16 @@ export function LoginPage() {
             size={'default'}
             extraClass="ml-1"
           />
-          <PasswordInput
-            onChange={(e) => setValuePassword(e.target.value)}
-            placeholder={'Пароль'}
-            value={''}
-            name="password"
-          />
+
           <Button type="primary" size="medium">
-            Войти
+            Восстановить
           </Button>
         </form>
         <div className={`${styles.container__footer} mt-20 text text_type_main-default text_color_inactive`}>
           <div className={styles.question}>
-            <p className="text">Вы - новый пользователь?</p>
-            <Link to="/register" className={`${styles.link} ml-1`}>
-              Зарегистрироваться
-            </Link>
-          </div>
-          <div className={`${styles.question} mt-4`}>
-            <p className="text">Забыли пароль?</p>
-            <Link to="/forgot-password" className={`${styles.link} ml-1`}>
-              Восстановить пароль
+            <p className="text">Вспомнили пароль?</p>
+            <Link to="/login" className={`${styles.link} ml-1`}>
+              Войти
             </Link>
           </div>
         </div>

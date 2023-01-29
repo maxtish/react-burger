@@ -5,7 +5,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getItemsIng } from '../../services/actions/ingredients';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import { ConstructorPage, LoginPage } from '../../pages/index';
+import {
+  ConstructorPage,
+  LoginPage,
+  RegisterPage,
+  ForgotPasswordPage,
+  ResetPasswordPage,
+  ProfilePage,
+} from '../../pages/index';
 
 function App() {
   const dispatch = useDispatch();
@@ -25,6 +32,10 @@ function App() {
           <Routes>
             <Route path="/" element={<ConstructorPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Routes>
         </BrowserRouter>
       </main>

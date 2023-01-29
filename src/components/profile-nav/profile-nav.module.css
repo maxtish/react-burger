@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+.nav {
+}
+
+.link {
+  flex-direction: column;
+  justify-content: center;
+  text-decoration: none;
+  display: flex;
+  height: 64px;
+}
+
+.info {
+  width: 320px;
+  opacity: 40%;
+}
+
+.exit {
+  flex-direction: column;
+  justify-content: center;
+  text-decoration: none;
+  display: flex;
+  height: 64px;
+  cursor: pointer;
+  text-decoration: none;
+
+  background-color: inherit;
+  border: none;
+}
