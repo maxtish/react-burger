@@ -10,7 +10,7 @@ let activeLinkOrders = false;
 export function ProfileNav() {
   return (
     <div className={styles.container}>
-      <nav className={`${styles.nav} `}>
+      <nav>
         <NavLink
           exact
           to="/profile"

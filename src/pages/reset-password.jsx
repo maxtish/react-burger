@@ -1,47 +1,58 @@
 import { React, useEffect, useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
+import { getResetPasswordAction } from '../services/actions/password';
+import { SAVE_PASSWORD } from '../services/actions/password';
 import styles from './authorization-form.module.css';
 
-const login = () => {};
 export function ResetPasswordPage() {
-  ///Input
-  const [valueName, setValueName] = useState('ValueName');
-  const [valueEmail, setValueEmail] = useState('ValueEmail');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [valuePassword, setValuePassword] = useState('');
+  const [token, setToken] = useState('');
+  const [newPassword, setNewPassword] = useState('');
 
-  const inputRef = useRef(null);
-  const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0);
-    alert('Icon Click Callback');
-  };
+  function handleSubmit(e) {
+    e.preventDefault();
+    dispatch(
+      getResetPasswordAction({
+        password: newPassword,
+        token: token,
+      })
+    );
+    dispatch({
+      type: SAVE_PASSWORD,
+      password: newPassword,
+    });
+  }
+  const resetPasswordStatus = useSelector((state) => state.forgotPassword.resetPasswordStatus);
 
-  //Password
-  const [valuePassword, setValuePassword] = useState('password');
-  const onChange = (e) => {
-    setValuePassword(e.target.value);
-  };
+  useEffect(() => {
+    if (resetPasswordStatus) {
+      return navigate('/login');
+    }
+  }, [resetPasswordStatus]);
+
   return (
     <section className={styles.wrapper}>
       <div className={styles.container}>
-        <form className={styles.form} onSubmit={login} method="post">
+        <form className={styles.form} onSubmit={handleSubmit} method="post">
           <h1 className={`text text_type_main-medium ${styles.title}`}>Восстановление пароля</h1>
           <PasswordInput
-            onChange={(e) => setValuePassword(e.target.value)}
-            placeholder={'Введите новый пароль'}
-            value={''}
+            onChange={(e) => setNewPassword(e.target.value)}
+            placeholder={'Пароль'}
+            value={newPassword}
             name="password"
           />
           <Input
             type={'text'}
             placeholder={'Введите код из письма'}
-            onChange={(e) => setValueName(e.target.value)}
+            onChange={(e) => setToken(e.target.value)}
             icon={'CurrencyIcon'}
-            value={''}
+            value={token}
             name={'name'}
             error={false}
-            ref={inputRef}
-            onIconClick={onIconClick}
             errorText={'Ошибка'}
             size={'default'}
             extraClass="ml-1"

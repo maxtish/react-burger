@@ -1,41 +1,47 @@
 import { React, useEffect, useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-router-dom';
+import { SAVE_PASSWORD } from '../services/actions/password';
+import { getNewUser } from '../services/actions/user';
 import styles from './authorization-form.module.css';
 
-const login = () => {};
 export function RegisterPage() {
+  const dispatch = useDispatch();
+
   ///Input
-  const [valueName, setValueName] = useState('ValueName');
-  const [valueEmail, setValueEmail] = useState('ValueEmail');
+  const [newName, setNewName] = useState('');
+  const [newEmail, setNewEmail] = useState('');
+  const [newPassword, setNewPassword] = useState('');
 
-  const inputRef = useRef(null);
-  const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0);
-    alert('Icon Click Callback');
+  const submitUserData = (e) => {
+    e.preventDefault();
+    dispatch(
+      getNewUser({
+        email: newEmail,
+        password: newPassword,
+        name: newName,
+      })
+    );
+    dispatch({
+      type: SAVE_PASSWORD,
+      password: newPassword,
+    });
   };
 
-  //Password
-  const [valuePassword, setValuePassword] = useState('password');
-  const onChange = (e) => {
-    setValuePassword(e.target.value);
-  };
   return (
     <section className={styles.wrapper}>
       <div className={styles.container}>
-        <form className={styles.form} onSubmit={login} method="post">
+        <form className={styles.form} onSubmit={submitUserData} method="post">
           <h1 className={`text text_type_main-medium ${styles.title}`}>Регистрация</h1>
           <Input
             type={'text'}
             placeholder={'Имя'}
-            onChange={(e) => setValueName(e.target.value)}
+            onChange={(e) => setNewName(e.target.value)}
             icon={'CurrencyIcon'}
-            value={''}
+            value={newName}
             name={'name'}
             error={false}
-            ref={inputRef}
-            onIconClick={onIconClick}
             errorText={'Ошибка'}
             size={'default'}
             extraClass="ml-1"
@@ -43,21 +49,19 @@ export function RegisterPage() {
           <Input
             type={'email'}
             placeholder={'E-mail'}
-            onChange={(e) => setValueEmail(e.target.value)}
+            onChange={(e) => setNewEmail(e.target.value)}
             icon={'CurrencyIcon'}
-            value={''}
+            value={newEmail}
             name={'email'}
             error={false}
-            ref={inputRef}
-            onIconClick={onIconClick}
             errorText={'Ошибка'}
             size={'default'}
             extraClass="ml-1"
           />
           <PasswordInput
-            onChange={(e) => setValuePassword(e.target.value)}
+            onChange={(e) => setNewPassword(e.target.value)}
             placeholder={'Пароль'}
-            value={''}
+            value={newPassword}
             name="password"
           />
           <Button type="primary" size="medium">
