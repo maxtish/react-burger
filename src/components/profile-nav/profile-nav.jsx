@@ -11,27 +11,15 @@ export function ProfileNav() {
   return (
     <div className={styles.container}>
       <nav>
-        <NavLink
-          exact
-          to="/profile"
-          className={`${styles.link} text text_type_main-medium text_color_inactive `}
-          activeStyle={{ color: ' white' }}
-        >
+        <NavLink to="/profile" className={`${styles.link} text text_type_main-medium text_color_inactive `}>
           Профиль
         </NavLink>
 
-        <NavLink
-          exact
-          to="/profile/orders"
-          className={`${styles.link} text text_type_main-medium text_color_inactive`}
-          activeStyle={{ color: ' white' }}
-        >
+        <NavLink to="/profile/orders" className={`${styles.link} text text_type_main-medium text_color_inactive`}>
           История заказов
         </NavLink>
 
-        <button className={`${styles.exit}  text text_type_main-medium text_color_inactive `} onClick={''}>
-          Выход
-        </button>
+        <button className={`${styles.exit}  text text_type_main-medium text_color_inactive `}>Выход</button>
       </nav>
 
       {activeLinkProfile && (

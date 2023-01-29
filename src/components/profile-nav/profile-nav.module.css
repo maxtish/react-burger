@@ -3,6 +3,9 @@
   flex-direction: column;
 }
 
+.active {
+  color: white;
+}
 .link {
   flex-direction: column;
   justify-content: center;
