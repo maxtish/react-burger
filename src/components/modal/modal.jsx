@@ -4,10 +4,13 @@ import PropTypes from 'prop-types';
 import modalStyles from './modal.module.css';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from '../modal-overlay/modal-overlay';
+import { getItemsIng } from '../../services/actions/ingredients';
 
 const modalRoot = document.getElementById('root');
 
 function Modal({ children, header, onClose }) {
+  console.log('Modal');
+
   React.useEffect(() => {
     const escClose = (evt) => {
       if (evt.key === 'Escape') {

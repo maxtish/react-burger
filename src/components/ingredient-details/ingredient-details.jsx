@@ -1,8 +1,18 @@
+import { React, useEffect, useState, useCallback } from 'react';
 import IngredientDetailsStyles from './ingredient-details.module.css';
-import { useSelector } from 'react-redux';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams, useLocation } from 'react-router-dom';
+import { getItemsIng } from '../../services/actions/ingredients';
 
 function IngredientDetails() {
-  const ingredient = useSelector((store) => store.ingredientDetailModal.viewingIngredient);
+  const location = useLocation();
+  console.log('IngredientDetails');
+  const { id } = useParams();
+
+  console.log('location', location.state.ingredient);
+  const ingredient = location.state.ingredient;
+
   return (
     <>
       <img src={ingredient.image_large} alt={ingredient.name} />

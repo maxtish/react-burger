@@ -7,7 +7,12 @@ import { SAVE_PASSWORD } from '../services/actions/password';
 import styles from './authorization-form.module.css';
 
 export function ResetPasswordPage() {
+  const location = useLocation();
   const navigate = useNavigate();
+  const forgotPasswordStatus = useSelector((state) => state.forgotPassword.forgotPasswordStatus);
+  console.log('forgotPasswordStatus=', forgotPasswordStatus);
+  console.log('location.state=', location.state);
+
   const dispatch = useDispatch();
   const [valuePassword, setValuePassword] = useState('');
   const [token, setToken] = useState('');
@@ -27,8 +32,11 @@ export function ResetPasswordPage() {
     });
   }
   const resetPasswordStatus = useSelector((state) => state.forgotPassword.resetPasswordStatus);
-
+  console.log('resetPasswordStatus', resetPasswordStatus);
   useEffect(() => {
+    if (location.state !== '/forgot-password') {
+      return navigate('/login');
+    }
     if (resetPasswordStatus) {
       return navigate('/login');
     }

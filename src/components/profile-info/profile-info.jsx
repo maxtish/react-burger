@@ -1,46 +1,86 @@
-import { React, useEffect, useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { Input, PasswordInput, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
+import { React, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Input, PasswordInput, EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-router-dom';
+import { SAVE_PASSWORD } from '../../services/actions/password';
+import { updateUser } from '../../services/actions/user';
+
 import styles from './profile-info.module.css';
 
-const login = () => {};
 export function ProfileInfo() {
-  ///Input
-  const [valueName, setValueName] = useState('');
-  const [valuePassword, setValuePassword] = useState('');
-  const [valueEmail, setValueEmail] = useState('');
+  const [valueName, setValueName] = useState({ value: '', isChange: false });
+  const [valueEmail, setValueEmail] = useState({ value: '', isChange: false });
+  const [valuePassword, setValuePassword] = useState({ value: '', isChange: false });
+
+  const dispatch = useDispatch();
+
+  const { name, email } = useSelector((state) => state.user.userData);
+  const password = useSelector((state) => state.forgotPassword.password);
+
+  const cancel = () => {
+    setValueName({ value: name, isChange: false });
+    setValuePassword({ value: password, isChange: false });
+    setValueEmail({ value: email, isChange: false });
+  };
+
+  const handleSubmit = () => {
+    dispatch(
+      updateUser({
+        email: valueEmail.isChange ? valueEmail.value : email,
+        password: valuePassword.isChange ? valuePassword.value : password,
+        name: valueName.isChange ? valueName.value : name,
+      })
+    );
+    if (valuePassword.isChange) {
+      dispatch({
+        type: SAVE_PASSWORD,
+        password: valuePassword.value,
+      });
+    }
+    cancel();
+  };
 
   return (
-    <form className={styles.form} onSubmit={login} method="post">
+    <div className={styles.form}>
       <div className={styles.wrapper}>
         <Input
           type="text"
           placeholder="Имя"
-          onChange={(e) => setValueName({ value: e.target.value })}
+          onChange={(e) => setValueName({ value: e.target.value, isChange: true })}
           icon="EditIcon"
-          value={''}
+          value={valueName.isChange ? valueName.value : name}
           name="name"
         />
       </div>
       <div className={styles.wrapper}>
         <EmailInput
           placeholder="Логин"
-          onChange={(e) => setValueEmail(e.target.value)}
+          onChange={(e) => setValueEmail({ value: e.target.value, isChange: true })}
           icon="EditIcon"
-          value={''}
+          value={valueEmail.isChange ? valueEmail.value : email}
           name="email"
         />
       </div>
       <div className={styles.wrapper}>
         <PasswordInput
           placeholder="Пароль"
-          onChange={(e) => setValuePassword({ value: e.target.value })}
+          onChange={(e) => setValuePassword({ value: e.target.value, isChange: true })}
           icon="EditIcon"
-          value={''}
+          value={valuePassword.isChange ? valuePassword.value : password}
           name="password"
         />
       </div>
-    </form>
+
+      {(valueName.isChange || valueEmail.isChange || valuePassword.isChange) && (
+        <div className={styles.buttons}>
+          <Button type="secondary" size="medium" onClick={cancel}>
+            Отмена
+          </Button>
+          <Button type="primary" size="medium" onClick={handleSubmit}>
+            Сохранить
+          </Button>
+        </div>
+      )}
+    </div>
   );
 }

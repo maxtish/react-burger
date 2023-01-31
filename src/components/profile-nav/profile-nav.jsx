@@ -1,25 +1,46 @@
-import { React, useEffect, useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { React, useState, useRef, useEffect, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams, useLocation } from 'react-router-dom';
+import { signOut, getUser } from '../../services/actions/user';
 import styles from './profile-nav.module.css';
 
-let activeLinkProfile = true;
-let activeLinkOrders = false;
-
 export function ProfileNav() {
+  const location = useLocation();
+
+  let activeLinkProfile = true;
+  let activeLinkOrders = false;
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getUser());
+  }, []);
+
+  const logout = useCallback(() => {
+    dispatch(signOut());
+  }, [dispatch]);
+
   return (
     <div className={styles.container}>
       <nav>
-        <NavLink to="/profile" className={`${styles.link} text text_type_main-medium text_color_inactive `}>
+        <NavLink
+          to="/profile"
+          style={({ isActive }) => ({ color: location.pathname === '/profile' && 'white' })}
+          className={`${styles.link} text text_type_main-medium text_color_inactive `}
+        >
           Профиль
         </NavLink>
 
-        <NavLink to="/profile/orders" className={`${styles.link} text text_type_main-medium text_color_inactive`}>
+        <NavLink
+          to="/profile/orders"
+          style={({ isActive }) => ({ color: location.pathname === '/profile/orders' && 'white' })}
+          className={`${styles.link} text text_type_main-medium text_color_inactive`}
+        >
           История заказов
         </NavLink>
 
-        <button className={`${styles.exit}  text text_type_main-medium text_color_inactive `}>Выход</button>
+        <button className={`${styles.exit}  text text_type_main-medium text_color_inactive `} onClick={logout}>
+          Выход
+        </button>
       </nav>
 
       {activeLinkProfile && (

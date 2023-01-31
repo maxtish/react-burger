@@ -1,4 +1,6 @@
 import React, { useMemo } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+
 import PropTypes from 'prop-types';
 import BurgerIngredientsStyles from './burger-ingredients.module.css';
 import { Tab, CurrencyIcon, Counter, Typography } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -28,24 +30,31 @@ const RenderGroup = ({ arr, clickProp, clickSelect, counters }) => {
 };
 
 // render игридиента
-const RenderIngredient = ({ item, clickProp, clickSelect, counters }) => {
+const RenderIngredient = ({ item, clickProp, counters }) => {
+  const ingredients = useSelector((store) => store.ingredients.data); // уже из стора
   // react-dnd
   const currentItem = item;
   const [, dragRef] = useDrag({
     type: 'ingredients',
     item: { currentItem },
   });
-
+  const location = useLocation();
   return (
-    <li className={BurgerIngredientsStyles.item} key={item._id} id={item._id} onClick={clickProp} ref={dragRef}>
-      {counters[item._id] > 0 && <Counter count={counters[item._id]} size="default" />}
+    <li className={BurgerIngredientsStyles.item} key={item._id} id={item._id} ref={dragRef}>
+      <Link
+        className={BurgerIngredientsStyles.link}
+        to={`/ingredients/${item._id}`}
+        state={{ background: location, ingredient: item }}
+      >
+        {counters[item._id] > 0 && <Counter count={counters[item._id]} size="default" />}
 
-      <img src={item.image} alt={item.name} onClick={clickSelect} />
-      <div className={`${BurgerIngredientsStyles.price} mt-1 mb-1`}>
-        <p className={`${BurgerIngredientsStyles.pricenumb} text text_type_digits-default`}>{item.price}</p>
-        <CurrencyIcon type="primary" />
-      </div>
-      <p className={`${BurgerIngredientsStyles.text} text text_type_main-default pb-6`}>{item.name}</p>
+        <img src={item.image} alt={item.name} />
+        <div className={`${BurgerIngredientsStyles.price} mt-1 mb-1`}>
+          <p className={`${BurgerIngredientsStyles.pricenumb} text text_type_digits-default`}>{item.price}</p>
+          <CurrencyIcon type="primary" />
+        </div>
+        <p className={`${BurgerIngredientsStyles.text} text text_type_main-default pb-6`}>{item.name}</p>
+      </Link>
     </li>
   );
 };

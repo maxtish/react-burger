@@ -1,24 +1,39 @@
 import { React, useEffect, useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { signIn } from '../services/actions/user';
+import { SAVE_PASSWORD } from '../services/actions/password';
 import styles from './authorization-form.module.css';
 
-const login = () => {};
 export function LoginPage() {
-  ///Input
-  const [value, setValue] = useState('value');
-  const inputRef = useRef(null);
-  const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0);
-    alert('Icon Click Callback');
+  const location = useLocation();
+  const navigate = useNavigate();
+  const fromPage = location.state?.from?.pathname || '/';
+  const [valueEmail, setValueEmail] = useState('');
+  const [valuePassword, setValuePassword] = useState('');
+
+  const isAuth = useSelector((state) => state.user.isAuth);
+  console.log('isAuth-', isAuth);
+
+  const dispatch = useDispatch();
+
+  const login = (e) => {
+    e.preventDefault();
+    dispatch(signIn({ email: valueEmail, password: valuePassword }));
+    dispatch({
+      type: SAVE_PASSWORD,
+      password: valuePassword,
+    });
   };
 
-  //Password
-  const [valuePassword, setValuePassword] = useState('password');
-  const onChange = (e) => {
-    setValuePassword(e.target.value);
-  };
+  useEffect(() => {
+    if (isAuth) {
+      return navigate(fromPage);
+    }
+  }, [isAuth]);
+
   return (
     <section className={styles.wrapper}>
       <div className={styles.container}>
@@ -27,13 +42,10 @@ export function LoginPage() {
           <Input
             type={'email'}
             placeholder={'E-mail'}
-            onChange={(e) => setValue(e.target.value)}
-            icon={'CurrencyIcon'}
-            value={''}
+            onChange={(e) => setValueEmail(e.target.value)}
+            value={valueEmail}
             name={'email'}
             error={false}
-            ref={inputRef}
-            onIconClick={onIconClick}
             errorText={'Ошибка'}
             size={'default'}
             extraClass="ml-1"
@@ -41,7 +53,7 @@ export function LoginPage() {
           <PasswordInput
             onChange={(e) => setValuePassword(e.target.value)}
             placeholder={'Пароль'}
-            value={''}
+            value={valuePassword}
             name="password"
           />
           <Button type="primary" size="medium">

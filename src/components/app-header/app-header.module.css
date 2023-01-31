@@ -1,6 +1,13 @@
-.activelink {
-  color: white;
+.page {
+  font-family: 'JetBrains Mono', Arial, sans-serif;
+  max-width: 1280px;
+  margin: auto;
 }
+
+.content {
+  display: flex;
+}
+
 .header {
   position: relative;
 

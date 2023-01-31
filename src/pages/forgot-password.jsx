@@ -1,15 +1,16 @@
 import { React, useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
+import { useParams, useLocation, useNavigate, useMatch, Link } from 'react-router-dom';
 import { getForgotPasswordAction } from '../services/actions/password';
 import styles from './authorization-form.module.css';
 
 export function ForgotPasswordPage() {
   const navigate = useNavigate();
-
+  const location = useLocation();
+  console.log(location);
   const dispatch = useDispatch();
-
+  const fromPage = location.pathname || '/';
   const [valueEmail, setValueEmail] = useState('');
 
   const forgotPasswordStatus = useSelector((state) => state.forgotPassword.forgotPasswordStatus);
@@ -21,7 +22,7 @@ export function ForgotPasswordPage() {
   }
   useEffect(() => {
     if (forgotPasswordStatus) {
-      return navigate('/reset-password');
+      return navigate('/reset-password', { state: fromPage });
     }
   }, [forgotPasswordStatus]);
 
@@ -43,7 +44,7 @@ export function ForgotPasswordPage() {
             extraClass="ml-1"
           />
 
-          <Button type="primary" size="medium">
+          <Button type="primary" size="medium" disabled={valueEmail === ''}>
             Восстановить
           </Button>
         </form>
