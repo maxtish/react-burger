@@ -33,10 +33,9 @@ function App() {
     return store.ingredients.data;
   });
   const location = useLocation();
-  console.log('locationApp', location);
 
   const background = location.state?.background;
-  console.log('backgroundApp', background);
+
   return (
     <>
       <Routes location={background || location}>
@@ -96,18 +95,3 @@ function App() {
 }
 
 export default App;
-
-/*
-{background && (
-        <Routes location={location}>
-          <Route
-            path="/ingredients/:id"
-            element={
-              <Modal header="Детали ингредиента" onClose={onClose}>
-                <IngredientDetails />
-              </Modal>
-            }
-          />
-        </Routes>
-      )}
-    */

@@ -5,7 +5,6 @@ export const GET_ITEMS_SUCCESS = 'GET_ITEMS_SUCCESS'; // успех получе
 export const GET_ITEMS_FAILED = 'GET_ITEMS_FAILED'; // нет успеха получение списка ингредиентов от API
 export const POSITION_SCROLL = 'POSITION_SCROLL'; //позиция скролла,
 export function getItemsIng() {
-  console.log('getItemsIng');
   return function (dispatch) {
     dispatch({
       type: GET_ITEMS_REQUEST,

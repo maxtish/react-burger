@@ -10,7 +10,6 @@ export const IngredientPage = () => {
     return store.ingredients.data;
   });
 
-  console.log('store', ingredients);
   const { id } = useParams();
   const ingredient = ingredients.find((item) => item._id === id);
 

@@ -1,21 +1,18 @@
 import React, { useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-
 import PropTypes from 'prop-types';
 import BurgerIngredientsStyles from './burger-ingredients.module.css';
-import { Tab, CurrencyIcon, Counter, Typography } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import objectWithShape from '../../utils/shape';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToConstructor } from '../../services/actions/constructor';
-
 import { POSITION_SCROLL } from '../../services/actions/ingredients';
 import {
   VIEWING_INGREDIENT_ENABLED,
   VIEWING_INGREDIENT_DISABLED,
 } from '../../services/actions/ingredient-detail-modal';
-
 import { useDrag } from 'react-dnd';
 
 // render группы игридиенто в
@@ -32,6 +29,7 @@ const RenderGroup = ({ arr, clickProp, clickSelect, counters }) => {
 // render игридиента
 const RenderIngredient = ({ item, clickProp, counters }) => {
   const ingredients = useSelector((store) => store.ingredients.data); // уже из стора
+
   // react-dnd
   const currentItem = item;
   const [, dragRef] = useDrag({

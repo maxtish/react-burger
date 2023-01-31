@@ -10,13 +10,11 @@ export const GET_RESET_PASSWORD_FAILED = 'GET_RESET_PASSWORD_FAILED';
 export const SAVE_PASSWORD = 'SAVE_PASSWORD';
 
 export const getForgotPasswordAction = (email) => (dispatch) => {
-  console.log('в action дошло-', email);
   dispatch({
     type: GET_FORGOT_PASSWORD_REQUEST,
   });
   getForgotPassword(email)
     .then((res) => {
-      console.log('res', res);
       dispatch({
         type: GET_FORGOT_PASSWORD_SUCCESS,
         data: res.success,
@@ -27,18 +25,15 @@ export const getForgotPasswordAction = (email) => (dispatch) => {
         type: GET_FORGOT_PASSWORD_FAILED,
         data: res.success,
       });
-      console.log('getForgotPassword', res.success);
     });
 };
 
 export const getResetPasswordAction = (data) => (dispatch) => {
-  console.log('в action дошло-', data);
   dispatch({
     type: GET_RESET_PASSWORD_REQUEST,
   });
   getResetPassword(data)
     .then((res) => {
-      console.log('res', res);
       dispatch({
         type: GET_RESET_PASSWORD_SUCCESS,
         data: res.success,
@@ -49,6 +44,5 @@ export const getResetPasswordAction = (data) => (dispatch) => {
         type: GET_RESET_PASSWORD_FAILED,
         data: res.success,
       });
-      console.log('getForgotPassword', res.success);
     });
 };

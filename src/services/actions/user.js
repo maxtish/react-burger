@@ -48,13 +48,11 @@ export const getNewUser = (data) => (dispatch) => {
       dispatch({
         type: GET_NEW_USER_ERROR,
       });
-      console.log('createUser' + res.message);
     });
 };
 
 //Вход нового пользователя авторизации
 export const signIn = (data) => (dispatch) => {
-  console.log('Вход нового пользователя авторизации', data);
   dispatch({
     type: USER_LOGIN_REQUEST,
   });
@@ -65,7 +63,6 @@ export const signIn = (data) => (dispatch) => {
       if (accessToken && refreshToken) {
         setCookie('accessToken', accessToken, { 'max-age': 1200 });
         setCookie('refreshToken', refreshToken);
-        console.log('Вход res', res);
       }
 
       dispatch({
@@ -77,13 +74,11 @@ export const signIn = (data) => (dispatch) => {
       dispatch({
         type: USER_LOGIN_ERROR,
       });
-      console.log('loginRequest' + res.message);
     });
 };
 
 //Выход пользователя из системы
 export const signOut = () => (dispatch) => {
-  console.log('Выход пользователя из системы');
   dispatch({
     type: USER_LOGOUT_REQUEST,
   });
@@ -100,7 +95,6 @@ export const signOut = () => (dispatch) => {
       dispatch({
         type: USER_LOGOUT_ERROR,
       });
-      console.log('logoutRequest' + res.message);
     });
 };
 
@@ -124,7 +118,6 @@ export const getUser = () => (dispatch) => {
         dispatch({
           type: GET_USER_ERROR,
         });
-        console.log('getUserData' + res.message);
       });
   } else {
     refreshTokenRequest().then((res) => {
@@ -143,7 +136,6 @@ export const getUser = () => (dispatch) => {
           dispatch({
             type: GET_USER_ERROR,
           });
-          console.log('getUserData' + res.message);
         });
     });
   }
@@ -166,7 +158,6 @@ export const updateUser = (data) => (dispatch) => {
         dispatch({
           type: USER_UPDATE_ERROR,
         });
-        console.log('updateUserData' + res.message);
       });
   } else {
     refreshTokenRequest().then((res) => {
@@ -185,7 +176,6 @@ export const updateUser = (data) => (dispatch) => {
           dispatch({
             type: USER_UPDATE_ERROR,
           });
-          console.log('updateUserData' + res.message);
         });
     });
   }

@@ -1,23 +1,24 @@
-import { React, useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useParams, useLocation, useNavigate, useMatch, Link } from 'react-router-dom';
+import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { getForgotPasswordAction } from '../services/actions/password';
 import styles from './authorization-form.module.css';
 
 export function ForgotPasswordPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location);
+
   const dispatch = useDispatch();
   const fromPage = location.pathname || '/';
   const [valueEmail, setValueEmail] = useState('');
 
   const forgotPasswordStatus = useSelector((state) => state.forgotPassword.forgotPasswordStatus);
-  console.log('forgotPasswordStatus-', forgotPasswordStatus);
+
   function handleSubmit(e) {
     e.preventDefault();
-    console.log('ввел-', valueEmail);
+
     dispatch(getForgotPasswordAction({ email: valueEmail }));
   }
   useEffect(() => {

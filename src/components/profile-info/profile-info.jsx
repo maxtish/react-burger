@@ -1,7 +1,6 @@
-import { React, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Input, PasswordInput, EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
 import { SAVE_PASSWORD } from '../../services/actions/password';
 import { updateUser } from '../../services/actions/user';
 

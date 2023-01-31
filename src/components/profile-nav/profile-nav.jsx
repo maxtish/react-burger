@@ -1,7 +1,6 @@
-import { React, useState, useRef, useEffect, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { NavLink, useParams, useLocation } from 'react-router-dom';
+import { useEffect, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { NavLink, useLocation } from 'react-router-dom';
 import { signOut, getUser } from '../../services/actions/user';
 import styles from './profile-nav.module.css';
 

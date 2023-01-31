@@ -9,7 +9,6 @@ async function request(url, options) {
 }
 
 export function getIngredients() {
-  console.log('getIngredients-API');
   return fetch(`${url}ingredients`, {
     method: 'GET',
     headers: {
@@ -30,7 +29,6 @@ export function getOrderDetails(idArrSelected) {
 
 //Проверка для Восстановить пароль
 export function getForgotPassword(data) {
-  console.log('Тело запроса:', data);
   return fetch(`${url}password-reset`, {
     method: 'POST',
     headers: {
@@ -42,7 +40,6 @@ export function getForgotPassword(data) {
 
 //Восстановить пароль
 export function getResetPassword(data) {
-  console.log('Тело запроса:', data);
   return fetch(`${url}password-reset/reset`, {
     method: 'POST',
     headers: {
@@ -54,7 +51,6 @@ export function getResetPassword(data) {
 
 //Создать пользователя
 export function createUser(data) {
-  console.log('Создать пользователя:', data);
   return fetch(`${url}auth/register`, {
     method: 'POST',
     headers: {
@@ -73,7 +69,6 @@ function getResponse(res) {
 
 //Для авторизации пользователя вход
 export function loginRequest(data) {
-  console.log('Для авторизации пользователя вход:', data);
   return request(`${url}auth/login`, {
     method: 'POST',
     mode: 'cors',
@@ -90,7 +85,6 @@ export function loginRequest(data) {
 
 //Для выхода пользователя
 export function logoutRequest(refreshToken) {
-  console.log('Для выхода пользователя:', refreshToken);
   return request(`${url}auth/logout`, {
     method: 'POST',
     mode: 'cors',
@@ -107,7 +101,6 @@ export function logoutRequest(refreshToken) {
 
 //Для обновления токена пользователя
 export function refreshTokenRequest() {
-  console.log('Для обновления токена пользователя');
   const refreshToken = getCookie('refreshToken');
   return request(`${url}auth/token`, {
     method: 'POST',
@@ -125,7 +118,6 @@ export function refreshTokenRequest() {
 
 //Для получения данных пользователя
 export function getUserData() {
-  console.log('Для получения данных пользователя');
   return request(`${url}auth/user`, {
     method: 'GET',
     mode: 'cors',

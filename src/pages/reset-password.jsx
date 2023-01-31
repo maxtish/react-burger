@@ -1,7 +1,7 @@
-import { React, useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { getResetPasswordAction } from '../services/actions/password';
 import { SAVE_PASSWORD } from '../services/actions/password';
 import styles from './authorization-form.module.css';
@@ -9,12 +9,7 @@ import styles from './authorization-form.module.css';
 export function ResetPasswordPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const forgotPasswordStatus = useSelector((state) => state.forgotPassword.forgotPasswordStatus);
-  console.log('forgotPasswordStatus=', forgotPasswordStatus);
-  console.log('location.state=', location.state);
-
   const dispatch = useDispatch();
-  const [valuePassword, setValuePassword] = useState('');
   const [token, setToken] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
@@ -32,7 +27,7 @@ export function ResetPasswordPage() {
     });
   }
   const resetPasswordStatus = useSelector((state) => state.forgotPassword.resetPasswordStatus);
-  console.log('resetPasswordStatus', resetPasswordStatus);
+
   useEffect(() => {
     if (location.state !== '/forgot-password') {
       return navigate('/login');

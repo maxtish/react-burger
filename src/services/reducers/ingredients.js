@@ -16,8 +16,6 @@ export const ingredientsReducer = (state = initialState, action) => {
     // Добавить ингридиент
 
     case GET_ITEMS_SUCCESS: {
-      console.log('GET_ITEMS_SUCCESS = ', action.items);
-
       return {
         ...state,
         isLoading: false,

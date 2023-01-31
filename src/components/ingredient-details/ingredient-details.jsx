@@ -1,16 +1,9 @@
-import { React, useEffect, useState, useCallback } from 'react';
 import IngredientDetailsStyles from './ingredient-details.module.css';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams, useLocation } from 'react-router-dom';
-import { getItemsIng } from '../../services/actions/ingredients';
+import { useLocation } from 'react-router-dom';
 
 function IngredientDetails() {
   const location = useLocation();
-  console.log('IngredientDetails');
-  const { id } = useParams();
 
-  console.log('location', location.state.ingredient);
   const ingredient = location.state.ingredient;
 
   return (

@@ -1,7 +1,7 @@
-import { React, useEffect, useState, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { SAVE_PASSWORD } from '../services/actions/password';
 import { getNewUser } from '../services/actions/user';
 import styles from './authorization-form.module.css';
@@ -9,14 +9,7 @@ import styles from './authorization-form.module.css';
 export function RegisterPage() {
   const dispatch = useDispatch();
   const location = useLocation();
-  const navigate = useNavigate();
 
-  const fromPage = location.state?.from?.pathname || '/';
-  const isAuth = useSelector((state) => state.user.isAuth);
-  console.log('isAuth-', isAuth);
-  console.log('fromPage-', fromPage);
-
-  ///Input
   const [newName, setNewName] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');

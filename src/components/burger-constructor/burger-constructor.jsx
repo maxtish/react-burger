@@ -57,48 +57,6 @@ const RenderBurgerIngr = ({ ingrdient, index }) => {
   });
   const opacity = isDragging ? 0 : 1;
 
-  /*
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: 'main',
-    item: { item, index },
-    collect: (monitor) => {
-      return {
-        isDragging: monitor.isDragging(),
-      };
-    },
-  }));
-  const { selectedIngredients, visibleOrderModal, selectedBun } = useSelector((store) => store.constructors);
-
-  const [{ isHover }, drop] = useDrop({
-    accept: 'main',
-    hover(item) {
-      if (!ref.current) {
-        return;
-      }
-      const dragIndex = item.index; //сам обект
-      const hoverIndex = index; //над обьектом
-      console.log('dragIndex-', dragIndex);
-      if (dragIndex === hoverIndex) {
-        return;
-      } else {
-        //Меняем местами элементы в массиве
-        console.log('dragIndex-', dragIndex, 'над ним-', hoverIndex);
-        dispatch({
-          type: TOGGLE_ING,
-          dragIndex: dragIndex,
-          hoverIndex: hoverIndex,
-        });
-
-        console.log(selectedIngredients);
-      }
-    },
-    collect: (monitor) => {
-      return {
-        isHover: monitor.isOver(),
-      };
-    },
-  });
-*/
   drag(drop(ref));
 
   return (
@@ -151,7 +109,7 @@ const SummPrice = ({ selectedIngredients, selectedBun }) => {
 const BurgerConstructor = () => {
   const { selectedIngredients, selectedBun } = useSelector((store) => store.constructors);
   const visibleOrderModal = useSelector((store) => store.order.visibleOrderModal);
-
+  const isAuth = useSelector((store) => store.user.isAuth);
   const dispatch = useDispatch();
 
   // react-dnd
@@ -198,7 +156,7 @@ const BurgerConstructor = () => {
           <div className={`${BurgerConstructorStyles.icon} ml-2 mr-10`}>
             <CurrencyIcon type="primary" />
           </div>
-          <Button type="primary" size="large" onClick={openModal}>
+          <Button type="primary" size="large" disabled={!isAuth} onClick={openModal}>
             Оформить заказ
           </Button>
         </div>

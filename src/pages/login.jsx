@@ -1,6 +1,6 @@
-import { React, useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
+import PropTypes from 'prop-types';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { signIn } from '../services/actions/user';
@@ -10,12 +10,13 @@ import styles from './authorization-form.module.css';
 export function LoginPage() {
   const location = useLocation();
   const navigate = useNavigate();
+
   const fromPage = location.state?.from?.pathname || '/';
+
   const [valueEmail, setValueEmail] = useState('');
   const [valuePassword, setValuePassword] = useState('');
 
   const isAuth = useSelector((state) => state.user.isAuth);
-  console.log('isAuth-', isAuth);
 
   const dispatch = useDispatch();
 
