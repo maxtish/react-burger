@@ -25,7 +25,7 @@ export function AppHeader() {
               <NavLink
                 className={`${HeaderStyles.link} text text_type_main-default text_color_inactive pl-2`}
                 style={({ isActive }) => ({ color: isActive && 'white' })}
-                to="/profile/orders"
+                to="/feed"
               >
                 Лента заказов
               </NavLink>

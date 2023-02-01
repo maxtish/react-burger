@@ -33,6 +33,7 @@ export const USER_UPDATE_SUCCESS = 'USER_UPDATE_SUCCESS';
 export const USER_UPDATE_ERROR = 'USER_UPDATE_ERROR';
 
 // Создание нового пользователя
+
 export const getNewUser = (data) => (dispatch) => {
   dispatch({
     type: GET_NEW_USER_REQUEST,
@@ -60,6 +61,7 @@ export const signIn = (data) => (dispatch) => {
     .then((res) => {
       const accessToken = res.accessToken.split('Bearer ')[1];
       const refreshToken = res.refreshToken;
+
       if (accessToken && refreshToken) {
         setCookie('accessToken', accessToken, { 'max-age': 1200 });
         setCookie('refreshToken', refreshToken);
@@ -100,13 +102,15 @@ export const signOut = () => (dispatch) => {
 
 //Для обновления данных и токена пользователя
 export const getUser = () => (dispatch) => {
+  let accessToken = getCookie('accessToken');
+
   dispatch({
     type: GET_USER_REQUEST,
   });
-  if (getCookie('accessToken') === undefined && getCookie('refreshToken') === undefined) {
+  if (getCookie('accessToken') === '' && getCookie('refreshToken') === undefined) {
     return null;
   }
-  if (getCookie('accessToken') !== undefined) {
+  if (getCookie('accessToken') !== '') {
     getUserData()
       .then((res) => {
         dispatch({
@@ -146,7 +150,10 @@ export const updateUser = (data) => (dispatch) => {
   dispatch({
     type: USER_UPDATE_REQUEST,
   });
-  if (getCookie('accessToken') !== undefined) {
+
+  let accessToken = getCookie('accessToken');
+
+  if (getCookie('accessToken') !== '') {
     updateUserData(data)
       .then((res) => {
         dispatch({

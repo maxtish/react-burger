@@ -16,6 +16,7 @@ import {
   ResetPasswordPage,
   ProfilePage,
   IngredientPage,
+  FeedPage,
 } from '../../pages/index';
 
 function App() {
@@ -43,7 +44,7 @@ function App() {
           <Route index element={<ConstructorPage />} />
           <Route path="ingredients/:id" element={<IngredientPage />} />
           <Route path="login" element={<LoginPage />} />
-
+          <Route path="feed" element={<FeedPage />} />
           <Route
             path="register"
             element={
