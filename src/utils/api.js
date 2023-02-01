@@ -102,7 +102,6 @@ export function logoutRequest(refreshToken) {
 //Для обновления токена пользователя
 export function refreshTokenRequest() {
   const refreshToken = getCookie('refreshToken');
-
   return request(`${url}auth/token`, {
     method: 'POST',
     mode: 'cors',
