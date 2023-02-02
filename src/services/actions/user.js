@@ -32,16 +32,6 @@ export const USER_UPDATE_REQUEST = 'USER_UPDATE_REQUEST';
 export const USER_UPDATE_SUCCESS = 'USER_UPDATE_SUCCESS';
 export const USER_UPDATE_ERROR = 'USER_UPDATE_ERROR';
 
-// для  обновления токена и куки
-const refreshCookie = () => {
-  refreshTokenRequest().then((res) => {
-    const accessToken = res.accessToken.split('Bearer ')[1];
-    if (accessToken) {
-      setCookie('accessToken', accessToken, { 'max-age': 1200 });
-    }
-  });
-};
-
 // Создание нового пользователя
 export const getNewUser = (data) => (dispatch) => {
   dispatch({
@@ -109,36 +99,50 @@ export const signOut = () => (dispatch) => {
     });
 };
 
-//Для получения данных и токена пользователя
+//Для получения данных и обновления токена пользователя
 export const getUser = () => (dispatch) => {
   dispatch({
     type: GET_USER_REQUEST,
   });
 
-  getUserData()
-    .then((res) => {
-      dispatch({
-        type: GET_USER_SUCCESS,
-        data: res.user,
+  if (getCookie('accessToken') === '' && getCookie('refreshToken') === '') {
+    return null;
+  }
+  if (getCookie('accessToken') !== '') {
+    getUserData()
+      .then((res) => {
+        dispatch({
+          type: GET_USER_SUCCESS,
+          data: res.user,
+        });
+      })
+      .catch((err) => {
+        dispatch({
+          type: GET_USER_ERROR,
+        });
       });
-    })
-    .catch((err) => {
-      refreshCookie();
-      dispatch({
-        type: GET_USER_ERROR,
-      });
-    })
-    .then((res) => {
-      dispatch({
-        type: GET_USER_SUCCESS,
-        data: res.user,
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: GET_USER_ERROR,
-      });
+  } else {
+    refreshTokenRequest().then((res) => {
+      const accessToken = res.accessToken.split('Bearer ')[1];
+      const refreshToken = res.refreshToken;
+      if (accessToken) {
+        setCookie('accessToken', accessToken, { 'max-age': 1200 });
+        setCookie('refreshToken', refreshToken);
+      }
+      getUserData()
+        .then((res) => {
+          dispatch({
+            type: GET_USER_SUCCESS,
+            data: res.user,
+          });
+        })
+        .catch((err) => {
+          dispatch({
+            type: GET_USER_ERROR,
+          });
+        });
     });
+  }
 };
 
 //Для обновления данных пользователя
@@ -146,29 +150,39 @@ export const updateUser = (data) => (dispatch) => {
   dispatch({
     type: USER_UPDATE_REQUEST,
   });
-
-  updateUserData(data)
-    .then((res) => {
-      dispatch({
-        type: USER_UPDATE_SUCCESS,
-        data: res.user,
+  if (getCookie('accessToken') !== '') {
+    updateUserData(data)
+      .then((res) => {
+        dispatch({
+          type: USER_UPDATE_SUCCESS,
+          data: res.user,
+        });
+      })
+      .catch((err) => {
+        dispatch({
+          type: USER_UPDATE_ERROR,
+        });
       });
-    })
-    .catch((err) => {
-      refreshCookie();
-      dispatch({
-        type: USER_UPDATE_ERROR,
-      });
-    })
-    .then((res) => {
-      dispatch({
-        type: USER_UPDATE_SUCCESS,
-        data: res.user,
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: USER_UPDATE_ERROR,
-      });
+  } else {
+    refreshTokenRequest().then((res) => {
+      const accessToken = res.accessToken.split('Bearer ')[1];
+      const refreshToken = res.refreshToken;
+      if (accessToken) {
+        setCookie('accessToken', accessToken, { 'max-age': 1200 });
+        setCookie('refreshToken', refreshToken);
+      }
+      updateUserData(data)
+        .then((res) => {
+          dispatch({
+            type: USER_UPDATE_SUCCESS,
+            data: res.user,
+          });
+        })
+        .catch((err) => {
+          dispatch({
+            type: USER_UPDATE_ERROR,
+          });
+        });
     });
+  }
 };
