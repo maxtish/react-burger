@@ -12,7 +12,7 @@
 - Модульность кода
 - Взаимодействие с сервером и GitHub Pages
 
-- Сайт [GitHub Pages react-burger](https://maxtish.github.io/react-burger/)
+- Сайт [GitHub Pages: react-burger](https://maxtish.github.io/react-burger/)
 
 Познакомились с React Router. Научились работать с несколькими маршрутами и настраивать навигацию по ссылке. Узнали, как создавать маршруты для обработки динамически генерируемых данных.
 
