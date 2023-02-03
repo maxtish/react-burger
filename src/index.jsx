@@ -1,13 +1,13 @@
 import React from 'react';
+import { compose, createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom/client';
-
+import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import App from './components/app/app.jsx';
 
 import { rootReducer } from './services/reducers/index';
-import { Provider, useDispatch } from 'react-redux';
-import { compose, createStore, applyMiddleware } from 'redux';
-import { constructorReducer } from './services/reducers/constructor';
+
 import thunk from 'redux-thunk';
 
 const composeEnhancers =
@@ -22,8 +22,10 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <BrowserRouter>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </BrowserRouter>
   </React.StrictMode>
 );

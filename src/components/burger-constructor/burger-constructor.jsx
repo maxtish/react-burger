@@ -8,71 +8,73 @@ import OrderDetails from '../order-details/order-details';
 import objectWithShape from '../../utils/shape';
 import { useDrop, useDrag } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
-
-import {
-  getOrder,
-  VIEWING_ORDER_ENABLED,
-  VIEWING_ORDER_DISABLED,
-  DELETE_ING,
-  ADD_SELECTED_ING,
-  TOGGLE_ING,
-} from '../../services/actions/constructor';
+import { addToConstructor, DELETE_ING, TOGGLE_ING } from '../../services/actions/constructor';
+import { getOrder, VIEWING_ORDER_ENABLED, VIEWING_ORDER_DISABLED } from '../../services/actions/order';
 
 // Берем все активные, убираем булки и рендерим разметку которые внутри бургера
-const RenderBurgerIngr = ({ item, index }) => {
+const RenderBurgerIngr = ({ ingrdient, index }) => {
+  const ref = useRef(null);
   const dispatch = useDispatch();
   const deleteIng = useCallback(() => {
     dispatch({
       type: DELETE_ING,
-      index: item._id,
+      index: ingrdient._id,
       indexN: index,
     });
   }, [dispatch, index]);
 
-  const ref = useRef();
-
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: 'main',
-    item: { index },
-    collect: (monitor) => {
-      return {
-        isDragging: monitor.isDragging(),
-      };
-    },
-  }));
-  const [{ isHover }, drop] = useDrop({
+  const [{ handlerID }, drop] = useDrop({
     accept: 'main',
-    hover(item) {
-      if (!ref.current) {
-        return;
-      }
+    collect(monitor) {
+      return { handlerID: monitor.getHandlerId() };
+    },
+    hover(item, monitor) {
       const dragIndex = item.index;
       const hoverIndex = index;
       if (dragIndex === hoverIndex) {
         return;
       }
-      //Меняем местами элементы в массиве
       dispatch({
         type: TOGGLE_ING,
-        dragIndex: dragIndex,
-        hoverIndex: hoverIndex,
+        payload: {
+          from: dragIndex,
+          to: hoverIndex,
+        },
       });
 
       item.index = hoverIndex;
     },
-    collect: (monitor) => {
-      return {
-        isHover: monitor.isOver(),
-      };
-    },
   });
+
+  const [{ isDragging }, drag] = useDrag({
+    type: 'main',
+    item: () => {
+      return { ingrdient, index };
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+  const opacity = isDragging ? 0 : 1;
 
   drag(drop(ref));
 
   return (
-    <li className={`${BurgerConstructorStyles.item} mt-4`} key={index} ref={ref}>
+    <li
+      className={`${BurgerConstructorStyles.item} mt-4`}
+      data-handler-id={handlerID}
+      draggable={true}
+      key={index}
+      ref={ref}
+      style={{ opacity }}
+    >
       <DragIcon type="primary" />{' '}
-      <ConstructorElement handleClose={deleteIng} text={item.name} price={item.price} thumbnail={item.image} />
+      <ConstructorElement
+        handleClose={deleteIng}
+        text={ingrdient.name}
+        price={ingrdient.price}
+        thumbnail={ingrdient.image}
+      />
     </li>
   );
 };
@@ -94,92 +96,78 @@ const RenderBurgerBuns = ({ bunsActiv, position }) => {
   );
 };
 
-const SummPrice = ({ arr }) => {
-  const buns = arr.filter((item) => item.type === 'bun')[0].price;
+const SummPrice = ({ selectedIngredients, selectedBun }) => {
+  const buns = selectedBun.price;
   let summ = 0;
-  summ = buns;
-  arr.map((item) => {
+  summ = buns * 2;
+  selectedIngredients.map((item) => {
     summ += item.price;
   });
   return <p className="text text_type_digits-medium">{summ}</p>;
 };
 
 const BurgerConstructor = () => {
-  const { selectedIngredients, visibleOrderModal } = useSelector((store) => store.constructors);
-
+  const { selectedIngredients, selectedBun } = useSelector((store) => store.constructors);
+  const visibleOrderModal = useSelector((store) => store.order.visibleOrderModal);
+  const isAuth = useSelector((store) => store.user.isAuth);
   const dispatch = useDispatch();
 
   // react-dnd
   const [{ isHover }, dropTarget] = useDrop({
     accept: 'ingredients',
     drop: ({ currentItem }) => {
-      dispatch({
-        type: ADD_SELECTED_ING,
-        item: { ...currentItem },
-      });
+      dispatch(addToConstructor(currentItem));
     },
   });
 
-  if (!selectedIngredients.length) {
-    return (
-      <section ref={dropTarget}>
-        <p>Лучше начать с булки</p>
-      </section>
-    );
-  } else {
-    const buns = selectedIngredients.filter((item) => item.type === 'bun')[0];
-
-    function openModal() {
-      const idArrSelected = selectedIngredients.map((item) => item._id);
-      dispatch({
-        type: VIEWING_ORDER_ENABLED,
-      });
-      dispatch(getOrder(idArrSelected));
-    }
-
-    function closeModal() {
-      dispatch({
-        type: VIEWING_ORDER_DISABLED,
-      });
-    }
-
-    const nobuns = selectedIngredients.filter((item) => item.type !== 'bun');
-
-    return (
-      <section>
-        <div className={`${BurgerConstructorStyles.wrap}  pt-25 ml-10 pl-4 pr-4`} ref={dropTarget}>
-          {!buns && 'Выберите булку'}
-          {buns && <RenderBurgerBuns bunsActiv={buns} position="top" />}
-
-          <div className={BurgerConstructorStyles.scroll}>
-            {nobuns.map((item, index) => (
-              <RenderBurgerIngr item={item} index={index} key={index} />
-            ))}
-          </div>
-          {!buns && 'Выберите булку'}
-          {buns && <RenderBurgerBuns bunsActiv={buns} position="bottom" />}
-        </div>
-        {!buns && 'Это не бургер!'}
-        {buns && (
-          <div className={`${BurgerConstructorStyles.summing} mt-10 mr-4`}>
-            <SummPrice arr={selectedIngredients} />
-
-            <div className={`${BurgerConstructorStyles.icon} ml-2 mr-10`}>
-              <CurrencyIcon type="primary" />
-            </div>
-            <Button type="primary" size="large" onClick={openModal}>
-              Оформить заказ
-            </Button>
-          </div>
-        )}
-        {visibleOrderModal && (
-          <Modal header="" onClose={closeModal}>
-            <OrderDetails />
-          </Modal>
-        )}
-      </section>
-    );
+  function openModal() {
+    const idArrSelected = selectedIngredients.map((item) => item._id);
+    dispatch({
+      type: VIEWING_ORDER_ENABLED,
+    });
+    dispatch(getOrder(idArrSelected));
   }
+
+  function closeModal() {
+    dispatch({
+      type: VIEWING_ORDER_DISABLED,
+    });
+  }
+
+  return (
+    <section className={BurgerConstructorStyles.section} ref={dropTarget}>
+      <div className={`${BurgerConstructorStyles.wrap}  pt-25 ml-10 pl-4 pr-4`}>
+        {!selectedBun && ''}
+        {selectedBun && <RenderBurgerBuns bunsActiv={selectedBun} position="top" />}
+
+        <div className={BurgerConstructorStyles.scroll}>
+          {selectedIngredients.map((item, index) => (
+            <RenderBurgerIngr ingrdient={item} index={index} key={item.id} />
+          ))}
+        </div>
+        {!selectedBun && ''}
+        {selectedBun && <RenderBurgerBuns bunsActiv={selectedBun} position="bottom" />}
+      </div>
+      {!selectedBun && ''}
+      {selectedBun && (
+        <div className={`${BurgerConstructorStyles.summing} mt-10 mr-4`}>
+          <SummPrice selectedIngredients={selectedIngredients} selectedBun={selectedBun} />
+
+          <div className={`${BurgerConstructorStyles.icon} ml-2 mr-10`}>
+            <CurrencyIcon type="primary" />
+          </div>
+          <Button type="primary" size="large" disabled={!isAuth} onClick={openModal}>
+            Оформить заказ
+          </Button>
+        </div>
+      )}
+      {visibleOrderModal && (
+        <Modal header="" onClose={closeModal}>
+          <OrderDetails />
+        </Modal>
+      )}
+    </section>
+  );
 };
 
 RenderBurgerBuns.propTypes = {

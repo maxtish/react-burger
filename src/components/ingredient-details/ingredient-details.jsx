@@ -1,8 +1,11 @@
 import IngredientDetailsStyles from './ingredient-details.module.css';
-import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
 function IngredientDetails() {
-  const ingredient = useSelector((store) => store.ingredients.viewingIngredient);
+  const location = useLocation();
+
+  const ingredient = location.state.ingredient;
+
   return (
     <>
       <img src={ingredient.image_large} alt={ingredient.name} />

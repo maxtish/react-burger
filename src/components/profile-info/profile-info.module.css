@@ -1,0 +1,7 @@
+.wrapper {
+  margin-bottom: 24px;
+}
+
+.wrapper:last-child {
+  margin-bottom: 0;
+}

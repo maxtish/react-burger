@@ -1,43 +1,21 @@
 import React, { useMemo } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import BurgerIngredientsStyles from './burger-ingredients.module.css';
-import { Tab, CurrencyIcon, Counter, Typography } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import objectWithShape from '../../utils/shape';
 import { useDispatch, useSelector } from 'react-redux';
-import { GET_INGREDIENTS } from '../../services/actions/constructor';
+import { addToConstructor } from '../../services/actions/constructor';
+import { POSITION_SCROLL } from '../../services/actions/ingredients';
 import {
   VIEWING_INGREDIENT_ENABLED,
   VIEWING_INGREDIENT_DISABLED,
-  POSITION_SCROLL,
-} from '../../services/actions/ingredients';
+} from '../../services/actions/ingredient-detail-modal';
 import { useDrag } from 'react-dnd';
 
-// render игридиента
-const RenderIngredient = ({ item, clickProp, clickSelect, counters }) => {
-  // react-dnd
-  const currentItem = item;
-  const [, dragRef] = useDrag({
-    type: 'ingredients',
-    item: { currentItem },
-  });
-
-  return (
-    <li className={BurgerIngredientsStyles.item} key={item._id} id={item._id} onClick={clickProp} ref={dragRef}>
-      {counters[item._id] > 0 && <Counter count={counters[item._id]} size="default" />}
-
-      <img src={item.image} alt={item.name} onClick={clickSelect} />
-      <div className={`${BurgerIngredientsStyles.price} mt-1 mb-1`}>
-        <p className={`${BurgerIngredientsStyles.pricenumb} text text_type_digits-default`}>{item.price}</p>
-        <CurrencyIcon type="primary" />
-      </div>
-      <p className={`${BurgerIngredientsStyles.text} text text_type_main-default pb-6`}>{item.name}</p>
-    </li>
-  );
-};
-
-// render группы игридиентов
+// render группы игридиенто в
 const RenderGroup = ({ arr, clickProp, clickSelect, counters }) => {
   return (
     <ul className={`${BurgerIngredientsStyles.list} ml-4 mt-6 mb-10`}>
@@ -48,10 +26,41 @@ const RenderGroup = ({ arr, clickProp, clickSelect, counters }) => {
   );
 };
 
+// render игридиента
+const RenderIngredient = ({ item, clickProp, counters }) => {
+  const ingredients = useSelector((store) => store.ingredients.data); // уже из стора
+
+  // react-dnd
+  const currentItem = item;
+  const [, dragRef] = useDrag({
+    type: 'ingredients',
+    item: { currentItem },
+  });
+  const location = useLocation();
+  return (
+    <li className={BurgerIngredientsStyles.item} key={item._id} id={item._id} ref={dragRef}>
+      <Link
+        className={BurgerIngredientsStyles.link}
+        to={`/ingredients/${item._id}`}
+        state={{ background: location, ingredient: item }}
+      >
+        {counters[item._id] > 0 && <Counter count={counters[item._id]} size="default" />}
+
+        <img src={item.image} alt={item.name} />
+        <div className={`${BurgerIngredientsStyles.price} mt-1 mb-1`}>
+          <p className={`${BurgerIngredientsStyles.pricenumb} text text_type_digits-default`}>{item.price}</p>
+          <CurrencyIcon type="primary" />
+        </div>
+        <p className={`${BurgerIngredientsStyles.text} text text_type_main-default pb-6`}>{item.name}</p>
+      </Link>
+    </li>
+  );
+};
+
 const BurgerIngredients = () => {
   const ingredients = useSelector((store) => store.ingredients.data); // уже из стора
-  const { visibleModal, positionScroll } = useSelector((store) => store.ingredients); // состояние модального окна
-
+  const { positionScroll } = useSelector((store) => store.ingredients); // состояние модального окна
+  const visibleModal = useSelector((store) => store.ingredientDetailModal.visibleModal);
   const dispatch = useDispatch();
 
   const buns = ingredients.filter((item) => item.type === 'bun');
@@ -64,10 +73,7 @@ const BurgerIngredients = () => {
     const ids = event.target.offsetParent.getAttribute('id');
     const selected = ingredients.find((item) => item._id === ids);
 
-    dispatch({
-      type: GET_INGREDIENTS,
-      ing: selected,
-    });
+    dispatch(addToConstructor(selected));
   }
 
   function openModal(Event) {
@@ -122,24 +128,18 @@ const BurgerIngredients = () => {
     activePositionScroll();
   }, []);
 
-  //////couters
-  const selectedIngredients = useSelector((store) => store.constructors.selectedIngredients);
-  const counters = useMemo(
-    () =>
-      selectedIngredients.reduce((previousValue, item) => {
-        if (!previousValue[item._id]) {
-          if (item.type === 'bun') {
-            previousValue[item._id] = 2;
-          } else {
-            previousValue[item._id] = 1;
-          }
-        } else {
-          previousValue[item._id]++;
-        }
-        return previousValue;
-      }, {}),
-    [selectedIngredients]
-  );
+  //////Счетчики на ингридиентах
+  const { selectedIngredients, selectedBun } = useSelector((store) => store.constructors);
+
+  const counters = useMemo(() => {
+    const count = {};
+    selectedIngredients.forEach((ingredient) => {
+      if (!count[ingredient._id]) count[ingredient._id] = 0;
+      count[ingredient._id]++;
+    });
+    if (selectedBun) count[selectedBun._id] = 2;
+    return count;
+  }, [selectedIngredients, selectedBun]);
 
   return (
     <>

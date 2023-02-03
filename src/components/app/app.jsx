@@ -1,39 +1,97 @@
-import { React, useEffect, useState } from 'react';
+import { React, useEffect, useState, useCallback } from 'react';
+import { BrowserRouter, Routes, Route, useNavigate, useLocation, RouterProvider } from 'react-router-dom';
 import AppStyles from './app.module.css';
-import AppHeader from '../app-header/app-header';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-import BurgerConstructor from '../burger-constructor/burger-constructor';
+import { AppHeader } from '../app-header/app-header';
 import { useDispatch, useSelector } from 'react-redux';
 import { getItemsIng } from '../../services/actions/ingredients';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DndProvider } from 'react-dnd';
+import { getUser } from '../../services/actions/user';
+import { ProtectedRouteElement } from '../protected-route-element/protected-route-element';
+import Modal from '../modal/modal';
+import IngredientDetails from '../ingredient-details/ingredient-details';
+import {
+  ConstructorPage,
+  LoginPage,
+  RegisterPage,
+  ForgotPasswordPage,
+  ResetPasswordPage,
+  ProfilePage,
+  IngredientPage,
+  FeedPage,
+} from '../../pages/index';
 
 function App() {
+  const navigation = useNavigate();
   const dispatch = useDispatch();
+  const onClose = useCallback(() => {
+    navigation(-1);
+  }, [navigation]);
 
   useEffect(() => {
-    // Отправляем экшен-функцию
     dispatch(getItemsIng());
-  }, [dispatch]);
+    dispatch(getUser());
+  }, []);
+  const ingredients = useSelector((store) => {
+    return store.ingredients.data;
+  });
+  const location = useLocation();
 
-  const { hasError, isLoading, data } = useSelector((store) => store.ingredients);
+  const background = location.state?.background;
 
   return (
-    <div className={AppStyles.page}>
-      <AppHeader />
-
-      {isLoading && 'Загрузка...'}
-      {hasError && 'Ошибка'}
-      {!isLoading && !hasError && !data.length && 'Ошибка - нет массива'}
-      {!isLoading && !hasError && data.length && (
-        <main className={AppStyles.content}>
-          <DndProvider backend={HTML5Backend}>
-            <BurgerIngredients />
-            <BurgerConstructor />
-          </DndProvider>
-        </main>
+    <>
+      <Routes location={background || location}>
+        <Route path="/" element={<AppHeader />}>
+          <Route index element={<ConstructorPage />} />
+          <Route path="ingredients/:id" element={<IngredientPage />} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="feed" element={<FeedPage />} />
+          <Route
+            path="register"
+            element={
+              <ProtectedRouteElement>
+                <RegisterPage />
+              </ProtectedRouteElement>
+            }
+          />
+          <Route
+            path="forgot-password"
+            element={
+              <ProtectedRouteElement>
+                <ForgotPasswordPage />
+              </ProtectedRouteElement>
+            }
+          />
+          <Route
+            path="reset-password"
+            element={
+              <ProtectedRouteElement>
+                <ResetPasswordPage />
+              </ProtectedRouteElement>
+            }
+          />
+          <Route
+            path="profile/*"
+            element={
+              <ProtectedRouteElement>
+                <ProfilePage />
+              </ProtectedRouteElement>
+            }
+          />
+        </Route>
+      </Routes>
+      {background && (
+        <Routes>
+          <Route
+            path="/ingredients/:id"
+            element={
+              <Modal header="Детали ингредиента" onClose={onClose}>
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+        </Routes>
       )}
-    </div>
+    </>
   );
 }
 
