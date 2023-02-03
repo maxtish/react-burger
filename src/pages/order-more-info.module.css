@@ -1,0 +1,35 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding-top: 122px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 640px;
+  max-height: 70vh;
+}
+
+.image {
+  width: 480px;
+  height: 240px;
+  display: block;
+  object-fit: cover;
+}
+
+.tab {
+  display: flex;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 112px;
+}

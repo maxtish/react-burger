@@ -8,6 +8,7 @@ async function request(url, options) {
   return getResponse(res);
 }
 
+//Получить ингридиенты
 export function getIngredients() {
   return fetch(`${url}ingredients`, {
     method: 'GET',
@@ -17,11 +18,13 @@ export function getIngredients() {
   }).then(getResponse);
 }
 
+//Отправить заказ
 export function getOrderDetails(idArrSelected) {
   return fetch(`${url}orders`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + getCookie('accessToken'),
     },
     body: JSON.stringify({ ingredients: idArrSelected }),
   }).then(getResponse);

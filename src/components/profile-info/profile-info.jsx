@@ -40,7 +40,7 @@ export function ProfileInfo() {
   };
 
   return (
-    <div className={styles.form}>
+    <div className={`${styles.form} mt-30`}>
       <div className={styles.wrapper}>
         <Input
           type="text"

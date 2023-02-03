@@ -6,9 +6,17 @@ import styles from './profile-nav.module.css';
 
 export function ProfileNav() {
   const location = useLocation();
+  let activeLinkOrder = false;
+  let activeLinkProfile = false;
 
-  let activeLinkProfile = true;
-  let activeLinkOrders = false;
+  if (location.pathname === '/profile/orders') {
+    activeLinkOrder = true;
+  }
+
+  if (location.pathname === '/profile') {
+    activeLinkProfile = true;
+  }
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUser());
@@ -19,7 +27,7 @@ export function ProfileNav() {
   }, [dispatch]);
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} mt-30`}>
       <nav>
         <NavLink
           to="/profile"
@@ -30,7 +38,7 @@ export function ProfileNav() {
         </NavLink>
 
         <NavLink
-          to="/profile/orders"
+          to="orders"
           style={({ isActive }) => ({ color: location.pathname === '/profile/orders' && 'white' })}
           className={`${styles.link} text text_type_main-medium text_color_inactive`}
         >
@@ -47,7 +55,7 @@ export function ProfileNav() {
           В этом разделе вы можете изменить&nbsp;свои персональные данные
         </p>
       )}
-      {activeLinkOrders && (
+      {activeLinkOrder && (
         <p className={`${styles.info} text text_type_main-default text_color_inactive mt-20 pt-2`}>
           В этом разделе вы можете просмотреть свою историю заказов
         </p>

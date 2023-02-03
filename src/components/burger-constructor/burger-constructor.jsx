@@ -121,7 +121,10 @@ const BurgerConstructor = () => {
   });
 
   function openModal() {
-    const idArrSelected = selectedIngredients.map((item) => item._id);
+    let idArrSelected = selectedIngredients.map((item) => item._id);
+    idArrSelected.push(selectedBun._id);
+    idArrSelected.push(selectedBun._id);
+
     dispatch({
       type: VIEWING_ORDER_ENABLED,
     });

@@ -1,6 +1,5 @@
 import { React, useEffect, useState, useCallback } from 'react';
-import { BrowserRouter, Routes, Route, useNavigate, useLocation, RouterProvider } from 'react-router-dom';
-import AppStyles from './app.module.css';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { AppHeader } from '../app-header/app-header';
 import { useDispatch, useSelector } from 'react-redux';
 import { getItemsIng } from '../../services/actions/ingredients';
@@ -8,6 +7,7 @@ import { getUser } from '../../services/actions/user';
 import { ProtectedRouteElement } from '../protected-route-element/protected-route-element';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import OrderMoreInfo from '../order-more-info/order-more-info';
 import {
   ConstructorPage,
   LoginPage,
@@ -17,6 +17,7 @@ import {
   ProfilePage,
   IngredientPage,
   FeedPage,
+  OrderMoreInfoPage,
 } from '../../pages/index';
 
 function App() {
@@ -45,6 +46,17 @@ function App() {
           <Route path="ingredients/:id" element={<IngredientPage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="feed" element={<FeedPage />} />
+          <Route path="feed/:id" element={<OrderMoreInfoPage />} />
+
+          <Route
+            path="profile/*"
+            element={
+              <ProtectedRouteElement>
+                <ProfilePage />
+              </ProtectedRouteElement>
+            }
+          />
+
           <Route
             path="register"
             element={
@@ -53,6 +65,7 @@ function App() {
               </ProtectedRouteElement>
             }
           />
+
           <Route
             path="forgot-password"
             element={
@@ -61,19 +74,12 @@ function App() {
               </ProtectedRouteElement>
             }
           />
+
           <Route
             path="reset-password"
             element={
               <ProtectedRouteElement>
                 <ResetPasswordPage />
-              </ProtectedRouteElement>
-            }
-          />
-          <Route
-            path="profile/*"
-            element={
-              <ProtectedRouteElement>
-                <ProfilePage />
               </ProtectedRouteElement>
             }
           />
@@ -84,8 +90,26 @@ function App() {
           <Route
             path="/ingredients/:id"
             element={
-              <Modal header="Детали ингредиента" onClose={onClose}>
+              <Modal onClose={onClose}>
                 <IngredientDetails />
+              </Modal>
+            }
+          />
+
+          <Route
+            path="/feed/:id"
+            element={
+              <Modal onClose={onClose}>
+                <OrderMoreInfo />
+              </Modal>
+            }
+          />
+
+          <Route
+            path="/profile/orders/:id"
+            element={
+              <Modal onClose={onClose}>
+                <OrderMoreInfo />
               </Modal>
             }
           />

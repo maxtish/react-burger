@@ -8,6 +8,9 @@ function IngredientDetails() {
 
   return (
     <>
+      <div className={`${IngredientDetailsStyles.header}`}>
+        <h2 className={`${IngredientDetailsStyles.title} text text_type_main-large`}>Детали ингредиента</h2>
+      </div>
       <img src={ingredient.image_large} alt={ingredient.name} />
       <h3 className="text text_type_main-medium mt-4 mb-8">{ingredient.name}</h3>
       <ul className={`${IngredientDetailsStyles.list} mb-15`}>
