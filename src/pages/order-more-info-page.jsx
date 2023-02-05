@@ -1,50 +1,42 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import styles from './order-more-info.module.css';
+import styles from './order-more-info-page.module.css';
 import OrderMoreInfo from '../components/order-more-info/order-more-info';
-import {
-  wsConnectionStartAll,
-  wsConnectionStartUser,
-  wsConnectionClosedAll,
-  wsConnectionClosedUser,
-} from '../services/actions/wsActions';
+import { wsConnectionOpen, wsConnectionClose } from '../services/actions/wsActions';
+import { getCookie } from '../utils/utils';
 
 import { useLocation, useParams } from 'react-router-dom';
 
 export function OrderMoreInfoPage() {
   const dispatch = useDispatch();
-  //const match = useRouteMatch();
+
+  const token = getCookie('accessToken');
 
   const location = useLocation();
 
   const match = location.pathname;
 
   useEffect(() => {
-    if (match === '/feed/:id') {
-      dispatch(wsConnectionStartAll());
+    if (match.slice(0, 5) === '/feed') {
+      dispatch(wsConnectionOpen('/all'));
     } else {
-      dispatch(wsConnectionStartUser());
+      if (match.slice(0, 15) === '/profile/orders') {
+        dispatch(wsConnectionOpen(`?token=${token}`));
+      }
     }
-    dispatch(wsConnectionStartAll());
 
     return () => {
-      if (match === '/feed/:id') {
-        dispatch(wsConnectionClosedAll());
-      } else {
-        dispatch(wsConnectionClosedUser());
-      }
+      dispatch(wsConnectionClose());
     };
-  }, [dispatch, location.pathname]);
+  }, []);
 
-  const orders = useSelector((state) => state.ws.orders);
+  const orders = useSelector((state) => {
+    return state.ws.orders;
+  });
 
   const { id } = useParams();
 
-  if (!orders) {
-    return;
-  }
-
-  const order = orders.find((item) => item._id === id);
+  const order = orders?.find((item) => item._id === id);
 
   return (
     <>

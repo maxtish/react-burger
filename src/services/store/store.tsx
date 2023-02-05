@@ -3,31 +3,16 @@ import { rootReducer } from '../reducers/index';
 import thunk from 'redux-thunk';
 import { socketMiddleware } from '../middleware/socketMiddleware';
 
-import {
-  WS_CONNECTION_START_ALL,
-  WS_CONNECTION_START_USER,
-  WS_CONNECTION_SUCCESS,
-  WS_CONNECTION_ERROR,
-  WS_CONNECTION_CLOSED_ALL,
-  WS_CONNECTION_CLOSED_USER,
-  WS_GET_MESSAGE,
-} from '../actions/wsActionTypes';
-
+import { ACTIONS } from '../actions/wsActionTypes';
 const wsUrl = 'wss://norma.nomoreparties.space/orders';
-
-const wsActionsAll = {
-  wsInit: WS_CONNECTION_START_ALL,
-  onOpen: WS_CONNECTION_SUCCESS,
-  onError: WS_CONNECTION_ERROR,
-  onClose: WS_CONNECTION_CLOSED_ALL,
-  onMessage: WS_GET_MESSAGE,
-};
-const wsActionsUser = {
-  wsInit: WS_CONNECTION_START_USER,
-  onOpen: WS_CONNECTION_SUCCESS,
-  onError: WS_CONNECTION_ERROR,
-  onClose: WS_CONNECTION_CLOSED_USER,
-  onMessage: WS_GET_MESSAGE,
+const wsActions = {
+  wsInit: ACTIONS.WS_CONNECTION_START,
+  wsSendMessage: ACTIONS.WS_SEND_MESSAGE,
+  onOpen: ACTIONS.WS_CONNECTION_SUCCESS,
+  onClose: ACTIONS.WS_CONNECTION_CLOSED,
+  close: ACTIONS.WS_CONNECTION_CLOSE,
+  onError: ACTIONS.WS_CONNECTION_ERROR,
+  onMessage: ACTIONS.WS_GET_MESSAGE,
 };
 
 declare global {
@@ -37,9 +22,7 @@ declare global {
 }
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const enhancer = composeEnhancers(
-  applyMiddleware(thunk, socketMiddleware(wsUrl, wsActionsAll, true), socketMiddleware(wsUrl, wsActionsUser, false))
-);
+const enhancer = composeEnhancers(applyMiddleware(thunk, socketMiddleware(wsUrl, wsActions)));
 
 const store = createStore(rootReducer, enhancer);
 export default store;

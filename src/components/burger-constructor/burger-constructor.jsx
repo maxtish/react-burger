@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useRef, useCallback } from 'react';
+import { useDrop, useDrag } from 'react-dnd';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useLocation } from 'react-router-dom';
 import BurgerConstructorStyles from './burger-constructor.module.css';
 import { CurrencyIcon, DragIcon, ConstructorElement, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import objectWithShape from '../../utils/shape';
-import { useDrop, useDrag } from 'react-dnd';
-import { useDispatch, useSelector } from 'react-redux';
 import { addToConstructor, DELETE_ING, TOGGLE_ING } from '../../services/actions/constructor';
 import { getOrder, VIEWING_ORDER_ENABLED, VIEWING_ORDER_DISABLED } from '../../services/actions/order';
 
@@ -97,12 +98,16 @@ const RenderBurgerBuns = ({ bunsActiv, position }) => {
 };
 
 const SummPrice = ({ selectedIngredients, selectedBun }) => {
-  const buns = selectedBun.price;
+  const buns = selectedBun?.price;
   let summ = 0;
-  summ = buns * 2;
+  if (buns > 0) {
+    summ += buns * 2;
+  }
+
   selectedIngredients.map((item) => {
     summ += item.price;
   });
+
   return <p className="text text_type_digits-medium">{summ}</p>;
 };
 
@@ -119,16 +124,21 @@ const BurgerConstructor = () => {
       dispatch(addToConstructor(currentItem));
     },
   });
-
+  const navigation = useNavigate();
+  const location = useLocation();
   function openModal() {
-    let idArrSelected = selectedIngredients.map((item) => item._id);
-    idArrSelected.push(selectedBun._id);
-    idArrSelected.push(selectedBun._id);
+    if (isAuth) {
+      let idArrSelected = selectedIngredients.map((item) => item._id);
+      idArrSelected.push(selectedBun._id);
+      idArrSelected.push(selectedBun._id);
 
-    dispatch({
-      type: VIEWING_ORDER_ENABLED,
-    });
-    dispatch(getOrder(idArrSelected));
+      dispatch({
+        type: VIEWING_ORDER_ENABLED,
+      });
+      dispatch(getOrder(idArrSelected));
+    } else {
+      navigation('/login', { state: { from: location } });
+    }
   }
 
   function closeModal() {
@@ -151,7 +161,19 @@ const BurgerConstructor = () => {
         {!selectedBun && ''}
         {selectedBun && <RenderBurgerBuns bunsActiv={selectedBun} position="bottom" />}
       </div>
-      {!selectedBun && ''}
+      {!selectedBun && (
+        <div className={`${BurgerConstructorStyles.summing} mt-10 mr-4`}>
+          <SummPrice selectedIngredients={selectedIngredients} selectedBun={selectedBun} />
+
+          <div className={`${BurgerConstructorStyles.icon} ml-2 mr-10`}>
+            <CurrencyIcon type="primary" />
+          </div>
+          <Button type="primary" size="large" disabled={true} onClick={openModal}>
+            Оформить заказ
+          </Button>
+        </div>
+      )}
+
       {selectedBun && (
         <div className={`${BurgerConstructorStyles.summing} mt-10 mr-4`}>
           <SummPrice selectedIngredients={selectedIngredients} selectedBun={selectedBun} />
@@ -159,7 +181,7 @@ const BurgerConstructor = () => {
           <div className={`${BurgerConstructorStyles.icon} ml-2 mr-10`}>
             <CurrencyIcon type="primary" />
           </div>
-          <Button type="primary" size="large" disabled={!isAuth} onClick={openModal}>
+          <Button type="primary" size="large" onClick={openModal}>
             Оформить заказ
           </Button>
         </div>

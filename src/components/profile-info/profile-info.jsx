@@ -7,9 +7,9 @@ import { updateUser } from '../../services/actions/user';
 import styles from './profile-info.module.css';
 
 export function ProfileInfo() {
-  const [valueName, setValueName] = useState({ value: '', isChange: false });
-  const [valueEmail, setValueEmail] = useState({ value: '', isChange: false });
-  const [valuePassword, setValuePassword] = useState({ value: '', isChange: false });
+  const [valueName, setValueName] = useState({ value: ' ', isChange: false });
+  const [valueEmail, setValueEmail] = useState({ value: ' ', isChange: false });
+  const [valuePassword, setValuePassword] = useState({ value: ' ', isChange: false });
 
   const dispatch = useDispatch();
 

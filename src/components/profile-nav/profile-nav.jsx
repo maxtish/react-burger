@@ -38,7 +38,7 @@ export function ProfileNav() {
         </NavLink>
 
         <NavLink
-          to="orders"
+          to="/profile/orders"
           style={({ isActive }) => ({ color: location.pathname === '/profile/orders' && 'white' })}
           className={`${styles.link} text text_type_main-medium text_color_inactive`}
         >

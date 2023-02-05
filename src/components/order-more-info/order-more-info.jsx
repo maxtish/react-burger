@@ -1,13 +1,26 @@
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useParams, useLocation } from 'react-router-dom';
 import { formatHumanDate } from '../../utils/utils';
+import { wsConnectionOpen, wsConnectionClose } from '../../services/actions/wsActions';
+
 import styles from './order-more-info.module.css';
 
 function OrderMoreInfo() {
   const location = useLocation();
-  const orders = useSelector((state) => state.ws.orders);
 
+  const dispatch = useDispatch();
+  const wsConnected = useSelector((store) => {
+    return store.ws.wsConnected;
+  });
+  useEffect(() => {
+    if (!wsConnected) {
+      dispatch(wsConnectionOpen('/all'));
+    } else return;
+  }, []);
+
+  let orders = useSelector((state) => state.ws.orders);
   const allIngredients = useSelector((state) => state.ingredients.data);
 
   const { id } = useParams();
@@ -17,13 +30,13 @@ function OrderMoreInfo() {
   }
 
   const order = orders.find((item) => item._id === id);
-
   if (!order) {
     return;
   }
+
   const orderNumber = order.number;
 
-  //Сделаем новый массив ингредиентов с кол-вом повторений этого ингредиента
+  //Сделаем новый массив ингредиентов в заказе в котором в объектах будет кол-во повторений этого ингредиента
   const orderIngrCount = allIngredients.reduce((prevVal, item) => {
     order.ingredients.forEach((id) => {
       const itemInNewArr = prevVal.find((item) => item._id === id);
@@ -47,11 +60,10 @@ function OrderMoreInfo() {
 
   //Если компонент открывается не отдельной страницей - то этот флаг поможет убрать номер заказа(он будет на уровне компонента Modal)
   const background = location.state?.background;
-
-  //Сумма заказа
+  //Считаем сумму заказа
   const total = orderIngrCount.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-  //Текст статуса и его цвет
+  //Здесь меняем текст статуса и его цвет
   let status = '';
   let colorStatus = undefined;
 
@@ -74,11 +86,11 @@ function OrderMoreInfo() {
       break;
   }
 
-  //Стиль для заголовка =  модальное окно или отдельная страница
-  const styleTitle = background ? styles.header : '';
+  //Положение заголовка? модальное окно или отдельная страница
+  const styleModal = background ? styles.header : '';
   return (
     <>
-      <h2 className={`text text_type_digits-default  pb-10 ${styleTitle}`}>{`#${orderNumber}`}</h2>
+      <h2 className={`text text_type_digits-default  pb-10 ${styleModal}`}>{`#${orderNumber}`}</h2>
       <h3 className={`${styles.header} text text_type_main-medium mb-3`}>{order.name}</h3>
       <p className={`${styles.status} ${colorStatus} text text_type_main-default`}>{status}</p>
       <h4 className={`${styles.header} text text_type_main-medium mt-15 mb-6`}>Состав:</h4>

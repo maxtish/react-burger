@@ -64,7 +64,7 @@ export function RegisterPage() {
             value={newPassword}
             name="password"
           />
-          <Button type="primary" size="medium">
+          <Button onClick={submitUserData} type="primary" size="medium">
             Регистрация
           </Button>
         </form>

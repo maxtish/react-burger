@@ -11,7 +11,7 @@ export function LoginPage() {
   const navigate = useNavigate();
 
   const fromPage = location.state?.from?.pathname || '/';
-
+  const state = location?.state;
   const [valueEmail, setValueEmail] = useState('');
   const [valuePassword, setValuePassword] = useState('');
 
@@ -30,7 +30,7 @@ export function LoginPage() {
 
   useEffect(() => {
     if (isAuth) {
-      return navigate(fromPage);
+      return navigate(fromPage, { state: state });
     }
   }, [isAuth]);
 
@@ -56,7 +56,7 @@ export function LoginPage() {
             value={valuePassword}
             name="password"
           />
-          <Button type="primary" size="medium">
+          <Button type="primary" size="medium" onClick={login}>
             Войти
           </Button>
         </form>

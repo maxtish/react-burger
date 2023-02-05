@@ -7,7 +7,12 @@ async function request(url, options) {
   const res = await fetch(url, options);
   return getResponse(res);
 }
-
+function getResponse(res) {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Error: ${res.status}`);
+}
 //Получить ингридиенты
 export function getIngredients() {
   return fetch(`${url}ingredients`, {
@@ -61,13 +66,6 @@ export function createUser(data) {
     },
     body: JSON.stringify(data),
   }).then(getResponse);
-}
-
-function getResponse(res) {
-  if (res.ok) {
-    return res.json();
-  }
-  return Promise.reject(`Error: ${res.status}`);
 }
 
 //Для авторизации пользователя вход

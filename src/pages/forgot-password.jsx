@@ -45,7 +45,7 @@ export function ForgotPasswordPage() {
             extraClass="ml-1"
           />
 
-          <Button type="primary" size="medium" disabled={valueEmail === ''}>
+          <Button onClick={handleSubmit} type="primary" size="medium" disabled={valueEmail === ''}>
             Восстановить
           </Button>
         </form>

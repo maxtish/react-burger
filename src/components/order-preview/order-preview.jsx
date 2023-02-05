@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 
 function OrderPreview({ order, isStatus }) {
   const location = useLocation();
+
   const allIngredients = useSelector((state) => state.ingredients.data);
 
   const orderIngredients = allIngredients.reduce((prevVal, item) => {
