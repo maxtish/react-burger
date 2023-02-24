@@ -61,7 +61,7 @@ export function ResetPasswordPage() {
             extraClass="ml-1"
           />
 
-          <Button type="primary" size="medium">
+          <Button onClick={handleSubmit} type="primary" size="medium">
             Сохранить
           </Button>
         </form>

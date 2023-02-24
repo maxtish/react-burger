@@ -5,6 +5,7 @@ import { orderReducer } from './order';
 import { ingredientDetailModal } from './ingredient-detail-modal';
 import { forgotPassword } from './password';
 import { userReducer } from './user';
+import { wsReducer } from './ws';
 
 export const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
@@ -13,4 +14,5 @@ export const rootReducer = combineReducers({
   ingredientDetailModal: ingredientDetailModal,
   forgotPassword: forgotPassword,
   user: userReducer,
+  ws: wsReducer,
 });

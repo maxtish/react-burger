@@ -1,0 +1,19 @@
+.grid {
+  grid-area: orders;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+}
+.item {
+  list-style: none;
+  margin-bottom: 24px;
+  box-sizing: border-box;
+}
+.scroll {
+  max-height: calc(100vh - 204px);
+  overflow-y: auto;
+  max-width: 600px;
+  padding: 0;
+}
