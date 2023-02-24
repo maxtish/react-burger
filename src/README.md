@@ -7,7 +7,7 @@
 - HTML
 - CSS
 - JavaScript
-- ...
+- TS
 - Настройка сборки Webpack
 - Модульность кода
 - Взаимодействие с сервером и GitHub Pages
