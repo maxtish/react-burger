@@ -8,7 +8,7 @@ export const GET_ORDER_FAILED: 'GET_ORDER_FAILED' = 'GET_ORDER_FAILED'; // не�
 export const VIEWING_ORDER_ENABLED: 'VIEWING_ORDER_ENABLED' = 'VIEWING_ORDER_ENABLED'; // Просмотр заказа открыть
 export const VIEWING_ORDER_DISABLED: 'VIEWING_ORDER_DISABLED' = 'VIEWING_ORDER_DISABLED'; // Просмотр заказа закрыть
 
-export function getOrder(idArrSelected: Array<string | undefined>) {
+export function getOrder(idArrSelected: Array<string>) {
   return function (dispatch: AppDispatch) {
     dispatch({
       type: GET_ORDER_REQUEST,

@@ -14,11 +14,11 @@ import {
 } from '../services/types/data';
 import { getCookie } from './utils';
 
-const url = 'https://norma.nomoreparties.space/api/';
+const API_URL = 'https://norma.nomoreparties.space/api/';
 
-async function request<T>(url: string, options: RequestInit | undefined) {
+async function request<T>(API_URL: string, options?: RequestInit) {
   // принимает два аргумента: урл и объект опций
-  const res = await fetch(url, options);
+  const res = await fetch(API_URL, options);
   return getResponse<T>(res);
 }
 function getResponse<T>(res: Response): Promise<T> {
@@ -30,7 +30,7 @@ function getResponse<T>(res: Response): Promise<T> {
 
 //Получить ингридиенты
 export function getIngredients() {
-  return request<IGetData>(`${url}ingredients`, {
+  return request<IGetData>(`${API_URL}ingredients`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -39,8 +39,8 @@ export function getIngredients() {
 }
 
 //Отправить заказ
-export function getOrderDetails(idArrSelected: Array<string | undefined>) {
-  return request<IPostOrder>(`${url}orders`, {
+export function getOrderDetails(idArrSelected: Array<string>) {
+  return request<IPostOrder>(`${API_URL}orders`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ export function getOrderDetails(idArrSelected: Array<string | undefined>) {
 
 //Проверка для Восстановить пароль
 export function getForgotPassword(data: { email: string }) {
-  return request<IPostForgotPassword>(`${url}password-reset`, {
+  return request<IPostForgotPassword>(`${API_URL}password-reset`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ export function getForgotPassword(data: { email: string }) {
 
 //Восстановить пароль
 export function getResetPassword(data: IResetPassword) {
-  return request<IPostResetPassword>(`${url}password-reset/reset`, {
+  return request<IPostResetPassword>(`${API_URL}password-reset/reset`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ export function getResetPassword(data: IResetPassword) {
 
 //Создать пользователя
 export function createUser(data: IRegisterData) {
-  return request<ICreateUser>(`${url}auth/register`, {
+  return request<ICreateUser>(`${API_URL}auth/register`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ export function createUser(data: IRegisterData) {
 
 //Для авторизации пользователя вход
 export function loginRequest(data: ILoginData) {
-  return request<ICreateUser>(`${url}auth/login`, {
+  return request<ICreateUser>(`${API_URL}auth/login`, {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
@@ -100,8 +100,8 @@ export function loginRequest(data: ILoginData) {
 }
 
 //Для выхода пользователя
-export function logoutRequest(refreshToken: string | undefined) {
-  return request<ILogoutRequest>(`${url}auth/logout`, {
+export function logoutRequest(refreshToken: string) {
+  return request<ILogoutRequest>(`${API_URL}auth/logout`, {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
@@ -118,7 +118,7 @@ export function logoutRequest(refreshToken: string | undefined) {
 //Для обновления токена пользователя
 export function refreshTokenRequest() {
   const refreshToken = getCookie('refreshToken');
-  return request<IRefreshTokenRequest>(`${url}auth/token`, {
+  return request<IRefreshTokenRequest>(`${API_URL}auth/token`, {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
@@ -134,7 +134,7 @@ export function refreshTokenRequest() {
 
 //Для получения данных пользователя
 export function getUserData() {
-  return request<IGetUserData>(`${url}auth/user`, {
+  return request<IGetUserData>(`${API_URL}auth/user`, {
     method: 'GET',
     mode: 'cors',
     cache: 'no-cache',
@@ -150,7 +150,7 @@ export function getUserData() {
 
 //Для обновления данных пользователя
 export function updateUserData(data: IUpdateUserData) {
-  return request<IGetUserData>(`${url}auth/user`, {
+  return request<IGetUserData>(`${API_URL}auth/user`, {
     method: 'PATCH',
     mode: 'cors',
     cache: 'no-cache',

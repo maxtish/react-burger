@@ -23,7 +23,8 @@ export function ProfileInfo() {
     setValueEmail({ value: email, isChange: false });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     dispatch(
       updateUser({
         email: valueEmail.isChange ? valueEmail.value : email,
@@ -41,7 +42,7 @@ export function ProfileInfo() {
   };
 
   return (
-    <div className={`${styles.form} mt-30`}>
+    <form className={`${styles.form} mt-30`} onSubmit={handleSubmit} method="patch">
       <div className={styles.wrapper}>
         <Input
           type="text"
@@ -76,11 +77,11 @@ export function ProfileInfo() {
           <Button htmlType="button" type="secondary" size="medium" onClick={cancel}>
             Отмена
           </Button>
-          <Button htmlType="button" type="primary" size="medium" onClick={handleSubmit}>
+          <Button htmlType="submit" type="primary" size="medium">
             Сохранить
           </Button>
         </div>
       )}
-    </div>
+    </form>
   );
 }

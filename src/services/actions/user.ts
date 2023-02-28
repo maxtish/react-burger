@@ -88,19 +88,21 @@ export const signOut = () => (dispatch: AppDispatch) => {
     type: USER_LOGOUT_REQUEST,
   });
   const refreshToken = getCookie('refreshToken');
-  logoutRequest(refreshToken)
-    .then((res) => {
-      dispatch({
-        type: USER_LOGOUT_SUCCESS,
+  if (refreshToken !== undefined) {
+    logoutRequest(refreshToken)
+      .then((res) => {
+        dispatch({
+          type: USER_LOGOUT_SUCCESS,
+        });
+        deleteCookie('refreshToken');
+        deleteCookie('accessToken');
+      })
+      .catch((res) => {
+        dispatch({
+          type: USER_LOGOUT_ERROR,
+        });
       });
-      deleteCookie('refreshToken');
-      deleteCookie('accessToken');
-    })
-    .catch((res) => {
-      dispatch({
-        type: USER_LOGOUT_ERROR,
-      });
-    });
+  }
 };
 
 //Для получения данных и обновления токена пользователя
