@@ -30,11 +30,6 @@
   text-align: center;
 }
 
-.link {
-  color: #f2f2f3;
-  text-decoration: none;
-}
-
 .ingredients {
   overflow-y: scroll;
   max-height: calc(100vh - 280px);

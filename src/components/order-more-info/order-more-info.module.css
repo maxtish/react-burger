@@ -1,3 +1,7 @@
+.separate {
+  margin-top: 6vh;
+}
+
 .scroll {
   list-style: none;
   overflow-y: auto;
